@@ -1,0 +1,23 @@
+{
+  "name": "luhistory-astro-js",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/react": "^3.0.9",
+    "@sanity/astro": "^2.2.0",
+    "@sanity/client": "^6.10.0",
+    "@types/react": "^18.2.46",
+    "@types/react-dom": "^18.2.18",
+    "astro": "^4.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sanity": "^3.23.4"
+  }
+}

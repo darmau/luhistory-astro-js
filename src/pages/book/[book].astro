@@ -1,0 +1,27 @@
+---
+import { sanityClient } from "sanity:client";
+import Layout from "../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+  const slugs = await sanityClient.fetch(`*[_type == 'book']{
+  "slug": slug.current,
+  "title": title
+  }`);
+  const paths = await slugs.map((book) => {
+    return {
+      params: {
+        book: book.slug,
+      },
+      props: {title: book.title}
+    };
+  });
+  return paths;
+}
+
+const {title} = Astro.props
+---
+<Layout>
+  <div>
+    <h1>{title}</h1>
+  </div>
+</Layout>
