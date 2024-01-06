@@ -1,0 +1,19 @@
+---
+import {sanityClient} from "sanity:client";
+import { Image } from 'astro:assets';
+
+const homepageData = await sanityClient.fetch(`
+  *[_type == 'homepage']{
+    slogan,
+    "image": cover.asset->{url}
+  }`)
+---
+<div>
+  <h1>{homepageData[0].slogan}</h1>
+  <Image
+    src={homepageData[0].image.url}
+    alt={homepageData[0].slogan}
+    width="528"
+    height="704"
+  />
+</div>
