@@ -7,13 +7,31 @@ const homepageData = await sanityClient.fetch(`
     slogan,
     "image": cover.asset->{url}
   }`)
+
+const headerString = homepageData[0].slogan.split(', ');
 ---
-<div>
-  <h1>{homepageData[0].slogan}</h1>
+<div class="flex px-4 items-center justify-between mb-16">
+  <h1 class="z-10 font-bold font-serif leading-tight text-6xl md:text-8xl mr-[-50%]">
+    {headerString.map((word, index) => {
+      return (
+        <span class="block" style={{'--delay': `${index * 0.1}s`}}>
+          {word}{index < headerString.length - 1 && <span>,</span>}
+        </span>
+      )
+    })}
+  </h1>
   <Image
     src={homepageData[0].image.url}
     alt={homepageData[0].slogan}
+    class="hero-img aspect-[3/4] w-3/5 md:w-1/2 z-0 object-cover brightness-95"
     width="528"
     height="704"
   />
 </div>
+
+<style>
+  .hero-img {
+    min-height: 560px;
+    min-width: 360px;
+  }
+</style>
