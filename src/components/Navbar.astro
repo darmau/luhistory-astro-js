@@ -9,10 +9,10 @@ import menuIcon from '../assets/icons/menu.svg';
   <!--该部分为全屏导航-->
   <div
     id="nav-fullscreen"
-    class="show-fullscreen-nav bg-neutral-900 w-screen h-screen fixed inset-0">
+    class="hide-fullscreen-nav bg-neutral-900 w-screen h-screen fixed inset-0">
     <hgroup class="w-full flex justify-between items-center p-8">
-      <Image src={faviconWhite} alt="logo" />
-      <Image id="close-button" src={closeWhite} alt="close button" />
+      <Image src={faviconWhite} alt="logo" class="cursor-pointer" />
+      <Image id="close-button" src={closeWhite} alt="close button" class="cursor-pointer" />
     </hgroup>
     <div class="grid grid-cols-1 gap-16 px-8 md:grid-cols-2 md:p-8 lg:grid-cols-5 lg:gap-3 lg:p-16">
       <ul class="col-span-1 lg:col-span-3 lg:mx-auto text-white font-serif font-bold text-4xl md:text-5xl space-y-6">
@@ -53,11 +53,11 @@ import menuIcon from '../assets/icons/menu.svg';
 
   <div class="w-28 h-8 flex justify-center items-center">
     <a href="/">
-      <Image src={favicon} alt="logo" />
+      <Image src={favicon} alt="logo" class="cursor-pointer" />
     </a>
   </div>
   <div class="w-10 h-10">
-    <Image src={menuIcon} alt="menu" class="w-full h-full" />
+    <Image src={menuIcon} alt="menu" class="w-full h-full cursor-pointer" />
   </div>
 </nav>
 
