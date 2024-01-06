@@ -3,7 +3,7 @@ import { sanityClient } from "sanity:client";
 import Layout from "../../layouts/Layout.astro";
 
 export async function getStaticPaths() {
-  const slugs = await sanityClient.fetch(`*[_type == 'caseStudy']{
+  const slugs = await sanityClient.fetch(`*[_type == 'caseStudy' && defined(slug)]{
   "slug": slug.current,
   "title": title
   }`);
