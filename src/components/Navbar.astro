@@ -1,0 +1,87 @@
+---
+import { Image } from 'astro:assets';
+import favicon from '../assets/icons/favicon.svg';
+import faviconWhite from '../assets/icons/favicon-white.svg';
+import closeWhite from '../assets/icons/close-white.svg';
+import menuIcon from '../assets/icons/menu.svg';
+---
+<nav class="flex justify-between items-center p-8">
+  <!--该部分为全屏导航-->
+  <div
+    id="nav-fullscreen"
+    class="hide-fullscreen-nav bg-neutral-900 w-screen h-screen absolute left-0 top-0">
+    <hgroup class="w-full flex justify-between items-center p-8">
+      <Image src={faviconWhite} alt="logo" />
+      <Image id="close-button" src={closeWhite} alt="close button" />
+    </hgroup>
+    <div class="grid grid-cols-4 py-10">
+      <ul class="col-span-3 flex flex-col mx-auto text-white font-serif font-bold text-5xl space-y-6">
+        <li class="w-fit">
+          <a href="/profile">Profile</a>
+        </li>
+        <li class="w-fit">
+          <a href="/exhibitions/1">Exhibitions</a>
+        </li>
+        <li class="w-fit">
+          <a href="/books/1">Books</a>
+        </li>
+        <li class="w-fit">
+          <a href="/documents/1">Documents</a>
+        </li>
+        <li class="w-fit">
+          <a href="/teaching">Teaching</a>
+        </li>
+        <li class="w-fit">
+          <a href="/case-studies/1">Case Studies</a>
+        </li>
+      </ul>
+      <div class="text-white col-span-1 space-y-12">
+        <div class="space-y-4">
+          <h3 class="font-normal font-sans text-sm uppercase opacity-50 tracking-widest">Social</h3>
+          <h4 class="font-serif font-bold text-4xl">Facebook</h4>
+          <h4 class="font-serif font-bold text-4xl">Weibo</h4>
+        </div>
+        <div class="space-y-4">
+          <h3 class="font-normal font-sans text-sm uppercase opacity-50 tracking-widest">Contact</h3>
+          <h4 class="font-serif font-bold text-4xl">
+            <a href="mailto:info@luhistory.com" target="_blank">info@luhistory.com</a>
+          </h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-28 h-8 flex justify-center items-center">
+    <Image src={favicon} alt="logo" />
+  </div>
+  <div class="w-10 h-10">
+    <Image src={menuIcon} alt="menu" class="w-full h-full" />
+  </div>
+</nav>
+
+<script>
+  const navFullscreen = document.getElementById('nav-fullscreen');
+  const closeButton = document.getElementById('close-button');
+  const menuButton = document.querySelector('nav > div:last-child');
+
+  closeButton.addEventListener('click', () => {
+    navFullscreen.classList.add('hide-fullscreen-nav');
+    navFullscreen.classList.remove('show-fullscreen-nav');
+  });
+
+  menuButton.addEventListener('click', () => {
+    navFullscreen.classList.remove('hide-fullscreen-nav');
+    navFullscreen.classList.add('show-fullscreen-nav');
+  });
+</script>
+
+<style>
+  .hide-fullscreen-nav {
+    display: none;
+    transition: opacity 1s ease-in-out;
+  }
+  .show-fullscreen-nav {
+    display: block;
+    transition: opacity 1s ease-in-out;
+  }
+</style>
