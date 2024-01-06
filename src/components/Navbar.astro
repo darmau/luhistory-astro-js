@@ -9,13 +9,13 @@ import menuIcon from '../assets/icons/menu.svg';
   <!--该部分为全屏导航-->
   <div
     id="nav-fullscreen"
-    class="hide-fullscreen-nav bg-neutral-900 w-screen h-screen absolute left-0 top-0">
+    class="show-fullscreen-nav bg-neutral-900 w-screen h-screen fixed inset-0">
     <hgroup class="w-full flex justify-between items-center p-8">
       <Image src={faviconWhite} alt="logo" />
       <Image id="close-button" src={closeWhite} alt="close button" />
     </hgroup>
-    <div class="grid grid-cols-4 py-10">
-      <ul class="col-span-3 flex flex-col mx-auto text-white font-serif font-bold text-5xl space-y-6">
+    <div class="grid grid-cols-1 gap-16 px-8 md:grid-cols-2 md:p-8 lg:grid-cols-5 lg:gap-3 lg:p-16">
+      <ul class="col-span-1 lg:col-span-3 lg:mx-auto text-white font-serif font-bold text-4xl md:text-5xl space-y-6">
         <li class="w-fit">
           <a href="/profile">Profile</a>
         </li>
@@ -35,15 +35,15 @@ import menuIcon from '../assets/icons/menu.svg';
           <a href="/case-studies/1">Case Studies</a>
         </li>
       </ul>
-      <div class="text-white col-span-1 space-y-12">
+      <div class="text-white col-span-1 space-y-12 lg:col-span-2">
         <div class="space-y-4">
           <h3 class="font-normal font-sans text-sm uppercase opacity-50 tracking-widest">Social</h3>
-          <h4 class="font-serif font-bold text-4xl">Facebook</h4>
-          <h4 class="font-serif font-bold text-4xl">Weibo</h4>
+          <h4 class="font-serif font-bold text-3xl md:text-4xl">Facebook</h4>
+          <h4 class="font-serif font-bold text-3xl md:text-4xl">Weibo</h4>
         </div>
         <div class="space-y-4">
           <h3 class="font-normal font-sans text-sm uppercase opacity-50 tracking-widest">Contact</h3>
-          <h4 class="font-serif font-bold text-4xl">
+          <h4 class="font-serif font-bold text-3xl md:text-4xl">
             <a href="mailto:info@luhistory.com" target="_blank">info@luhistory.com</a>
           </h4>
         </div>
@@ -52,7 +52,9 @@ import menuIcon from '../assets/icons/menu.svg';
   </div>
 
   <div class="w-28 h-8 flex justify-center items-center">
-    <Image src={favicon} alt="logo" />
+    <a href="/">
+      <Image src={favicon} alt="logo" />
+    </a>
   </div>
   <div class="w-10 h-10">
     <Image src={menuIcon} alt="menu" class="w-full h-full" />
