@@ -14,5 +14,9 @@ export default defineConfig({
       useCdn: false
     }),
     react(),
-    tailwind()]
+    tailwind()],
+  image: {
+    domains: ["cdn.sanity.io"],
+    remotePatterns: [{ protocol: "https"}]
+  }
 });
