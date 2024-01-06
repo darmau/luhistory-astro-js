@@ -11,6 +11,12 @@ dependencies:
   '@astrojs/tailwind':
     specifier: ^5.1.0
     version: 5.1.0(astro@4.1.1)(tailwindcss@3.4.1)
+  '@fontsource/cormorant':
+    specifier: ^5.0.8
+    version: 5.0.8
+  '@fontsource/inter':
+    specifier: ^5.0.16
+    version: 5.0.16
   '@sanity/astro':
     specifier: ^2.2.0
     version: 2.2.0(@sanity/client@6.10.0)(astro@4.1.1)(react-dom@18.2.0)(react-is@18.2.0)(react@18.2.0)(sanity@3.23.4)(styled-components@6.1.6)
@@ -35,6 +41,9 @@ dependencies:
   sanity:
     specifier: ^3.23.4
     version: 3.23.4(@types/react@18.2.46)(react-dom@18.2.0)(react@18.2.0)(styled-components@6.1.6)
+  sharp:
+    specifier: ^0.33.1
+    version: 0.33.1
   tailwindcss:
     specifier: ^3.4.1
     version: 3.4.1
@@ -927,6 +936,14 @@ packages:
 
   /@floating-ui/utils@0.1.6:
     resolution: {integrity: sha512-OfX7E2oUDYxtBvsuS4e/jSn4Q9Qb6DzgeYtsAdkPZ47znpoNsMgZw0+tVijiv3uGNR6dgNlty6r9rzIzHjtd/A==}
+    dev: false
+
+  /@fontsource/cormorant@5.0.8:
+    resolution: {integrity: sha512-2HGCW7LAQ+PfGSe64b0c3/7VueN4fCsIunxrVdg+2TYTQjXlQnzk9a7oqnsLBOoEHRF+bFtLJd89cD9ZJuY8qQ==}
+    dev: false
+
+  /@fontsource/inter@5.0.16:
+    resolution: {integrity: sha512-qF0aH5UiZvCmneX5orJbVRoc2VTyLTV3X/7laMp03Qt28L+B9tFlZODOGUL64wDWc69YVdi1LeJB0cIgd51lvw==}
     dev: false
 
   /@img/sharp-darwin-arm64@0.33.1:
@@ -2452,7 +2469,6 @@ packages:
       color-name: 1.1.4
       simple-swizzle: 0.2.2
     dev: false
-    optional: true
 
   /color2k@2.0.3:
     resolution: {integrity: sha512-zW190nQTIoXcGCaU08DvVNFTmQhUpnJfVuAKfWqUQkflXKpaDdpaYoM0iluLS9lgJNHyBF58KKA2FBEwkD7wog==}
@@ -2466,7 +2482,6 @@ packages:
       color-convert: 2.0.1
       color-string: 1.9.1
     dev: false
-    optional: true
 
   /combined-stream@1.0.8:
     resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}
@@ -2739,7 +2754,6 @@ packages:
     engines: {node: '>=8'}
     requiresBuild: true
     dev: false
-    optional: true
 
   /detect-node-es@1.1.0:
     resolution: {integrity: sha512-ypdmJU/TbBby2Dxibuv7ZLW3Bs1QEmM7nHjEANfohJLvE0XVujisn1qPJcZxg+qDucsr+bP6fLD1rPS3AhJ7EQ==}
@@ -3633,7 +3647,6 @@ packages:
     resolution: {integrity: sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==}
     requiresBuild: true
     dev: false
-    optional: true
 
   /is-binary-path@2.1.0:
     resolution: {integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==}
@@ -5864,7 +5877,6 @@ packages:
       '@img/sharp-win32-ia32': 0.33.1
       '@img/sharp-win32-x64': 0.33.1
     dev: false
-    optional: true
 
   /shebang-command@2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}
@@ -5899,7 +5911,6 @@ packages:
     dependencies:
       is-arrayish: 0.3.2
     dev: false
-    optional: true
 
   /simple-wcswidth@1.0.1:
     resolution: {integrity: sha512-xMO/8eNREtaROt7tJvWJqHBDTMFN4eiQ5I4JRMuilwfnFcV5W9u7RUkueNkdw0jPqGMX36iCywelS5yilTuOxg==}
