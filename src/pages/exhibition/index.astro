@@ -1,0 +1,65 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import {sanityClient} from "sanity:client";
+const exhibitionRawData = await sanityClient.fetch(`
+  *[_type == 'exhibition' && defined(dateRange)]|order(dateRange.startDate desc){
+    title,
+    "year": dateRange.startDate,
+    "city": location.city,
+    "slug": slug.current
+}`);
+
+// 遍历exhibitions，将exhibitions中的每个元素，分别push进两个数组。如：exhibitionYears = [2019,
+// 2020]，exhibitionByYears = [[{}, {}, {}], [{}, {}, {}]]
+const exhibitionYears = [];
+const exhibitionByYears = [];
+exhibitionRawData.forEach((exhibition) => {
+  const year = exhibition.year.split("-")[0];
+  if (exhibitionYears.indexOf(year) === -1) {
+    exhibitionYears.push(year);
+    exhibitionByYears.push([exhibition]);
+  } else {
+    exhibitionByYears[exhibitionYears.indexOf(year)].push(exhibition);
+  }
+});
+
+---
+<Layout>
+  <main>
+    <hgroup class="exhibition-grid max-w-5xl mx-auto mb-44 mt-16">
+      <div></div>
+      <h1 class="font-serif font-bold text-neutral-900 text-9xl">Exhibitions</h1>
+    </hgroup>
+    <div class="mb-40 max-w-5xl mx-auto">
+      {
+        exhibitionYears.map((year) => (
+          <div class="exhibition-grid">
+            <h2 class="font-serif font-bold proportional-nums text-3xl tracking-wider py-6">{year}</h2>
+            <ul class="flex-1">
+              {
+                exhibitionByYears[exhibitionYears.indexOf(year)].map((exhibition) => (
+                  <li class="flex justify-between items-center py-6 border-b border-neutral-900 text-neutral-900">
+                    <a
+                      href={`/exhibition/detail/${exhibition.slug}`}
+                      class="font-serif font-bold proportional-nums text-3xl text-neutral-900"
+                    >
+                      {exhibition.title}
+                    </a>
+                    <p class="font-sans text-base font-normal text-neutral-900 opacity-50">{exhibition.city}</p>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .exhibition-grid {
+    display: grid;
+    grid-template-columns: 208px 1fr;
+  }
+</style>

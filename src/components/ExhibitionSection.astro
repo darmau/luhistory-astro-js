@@ -2,21 +2,27 @@
 import {sanityClient} from "sanity:client";
 import {Image} from 'astro:assets';
 const exhibitionData = await sanityClient.fetch(`
-  *[_type == 'exhibition' && defined(dateRange)]|order(dateRange.endDate desc){
+  *[_type == 'exhibition' && defined(dateRange) && defined(cover)]|order(dateRange.endDate desc){
     title,
+    "slug": slug.current,
     "year": dateRange.endDate,
     "city": location.city,
     "cover": {
-      "url": cover.asset->{url},
+      "url": cover.asset->url,
       "caption": cover.caption
     }
   }`)
 ---
-<div class="w-full mx-auto mb-24 px-4 overflow-hidden">
-  <hgroup class = "flex justify-between items-center text-neutral-900 mb-8">
+<div class = "w-full mx-auto mb-24 px-4 overflow-hidden">
+  <hgroup
+    class = "max-w-5xl mx-auto flex justify-between items-center text-neutral-900 mb-8 px-4"
+  >
     <h2 class = "font-bold text-4xl md:text-5xl font-serif">Exhibitions</h2>
     <div class = "flex items-center gap-2">
-      <p class = "text-2xl font-thin font-serif">View more</p>
+      <a
+        href = "/exhibition" class = "text-2xl font-thin font-serif"
+        data-astro-prefetch = "viewport"
+      >View more</a>
       <svg
         xmlns = "http://www.w3.org/2000/svg" fill = "none" viewBox = "0 0 24 24"
         stroke-width = "1.5" stroke = "currentColor" class = "w-5 h-5"
@@ -28,33 +34,42 @@ const exhibitionData = await sanityClient.fetch(`
       </svg>
     </div>
   </hgroup>
-  <div class="w-full">
-    <div class="overflow-x-auto">
-      <ul class="flex gap-8 overflow-auto touch-pan-x cursor-grab w-fit"
-          style="scroll-snap-type: x mandatory;"
+  <div class = "w-full">
+    <div class = "overflow-auto">
+      <ul
+        class = "flex gap-8 overflow-auto touch-pan-x cursor-grab w-fit pr-12"
+        style = "scroll-snap-type: x mandatory;"
+        id="exhibition-list"
       >
         {exhibitionData.map((exhibition) => {
           const info = `
         ${exhibition.year.split('-')[0]}
-        ${exhibition.city? ' · ' + exhibition.city : ''}
+        ${exhibition.city ? ' · ' + exhibition.city : ''}
       `
           return (
-            <li class="space-y-4">
-              <div class="cover-img aspect-[3/2] bg-gray-200">
-                {exhibition.cover.url && (
-                  <Image
-                    src={exhibition.cover.url.url}
-                    alt={exhibition.cover.caption ?? exhibition.title}
-                    class="object-cover w-full h-full"
-                    width="528"
-                    height="352"
-                  />
-                )}
-              </div>
-              <h3 class="font-serif font-bold text-3xl text-neutral-900">{exhibition.title}</h3>
-              <p class="text-neutral-900 opacity-50">
-                {info}
-              </p>
+            <li>
+              <a
+                href = {`/exhibition/detail/${exhibition.slug}`}
+                class = "space-y-4"
+              >
+                <div class = "cover-img aspect-[3/2] bg-gray-200">
+                  {exhibition.cover.url && (
+                    <Image
+                      src = {exhibition.cover.url}
+                      alt = {exhibition.cover.caption ?? exhibition.title}
+                      class = "object-cover w-full h-full"
+                      width = "528"
+                      height = "352"
+                    />
+                  )}
+                </div>
+                <h3
+                  class = "font-serif font-bold text-3xl text-neutral-900"
+                >{exhibition.title}</h3>
+                <p class = "text-neutral-900 opacity-50">
+                  {info}
+                </p>
+              </a>
             </li>
           )
         })}
@@ -68,6 +83,7 @@ const exhibitionData = await sanityClient.fetch(`
     width: 320px;
     height: 213px;
   }
+
   @media (min-width: 768px) {
     .cover-img {
       width: 528px;
@@ -75,3 +91,26 @@ const exhibitionData = await sanityClient.fetch(`
     }
   }
 </style>
+
+<script>
+  // 获取屏幕宽度，减去1024px, 除以2，得到左右两边的空白宽度为n，并将#exhibition-list向右移动n个px。并且更改窗口大小时，也要重新计算。
+  function getScreenWidth() {
+    return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  }
+
+  function moveExhibitionList() {
+    const exhibitionList = document.getElementById('exhibition-list');
+    let screenWidth = getScreenWidth();
+    let exhibitionListOffset = (screenWidth - 1024) / 2;
+    if (exhibitionListOffset <= 0) {
+      exhibitionListOffset = 0;
+    }
+    exhibitionList.style.transform = `translateX(${exhibitionListOffset}px)`;
+  }
+
+  document.addEventListener('DOMContentLoaded', moveExhibitionList);
+
+  window.addEventListener('resize', function() {
+    moveExhibitionList();
+  });
+</script>

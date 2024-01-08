@@ -10,7 +10,7 @@ const homepageData = await sanityClient.fetch(`
 
 const headerString = homepageData[0].slogan.split(', ');
 ---
-<div class = "flex px-4 items-center justify-between mb-16">
+<div class = "flex px-4 max-w-5xl mx-auto items-center justify-between mb-16">
   <h1
     class = "z-10 font-bold font-serif leading-tight text-6xl md:text-8xl mr-[-50%]"
     id = "hero-text"

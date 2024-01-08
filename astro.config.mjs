@@ -18,5 +18,6 @@ export default defineConfig({
   image: {
     domains: ["cdn.sanity.io"],
     remotePatterns: [{ protocol: "https"}]
-  }
+  },
+  prefetch: true
 });

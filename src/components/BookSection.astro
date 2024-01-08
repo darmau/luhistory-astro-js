@@ -2,19 +2,20 @@
 import {sanityClient} from "sanity:client";
 import {Image} from 'astro:assets'
 const booksData = await sanityClient.fetch(`
-  *[_type == 'book'&& defined(edition.publishDate)]|order(edition.publishDate desc){
+  *[_type == 'book'&& defined(slug) && defined(publishDate)]|order(publishDate desc){
     title,
+    "slug": slug.current,
     "publishDate": edition.publishDate,
     "cover": cover.asset->{url}
 }[0..3]
 `)
 ---
 
-<div class="w-full mx-auto mb-24 px-4">
+<div class="w-full max-w-5xl mx-auto mb-24 px-4">
   <hgroup class = "flex justify-between items-center text-neutral-900 mb-8">
     <h2 class = "font-bold text-4xl md:text-5xl font-serif">Publications</h2>
     <div class = "flex items-center gap-2">
-      <p class = "text-2xl font-thin font-serif">View more</p>
+      <a href="/book/category/all" class = "text-2xl font-thin font-serif" data-astro-prefetch>View more</a>
       <svg
         xmlns = "http://www.w3.org/2000/svg" fill = "none" viewBox = "0 0 24 24"
         stroke-width = "1.5" stroke = "currentColor" class = "w-5 h-5"
@@ -28,23 +29,25 @@ const booksData = await sanityClient.fetch(`
   </hgroup>
   <ul class="grid grid-cols-1 gap-8 md:grid-cols-2">
     {booksData.map((book) => (
-        <li class="flex gap-4">
-          <div class="h-32 w-32 bg-neutral-100 flex items-center justify-center shrink-0">
-            {book.cover && (
-              <Image
-                src={book.cover.url}
-                alt={book.title}
-                class="h-3/4 w-3/4 object-contain"
-                height="128"
-                width="128"
-              />
-            )
-            }
-          </div>
-          <div class="space-y-2">
-            <h3 class="font-serif font-bold text-neutral-900 text-3xl">{book.title}</h3>
-            <p class="text-neutral-900 opacity-50">{new Date(book.publishDate).getFullYear()}</p>
-          </div>
+        <li>
+          <a href={`/book/detail/${book.slug}`} class="flex gap-4" data-astro-prefetch>
+            <div class="h-32 w-32 bg-neutral-100 flex items-center justify-center shrink-0">
+              {book.cover && (
+                <Image
+                  src={book.cover.url}
+                  alt={book.title}
+                  class="h-3/4 w-3/4 object-contain"
+                  height="128"
+                  width="128"
+                />
+              )
+              }
+            </div>
+            <div class="space-y-2">
+              <h3 class="font-serif font-bold text-neutral-900 text-3xl">{book.title}</h3>
+              <p class="text-neutral-900 opacity-50">{new Date(book.publishDate).getFullYear()}</p>
+            </div>
+          </a>
         </li>
     ))}
   </ul>
