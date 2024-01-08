@@ -52,10 +52,12 @@ const {
     <p>{category}</p>
     <p>{publishDate}</p>
     <p>{publisher}</p>
-    <ul>
-      {people.map((person) => (
-        <li>{person.title}: {person.name}</li>
-      ))}
-    </ul>
+    {people &&
+      <ul>
+        {people.map((person) => (
+          <li>{person.title}: {person.name}</li>
+        ))}
+      </ul>
+    }
   </div>
 </Layout>
