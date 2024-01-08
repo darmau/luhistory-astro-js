@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import '@fontsource/cormorant';
 import '@fontsource/inter';
+import { ViewTransitions } from "astro:transitions";
 const { title } = Astro.props;
 ---
 <html lang = "en" class="scroll-smooth">
@@ -11,6 +12,7 @@ const { title } = Astro.props;
   <meta name = "viewport" content = "width=device-width, initial-scale=1">
   <meta name = "generator" content = {Astro.generator}/>
   <title>{title}</title>
+  <ViewTransitions />
 </head>
 <body>
   <div class="min-h-screen flex flex-col relative">
