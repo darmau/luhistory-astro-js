@@ -1,0 +1,138 @@
+---
+import {sanityClient} from "sanity:client";
+import Layout from "../../../layouts/Layout.astro";
+import {Image} from 'astro:assets'
+export async function getStaticPaths() {
+  const slugs = await sanityClient.fetch(`*[_type == 'exhibition' && defined(slug)]{
+  title,
+  "slug": slug.current,
+  subtitle,
+  "start": dateRange.startDate,
+  "end": dateRange.endDate,
+  "cover": cover.asset->url,
+  curator,
+  "city": location->city,
+  "place": location->place,
+  "blocks": pageBlocks[]
+  }`);
+  const paths = await slugs.map((exhibition) => {
+    return {
+      params: {
+        exhibition: exhibition.slug,
+      },
+      props: {
+        title: exhibition.title,
+        subtitle: exhibition.subtitle,
+        start: exhibition.start,
+        end: exhibition.end,
+        cover: exhibition.cover,
+        curator: exhibition.curator,
+        city: exhibition.city,
+        place: exhibition.place,
+        pageBlock: exhibition.pageBlock,
+      }
+    };
+  });
+  return paths;
+}
+
+const {
+  title,
+  subtitle,
+  start,
+  end,
+  cover,
+  curator,
+  city,
+  place,
+  pageBlock,
+} = Astro.props
+
+function formatDate(start, end) {
+  // 将2023-12-09和2023-12-16转换成Dec 9 - 16, 2023
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+  const startMonth = startDate.toLocaleString("default", { month: "short" });
+  const endMonth = endDate.toLocaleString("default", { month: "short" });
+  const startDay = startDate.getDate();
+  const endDay = endDate.getDate();
+  const startYear = startDate.getFullYear();
+  const endYear = endDate.getFullYear();
+  if (startYear === endYear) {
+    if (startMonth === endMonth) {
+      return `${startMonth} ${startDay} - ${endDay}, ${startYear}`;
+    } else {
+      return `${startMonth} ${startDay} - ${endMonth} ${endDay}, ${startYear}`;
+    }
+  } else {
+    return `${startMonth} ${startDay}, ${startYear} - ${endMonth} ${endDay}, ${endYear}`;
+  }
+}
+---
+<Layout>
+  <div class="frame p-8 max-w-screen-2xl mx-auto">
+    <div class="rectangle"></div>
+    <h1 class="font-serif font-bold text-8xl text-neutral-900 leading-snug">
+      {title}
+    </h1>
+    <aside class="info space-y-8">
+      {curator && (
+        <div>
+          <h3 class="text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Curator</h3>
+          <p class="text-lg font-semibold font-serif">{curator}</p>
+        </div>
+        )}
+        <div>
+          <h3 class="text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Date</h3>
+          <p class="text-lg font-semibold font-serif">{formatDate(start, end)}</p>
+        </div>
+      {
+          place && (
+          <div>
+            <h3 class="text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Location</h3>
+            <p class="text-lg font-semibold font-serif">{place}</p>
+          </div>
+        )
+        }
+        </aside>
+        <main class="content flex-1">
+          <h2 class="font-serif font-semibold text-2xl text-neutral-900 my-8">
+            {subtitle}
+          </h2>
+          { cover && (
+            <Image src={cover} alt={title} width="640" height="420" class="w-4/5 my-16" />
+          )}
+          <p>正文部分需要专门处理，暂时跳过</p>
+        </main>
+  </div>
+</Layout>
+
+<style>
+  .frame {
+    display: grid;
+    gap: 36px;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+      "placeholder title"
+      "info main";
+  }
+
+  .rectangle {
+    grid-area: placeholder;
+    width: 100%;
+  }
+
+  .title {
+    grid-area: title;
+  }
+
+  .info {
+    grid-area: info;
+    min-width: 240px;
+  }
+
+  .content {
+    grid-area: main;
+  }
+</style>
