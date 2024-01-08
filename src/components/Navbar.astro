@@ -51,7 +51,7 @@ import menuIcon from '../assets/icons/menu.svg';
     </div>
   </div>
 
-  <div class="w-28 h-8 flex justify-center items-center">
+  <div class="w-28 h-8 flex justify-center items-center mix-blend-difference">
     <a href="/">
       <Image src={favicon} alt="logo" class="cursor-pointer" />
     </a>
@@ -83,17 +83,6 @@ import menuIcon from '../assets/icons/menu.svg';
     // 禁用滚动
     document.body.style.overflow = 'hidden';
   });
-
-  // 为nav添加滚动后的阴影
-  const navBar = document.querySelector('nav');
-
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 103) {
-      navBar.classList.add('nav-border');
-    } else {
-      navBar.classList.remove('nav-border');
-    }
-  });
 </script>
 
 <style>
@@ -101,12 +90,5 @@ import menuIcon from '../assets/icons/menu.svg';
     display: block;
     transition: all 1s ease-in-out;
     z-index: 100;
-  }
-  .nav-border {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    background-color: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    z-index: 30;
-    transition: all 0.3s ease-in-out;
   }
 </style>
