@@ -48,7 +48,9 @@ const {
     <a href="/book/category/all">Back to all books</a>
     <h1>{title}</h1>
     <p>{subtitle}</p>
-    <Image src={cover} alt={title} width="500" height="300" />
+    { cover && (
+      <Image src={cover} alt={title} width="500" height="300" />
+    )}
     <p>{category}</p>
     <p>{publishDate}</p>
     <p>{publisher}</p>
