@@ -2,7 +2,7 @@
 import {sanityClient} from "sanity:client";
 import {Image} from 'astro:assets'
 const booksData = await sanityClient.fetch(`
-  *[_type == 'book'&& defined(edition.publishDate)]|order(edition.publishDate desc){
+  *[_type == 'book'&& defined(slug) && defined(publishDate)]|order(publishDate desc){
     title,
     "slug": slug.current,
     "publishDate": edition.publishDate,

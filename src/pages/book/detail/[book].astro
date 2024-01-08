@@ -1,0 +1,61 @@
+---
+import {sanityClient} from "sanity:client";
+import Layout from "../../../layouts/Layout.astro";
+import {Image} from 'astro:assets'
+
+export async function getStaticPaths() {
+  const slugs = await sanityClient.fetch(`*[_type == 'book' && defined(slug)] | order(publishDate desc) {
+    "slug": slug.current,
+    title,
+    subtitle,
+    category,
+    publishDate,
+    publisher,
+    "cover": cover.asset->url,
+    "people": people[]{name, title},
+  }`);
+  const paths = await slugs.map((book) => {
+    return {
+      params: {
+        book: book.slug,
+      },
+      props: {
+        title: book.title,
+        subtitle: book.subtitle,
+        cover: book.cover,
+        category: book.category,
+        publishDate: book.publishDate,
+        publisher: book.publisher,
+        people: book.people,
+      }
+    };
+  });
+  return paths;
+}
+
+const {
+  title,
+  subtitle,
+  cover,
+  category,
+  publishDate,
+  publisher,
+  people
+} = Astro.props
+---
+<Layout>
+  <div>
+    <a href="/book/category/all">Back to all books</a>
+    <h1>{title}</h1>
+    <p>{subtitle}</p>
+    <Image src={cover} alt={title} width="500" height="300" />
+    <p>{category}</p>
+    <p>{publishDate}</p>
+    <p>{publisher}</p>
+    <ul>
+      {people.map((person) => (
+        <li>{person.title}: {person.name}</li>
+      ))}
+    </ul>
+  </div>
+</Layout>
