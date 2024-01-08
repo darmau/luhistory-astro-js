@@ -2,23 +2,27 @@
 import Layout from "../../layouts/Layout.astro";
 import {sanityClient} from "sanity:client";
 const exhibitionRawData = await sanityClient.fetch(`
-  *[_type == 'exhibition' && defined(dateRange) && defined(cover)]|order(dateRange.endDate desc){
+  *[_type == 'exhibition' && defined(dateRange)]|order(dateRange.startDate desc){
     title,
     "year": dateRange.startDate,
     "city": location.city,
     "slug": slug.current
 }`);
 
-// 提取出exhibitionRawData.year中的年份，并分别添加到exhibitions中，形成对象嵌套数组。如：exhibitions = {2019: [{}, {}, {}], 2020: [{}, {}, {}]}
-const exhibitions = {};
+// 遍历exhibitions，将exhibitions中的每个元素，分别push进两个数组。如：exhibitionYears = [2019,
+// 2020]，exhibitionByYears = [[{}, {}, {}], [{}, {}, {}]]
+const exhibitionYears = [];
+const exhibitionByYears = [];
 exhibitionRawData.forEach((exhibition) => {
   const year = exhibition.year.split("-")[0];
-  if (exhibitions[year]) {
-    exhibitions[year].push(exhibition);
+  if (exhibitionYears.indexOf(year) === -1) {
+    exhibitionYears.push(year);
+    exhibitionByYears.push([exhibition]);
   } else {
-    exhibitions[year] = [exhibition];
+    exhibitionByYears[exhibitionYears.indexOf(year)].push(exhibition);
   }
 });
+
 ---
 <Layout>
   <hgroup class="exhibition-grid max-w-5xl mx-auto mb-44 mt-16">
@@ -27,12 +31,12 @@ exhibitionRawData.forEach((exhibition) => {
   </hgroup>
   <div class="mb-40 max-w-5xl mx-auto">
     {
-      Object.keys(exhibitions).map((year) => (
+      exhibitionYears.map((year) => (
         <div class="exhibition-grid">
           <h2 class="font-serif font-bold proportional-nums text-3xl tracking-wider py-6">{year}</h2>
           <ul class="flex-1">
             {
-              exhibitions[year].map((exhibition) => (
+              exhibitionByYears[exhibitionYears.indexOf(year)].map((exhibition) => (
                 <li class="flex justify-between items-center py-6 border-b border-neutral-900 text-neutral-900">
                   <a
                     href={`/exhibition/detail/${exhibition.slug}`}
