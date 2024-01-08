@@ -4,7 +4,7 @@ import Layout from "../../../layouts/Layout.astro";
 import {Image} from 'astro:assets'
 
 export async function getStaticPaths() {
-  const slugs = await sanityClient.fetch(`*[_type == 'book' && defined(slug)] | order(publishDate desc) {
+  const slugs = await sanityClient.fetch(`*[_type == 'book' && defined(slug) && defined(publishDate)] | order(publishDate desc) {
     "slug": slug.current,
     title,
     subtitle,
