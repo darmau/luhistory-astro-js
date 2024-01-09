@@ -1,6 +1,7 @@
 ---
 import RelatedBooks from "./page-block/RelatedBooks.astro";
 import RelatedDocuments from "./page-block/RelatedDocuments.astro";
+import Gallery from "./page-block/Gallery.astro";
 const { blocks } = Astro.props
 ---
 
@@ -12,6 +13,8 @@ const { blocks } = Astro.props
         return <RelatedBooks {...block} />;
       case "articles":
         return <RelatedDocuments {...block} />;
+      case "gallery":
+        return <Gallery {...block} />;
       default:
         return null;
     }
