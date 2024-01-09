@@ -1,0 +1,10 @@
+---
+import {Image} from 'astro:assets'
+const { images } = Astro.props;
+---
+
+<div class="my-24 flex gap-4">
+  {images.map((image) => (
+    <Image class="aspect-square" src={image.url} alt={image.caption || 'image'} width="192" height="192" />
+  ))}
+</div>

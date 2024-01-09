@@ -2,18 +2,47 @@
 import {sanityClient} from "sanity:client";
 import Layout from "../../../layouts/Layout.astro";
 import {Image} from 'astro:assets'
+import PageBlock from "../../../components/PageBlock.astro";
 export async function getStaticPaths() {
   const slugs = await sanityClient.fetch(`*[_type == 'exhibition' && defined(slug)]{
-  title,
-  "slug": slug.current,
-  subtitle,
-  "start": dateRange.startDate,
-  "end": dateRange.endDate,
-  "cover": cover.asset->url,
-  curator,
-  "city": location->city,
-  "place": location->place,
-  "blocks": pageBlocks[]
+    title,
+    "slug": slug.current,
+    "subtitle": subtitle,
+    "start": dateRange.startDate,
+    "end": dateRange.endDate,
+    "cover": cover.asset->url,
+    "curator": curator,
+    "place": location->place,
+    overview,
+    "blocks": pageBlocks[]
+      {
+        _type == 'gallery' => {
+          title, 
+          "type": 'gallery',
+          "gallery": type, 
+          "images": images[]{
+            caption,
+            "url": asset->url
+          }
+        },
+        _type == 'relatedBooks' => {
+          "type": 'books',
+          "books": books[]->{
+            title,
+            publishDate,
+            "slug": slug.current,
+            "cover": cover.asset->url
+          }
+        },
+        _type == 'relatedArticles' => {
+           "type": 'articles',
+          "articles": articles[]->{
+            title,
+            "slug": slug.current,
+            category
+          }
+        }
+      }
   }`);
   const paths = await slugs.map((exhibition) => {
     return {
@@ -29,7 +58,8 @@ export async function getStaticPaths() {
         curator: exhibition.curator,
         city: exhibition.city,
         place: exhibition.place,
-        pageBlock: exhibition.pageBlock,
+        blocks: exhibition.blocks,
+        overview: exhibition.overview,
       }
     };
   });
@@ -43,13 +73,12 @@ const {
   end,
   cover,
   curator,
-  city,
   place,
-  pageBlock,
+  blocks,
 } = Astro.props
 
+// 将2023-12-09和2023-12-16转换成Dec 9 - 16, 2023
 function formatDate(start, end) {
-  // 将2023-12-09和2023-12-16转换成Dec 9 - 16, 2023
   const startDate = new Date(start);
   const endDate = new Date(end);
   const startMonth = startDate.toLocaleString("default", { month: "short" });
@@ -69,41 +98,39 @@ function formatDate(start, end) {
   }
 }
 ---
+
 <Layout>
-  <div class="frame p-8 max-w-screen-2xl mx-auto">
+  <div class="frame p-8 max-w-screen-xl mx-auto">
     <div class="rectangle"></div>
     <h1 class="font-serif font-bold text-8xl text-neutral-900 leading-snug">
       {title}
     </h1>
     <aside class="info space-y-8">
-      {curator && (
+      { curator &&
         <div>
           <h3 class="text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Curator</h3>
           <p class="text-lg font-semibold font-serif">{curator}</p>
-        </div>
-        )}
+        </div> }
+      <div>
+        <h3 class="text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Date</h3>
+        <p class="text-lg font-semibold font-serif">{formatDate(start, end)}</p>
+      </div>
+      { place &&
         <div>
-          <h3 class="text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Date</h3>
-          <p class="text-lg font-semibold font-serif">{formatDate(start, end)}</p>
-        </div>
-      {
-          place && (
-          <div>
-            <h3 class="text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Location</h3>
-            <p class="text-lg font-semibold font-serif">{place}</p>
-          </div>
-        )
-        }
-        </aside>
-        <main class="content flex-1">
-          <h2 class="font-serif font-semibold text-2xl text-neutral-900 my-8">
-            {subtitle}
-          </h2>
-          { cover && (
-            <Image src={cover} alt={title} width="640" height="420" class="w-4/5 my-16" />
-          )}
-          <p>正文部分需要专门处理，暂时跳过</p>
-        </main>
+          <h3 class="text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Location</h3>
+          <p class="text-lg font-semibold font-serif">{place}</p>
+        </div> }
+    </aside>
+    <main class="content flex-1">
+      <h2 class="font-serif font-semibold text-2xl text-neutral-900 my-8">
+        {subtitle}
+      </h2>
+      { cover &&
+        <Image src={cover} alt={title} width="640" height="420" class="w-4/5 my-16" />
+      }
+      <p>正文部分需要专门处理，暂时跳过</p>
+      {blocks && <PageBlock blocks={blocks} />}
+    </main>
   </div>
 </Layout>
 

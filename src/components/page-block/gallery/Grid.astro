@@ -1,0 +1,16 @@
+---
+import {Image} from 'astro:assets'
+const { title, images } = Astro.props;
+---
+
+<div class="my-24">
+  <hgroup class="my-12 flex justify-between items-baseline max-w-3xl">
+    <h2 class="font-serif font-bold text-neutral-900 text-5xl">{title}</h2>
+    <small class="font-sans text-base text-neutral-900 opacity-50">{images.length} photos</small>
+  </hgroup>
+  <div class="grid grid-cols-3 gap-6 max-w-3xl">
+    {images.map((image) => (
+      <Image class="aspect-square object-cover w-full" src={image.url} alt={image.caption || 'image'} width="192" height="192" />
+    ))}
+  </div>
+</div>

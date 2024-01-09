@@ -1,0 +1,9 @@
+---
+import Slider from './gallery/Slider.astro';
+import Grid from './gallery/Grid.astro';
+const { gallery, title, images } = Astro.props;
+---
+
+<div>
+  { gallery === 'slider' ? <Slider images={images} /> : <Grid title={title} images={images} />}
+</div>
