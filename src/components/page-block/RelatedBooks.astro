@@ -17,9 +17,11 @@ const { books } = Astro.props
     {books.map((book) => (
       <li class="w-96">
         <a class="flex gap-6" href={`/book/detail/${book.slug}`}>
-          <div class="aspect-square bg-gray-50 flex justify-center items-center">
-            <Image class="object-contain h-3/4 w-3/4" src={book.cover} alt={book.title} width="160" height="160" />
-          </div>
+          {book.cover && (
+            <div class="aspect-square bg-gray-50 flex justify-center items-center">
+              <Image class="object-contain h-3/4 w-3/4" src={book.cover} alt={book.title} width="160" height="160" />
+            </div>
+          )}
           <div class="flex-1">
             <h3 class="font-serif font-bold text-3xl text-neutral-900 mb-3">{book.title}</h3>
             <small class="font-sans text-base text-neutral-900 opacity-50">{getYear(book.publishDate)}</small>

@@ -129,7 +129,7 @@ function formatDate(start, end) {
         <Image src={cover} alt={title} width="640" height="420" class="w-4/5 my-16" />
       }
       <p>正文部分需要专门处理，暂时跳过</p>
-      <PageBlock blocks={blocks} />
+      {blocks && <PageBlock blocks={blocks} />}
     </main>
   </div>
 </Layout>
