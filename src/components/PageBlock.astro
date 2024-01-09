@@ -1,0 +1,19 @@
+---
+import RelatedBooks from "./page-block/RelatedBooks.astro";
+import RelatedDocuments from "./page-block/RelatedDocuments.astro";
+const { blocks } = Astro.props
+---
+
+<div class="page-block">
+  <!--根据block.type分别传入不同组件-->
+  {blocks.map((block) => {
+    switch (block.type) {
+      case "books":
+        return <RelatedBooks {...block} />;
+      case "articles":
+        return <RelatedDocuments {...block} />;
+      default:
+        return null;
+    }
+  })}
+</div>
