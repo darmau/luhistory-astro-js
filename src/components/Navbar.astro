@@ -62,13 +62,13 @@ import menuIcon from '../assets/icons/menu.svg';
   </div>
 </div>
 <!--导航-->
-<nav class = "fixed w-full flex justify-between items-center p-8">
+<nav class = "fixed w-full flex justify-between items-center p-8 z-10">
   <div class = "w-28 h-8 flex justify-center items-center">
     <a href = "/">
       <Image src = {favicon} alt = "logo" class = "cursor-pointer"/>
     </a>
   </div>
-  <div class = "w-10 h-10">
+  <div class = "w-10 h-10 menu-button">
     <Image
       src = {menuIcon} alt = "menu" class = "w-full h-full cursor-pointer"
     />
@@ -78,7 +78,7 @@ import menuIcon from '../assets/icons/menu.svg';
 <script>
   const navFullscreen = document.getElementById('nav-fullscreen');
   const closeButton = document.getElementById('close-button');
-  const menuButton = document.querySelector('nav > div:last-child');
+  const menuButton = document.querySelector('.menu-button');
 
   closeButton.addEventListener('click', () => {
     navFullscreen.classList.remove('show-fullscreen-nav');

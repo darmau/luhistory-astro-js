@@ -1,0 +1,43 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import {sanityClient} from "sanity:client";
+import {Image} from "astro:assets";
+
+export async function getStaticPaths() {
+  const allBooks = await sanityClient.fetch(`*[_type == 'book' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
+    title,
+    publishDate,
+    category,
+    "slug": slug.current,
+    "cover": cover.asset->url
+}`)
+  const paths = allBooks.map((book) => {
+    // 筛选出同一分类的书籍
+    const filteredBooks = allBooks.filter((b) => b.category === book.category);
+    return {
+      params: {
+        category: book.category,
+      },
+      props: {
+        category: book.category,
+        books: filteredBooks,
+      }
+    }
+  });
+  return paths;
+}
+const {books, category} = Astro.props;
+---
+
+<Layout>
+  <h1>{category}</h1>
+  {books.map((book) => (
+    <div>
+      <h2>{book.title}</h2>
+      <Image
+        src = {book.cover} alt = {book.title} width = "120" height = "120"
+      />
+      <p>{book.publishDate.split('-')[0]}</p>
+    </div>
+  ))}
+</Layout>
