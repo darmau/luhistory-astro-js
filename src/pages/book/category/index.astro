@@ -1,0 +1,24 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import {sanityClient} from "sanity:client";
+import {Image} from 'astro:assets'
+
+const books = await sanityClient.fetch(`*[_type == 'book' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
+    title,
+    publishDate,
+    category,
+    "slug": slug.current,
+    "cover": cover.asset->url
+}`);
+---
+
+<Layout>
+  <h1>全部图书</h1>
+  {books.map((book) => (
+    <div>
+      <h2>{book.title}</h2>
+      <Image src={book.cover} alt={book.title} width="120" height="120" />
+      <p>{book.publishDate.split('-')[0]}</p>
+    </div>
+  ))}
+</Layout>
