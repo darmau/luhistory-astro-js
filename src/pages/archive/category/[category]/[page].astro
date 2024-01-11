@@ -1,0 +1,32 @@
+---
+import {sanityClient} from "sanity:client";
+import PageTitle from "../../../../components/PageTitle.astro";
+import Layout from "../../../../layouts/Layout.astro";
+export async function getStaticPaths() {
+  const allArticles = await sanityClient.fetch(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
+    title,
+    publishDate,
+    category,
+    "slug": slug.current,
+  }`);
+  const paths = allArticles.map((article) => {
+    const filteredArticles = allArticles.filter((a) => a.category === article.category);
+    return {
+      params: {
+        category: article.category,
+      },
+      props: {
+        category: article.category,
+        articles: filteredArticles,
+      }
+    }
+  });
+  return paths;
+}
+
+const {category, articles} = Astro.props;
+---
+
+<Layout>
+  <PageTitle title="Archive" subtitle="Praesentium ea asperiores molestias aperiam enim accusantium. Voluptatibus dicta quam eum labore dolorum eum nobis deleniti eum." />
+</Layout>
