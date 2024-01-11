@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import {sanityClient} from "sanity:client";
+import PageTitle from "../../components/PageTitle.astro";
 const exhibitionRawData = await sanityClient.fetch(`
   *[_type == 'exhibition' && defined(dateRange)]|order(dateRange.startDate desc){
     title,
@@ -25,17 +26,19 @@ exhibitionRawData.forEach((exhibition) => {
 
 ---
 <Layout>
-  <main>
-    <hgroup class="exhibition-grid max-w-5xl mx-auto mb-44 mt-16">
-      <div></div>
-      <h1 class="font-serif font-bold text-neutral-900 text-9xl">Exhibitions</h1>
-    </hgroup>
-    <div class="mb-40 max-w-5xl mx-auto">
+  <main class="max-w-5xl mx-auto">
+    <div class="grid grid-cols-10">
+      <div class="col-span-2"></div>
+      <div class="col-span-8">
+        <PageTitle title="Exhibitions" />
+      </div>
+    </div>
+    <div class="mb-40">
       {
         exhibitionYears.map((year) => (
-          <div class="exhibition-grid">
-            <h2 class="font-serif font-bold proportional-nums text-3xl tracking-wider py-6">{year}</h2>
-            <ul class="flex-1">
+          <div class="grid grid-cols-10">
+            <h2 class="col-span-2 font-serif font-bold proportional-nums text-3xl tracking-wider py-6">{year}</h2>
+            <ul class="col-span-8 flex-1">
               {
                 exhibitionByYears[exhibitionYears.indexOf(year)].map((exhibition) => (
                   <li class="flex justify-between items-center py-6 border-b border-neutral-900 text-neutral-900">
@@ -57,10 +60,3 @@ exhibitionRawData.forEach((exhibition) => {
     </div>
   </main>
 </Layout>
-
-<style>
-  .exhibition-grid {
-    display: grid;
-    grid-template-columns: 208px 1fr;
-  }
-</style>
