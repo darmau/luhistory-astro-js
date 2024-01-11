@@ -2,25 +2,24 @@
 import Layout from "../../layouts/Layout.astro";
 import {sanityClient} from "sanity:client";
 import PageTitle from "../../components/PageTitle.astro";
-const exhibitionRawData = await sanityClient.fetch(`
-  *[_type == 'exhibition' && defined(dateRange)]|order(dateRange.startDate desc){
+const caseStudyRawData = await sanityClient.fetch(`
+  *[_type == 'caseStudy' && defined(publishDate)]|order(publishDate desc){
     title,
-    "year": dateRange.startDate,
-    "city": location.city,
+    "year": publishDate,
     "slug": slug.current
 }`);
 
-// 遍历exhibitions，将exhibitions中的每个元素，分别push进两个数组。如：exhibitionYears = [2019,
-// 2020]，exhibitionByYears = [[{}, {}, {}], [{}, {}, {}]]
-const exhibitionYears = [];
-const exhibitionByYears = [];
-exhibitionRawData.forEach((exhibition) => {
-  const year = exhibition.year.split("-")[0];
-  if (exhibitionYears.indexOf(year) === -1) {
-    exhibitionYears.push(year);
-    exhibitionByYears.push([exhibition]);
+// 遍历caseStudy，将caseStudy中的每个元素，分别push进两个数组。如：caseStudyYears = [2019,
+// 2020]，caseStudyByYears = [[{}, {}, {}], [{}, {}, {}]]
+const caseStudyYears = [];
+const caseStudyByYears = [];
+caseStudyRawData.forEach((caseStudy) => {
+  const year = caseStudy.year.split("-")[0];
+  if (caseStudyYears.indexOf(year) === -1) {
+    caseStudyYears.push(year);
+    caseStudyByYears.push([caseStudy]);
   } else {
-    exhibitionByYears[exhibitionYears.indexOf(year)].push(exhibition);
+    caseStudyByYears[caseStudyYears.indexOf(year)].push(caseStudy);
   }
 });
 
@@ -30,26 +29,25 @@ exhibitionRawData.forEach((exhibition) => {
     <div class="grid grid-cols-10">
       <div class="col-span-2"></div>
       <div class="col-span-8">
-        <PageTitle title="Exhibitions" />
+        <PageTitle title="Case Stuies" />
       </div>
     </div>
     <div class="mb-40">
       {
-        exhibitionYears.map((year) => (
+        caseStudyYears.map((year) => (
           <div class="grid grid-cols-10">
             <h2 class="col-span-2 font-serif font-bold proportional-nums text-3xl tracking-wider py-6">{year}</h2>
             <ul class="col-span-8 flex-1">
               {
-                exhibitionByYears[exhibitionYears.indexOf(year)].map((exhibition) => (
+                caseStudyByYears[caseStudyYears.indexOf(year)].map((caseStudy) => (
                   <li class="flex justify-between items-center py-6 border-b border-neutral-900 text-neutral-900">
                     <a
-                      href={`/exhibition/detail/${exhibition.slug}`}
+                      href={`/case-study/detail/${caseStudy.slug}`}
                       class="font-serif font-bold proportional-nums text-3xl text-neutral-900"
                       data-astro-prefetch
                     >
-                      {exhibition.title}
+                      {caseStudy.title}
                     </a>
-                    <p class="font-sans text-base font-normal text-neutral-900 opacity-50">{exhibition.city}</p>
                   </li>
                 ))
               }

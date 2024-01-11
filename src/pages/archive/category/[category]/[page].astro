@@ -1,0 +1,80 @@
+---
+import {sanityClient} from "sanity:client";
+import PageTitle from "../../../../components/PageTitle.astro";
+import Layout from "../../../../layouts/Layout.astro";
+import Category from "../../../../data/ArchiveCategory";
+export async function getStaticPaths({paginate}) {
+  const allCategory = Category;
+  const allArticles = await sanityClient.fetch(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
+    title,
+    publishDate,
+    category,
+    "slug": slug.current,
+  }`);
+  return allCategory.flatMap((category) => {
+    const filteredArticles = allArticles.filter((article) => article.category === category);
+    return paginate(filteredArticles, {
+      params: {category},
+      pageSize: 5,
+    })
+  })
+}
+
+// 转换成大写
+function toUppercase (str) {
+  return str.replace(/-/g, '').toUpperCase();
+}
+
+const ArticleCategories = Category;
+const {category, page} = Astro.props;
+const params = Astro.params;
+---
+
+<Layout>
+  <PageTitle
+    title = "Archive"
+    subtitle = "Praesentium ea asperiores molestias aperiam enim accusantium. Voluptatibus dicta quam eum labore dolorum eum nobis deleniti eum."
+  />
+  <main class="max-w-7xl mx-auto grid grid-cols-12 px-8">
+    <ul class="col-span-2 space-y-2">
+      <li class="text-sm text-neutral-900 tracking-wider">
+        <a
+          class="text-sm text-neutral-900 opacity-50 tracking-wider hover:opacity-100"
+          href={`/archive/all/1`}
+          data-astro-prefetch>
+          ALL
+        </a>
+      </li>
+      {ArticleCategories.map((category) => {
+        return (
+          <li>
+            <a
+              class={`${category === params.category ? 'text-neutral-900' : 'text-neutral-900 opacity-50'} text-sm tracking-wider hover:opacity-100`}
+              href={`/archive/category/${category}/1`}
+              data-astro-prefetch>
+              {toUppercase(category)}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+      <div class="col-start-4 col-end-12">
+        <div class="space-y-8">
+          {page.data.map((article) => {
+            return (
+              <article>
+                <a href={`/archive/detail/${article.slug}`}>
+                  <h2 class="font-serif font-bold text-3xl text-neutral-900 mb-2">{article.title}</h2>
+                  <small class="text-base text-neutral-900 opacity-50">{article.category}</small>
+                </a>
+              </article>
+            );
+          })}
+        </div>
+        <div class="my-8 flex justify-between">
+          {page.url.prev ? <a href={page.url.prev}>Previous</a> : null}
+          {page.url.next ? <a href={page.url.next}>Next</a> : null}
+        </div>
+      </div>
+  </main>
+</Layout>

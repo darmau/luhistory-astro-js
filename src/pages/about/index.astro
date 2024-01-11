@@ -1,0 +1,14 @@
+---
+import {sanityClient} from "sanity:client";
+import PageTitle from "../../components/PageTitle.astro";
+import Layout from "../../layouts/Layout.astro";
+const profileData = await sanityClient.fetch(`*[_type == 'profile' ]{
+  overview,
+  "blocks": pageBlock,
+  "cvLink": cvLink.asset->url
+}`);
+---
+
+<Layout>
+  <PageTitle title="About" />
+</Layout>

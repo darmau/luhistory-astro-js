@@ -24,22 +24,22 @@ import menuIcon from '../assets/icons/menu.svg';
       class = "col-span-1 lg:col-span-3 lg:mx-auto text-white font-serif font-bold text-4xl md:text-5xl space-y-6"
     >
       <li class = "w-fit">
-        <a href = "/profile">Profile</a>
+        <a href = "/about">About</a>
       </li>
       <li class = "w-fit">
-        <a href = "/exhibitions/1">Exhibitions</a>
+        <a href = "/exhibition" data-astro-prefetch = "load">Exhibitions</a>
       </li>
       <li class = "w-fit">
-        <a href = "/books/1">Books</a>
-      </li>
-      <li class = "w-fit">
-        <a href = "/documents/1">Documents</a>
+        <a href = "/book/category" data-astro-prefetch = "load">Books</a>
       </li>
       <li class = "w-fit">
         <a href = "/teaching">Teaching</a>
       </li>
       <li class = "w-fit">
-        <a href = "/case-studies/1">Case Studies</a>
+        <a href = "/archive/all/1/" data-astro-prefetch = "load">Archive</a>
+      </li>
+      <li class = "w-fit">
+        <a href = "/case-study">Case Studies</a>
       </li>
     </ul>
     <div class = "text-white col-span-1 space-y-12 lg:col-span-2">
@@ -76,21 +76,30 @@ import menuIcon from '../assets/icons/menu.svg';
 </nav>
 
 <script>
-  const navFullscreen = document.getElementById('nav-fullscreen');
-  const closeButton = document.getElementById('close-button');
-  const menuButton = document.querySelector('.menu-button');
+  function init() {
+    const navFullscreen = document.getElementById('nav-fullscreen');
+    const closeButton = document.getElementById('close-button');
+    const menuButton = document.querySelector('.menu-button');
 
-  closeButton.addEventListener('click', () => {
-    navFullscreen.classList.remove('show-fullscreen-nav');
-    // 恢复滚动
-    document.body.style.overflow = 'auto';
-  });
+    closeButton.addEventListener('click', () => {
+      navFullscreen.classList.remove('show-fullscreen-nav');
+      // 恢复滚动
+      document.body.style.overflow = 'auto';
+    });
 
-  menuButton.addEventListener('click', () => {
-    navFullscreen.classList.add('show-fullscreen-nav');
-    // 禁用滚动
-    document.body.style.overflow = 'hidden';
-  });
+    menuButton.addEventListener('click', () => {
+      navFullscreen.classList.add('show-fullscreen-nav');
+      console.log('clicked!')
+      // 禁用滚动
+      document.body.style.overflow = 'hidden';
+    });
+  }
+
+  // 初始化
+  init();
+
+  // 监听 astro:after-swap 事件
+  document.addEventListener('astro:after-swap', init);
 </script>
 
 <style>
