@@ -109,6 +109,7 @@ const exhibitionData = await sanityClient.fetch(`
   }
 
   document.addEventListener('DOMContentLoaded', moveExhibitionList);
+  document.addEventListener('astro:after-swap', moveExhibitionList);
 
   window.addEventListener('resize', function() {
     moveExhibitionList();
