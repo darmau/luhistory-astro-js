@@ -2,6 +2,8 @@
 import {sanityClient} from "sanity:client";
 import Layout from "../../../layouts/Layout.astro";
 import PageTitle from "../../../components/PageTitle.astro";
+import Category from "../../../data/ArchiveCategory";
+import Uppercase from "../../../function/Uppercase";
 export async function getStaticPaths({paginate}) {
   const allArticles = await sanityClient.fetch(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
@@ -12,30 +14,55 @@ export async function getStaticPaths({paginate}) {
   return paginate(allArticles, { pageSize: 5 });
 }
 
+// 转换成大写
+function toUppercase (str) {
+  return str.replace(/-/g, '').toUpperCase();
+}
+
+const ArticleCategories = Category;
 const { page } = Astro.props;
 ---
 
 <Layout>
   <PageTitle
-    title="Articles"
+    title="Archive"
     subtitle="Praesentium ea asperiores molestias aperiam enim accusantium. Voluptatibus dicta quam eum labore dolorum eum nobis deleniti eum."
   />
-  <main class="max-w-5xl mx-auto">
-    <div class="space-y-8">
-      {page.data.map((article) => {
+  <main class="max-w-7xl mx-auto grid grid-cols-12 px-8">
+    <ul class="col-span-2 space-y-2">
+      <li class="text-sm text-neutral-900 tracking-wider">
+        ALL
+      </li>
+      {ArticleCategories.map((category) => {
         return (
-          <article>
-            <a href={`/archive/detail/${article.slug}`}>
-              <h2 class="font-serif font-bold text-3xl text-neutral-900">{article.title}</h2>
-              <small class="text-base text-neutral-900 opacity-50">{article.category}</small>
+          <li>
+            <a
+              class="text-sm text-neutral-900 opacity-50 tracking-wider hover:opacity-100"
+              href={`/archive/category/${category}/1`}
+              data-astro-prefetch>
+              {toUppercase(category)}
             </a>
-          </article>
+          </li>
         );
       })}
-    </div>
-    <div class="my-8 flex justify-between">
-      {page.url.prev ? <a href={page.url.prev}>Previous</a> : null}
-      {page.url.next ? <a href={page.url.next}>Next</a> : null}
+    </ul>
+    <div class="col-start-4 col-end-12">
+      <div class="space-y-8">
+        {page.data.map((article) => {
+          return (
+            <article>
+              <a href={`/archive/detail/${article.slug}`}>
+                <h2 class="font-serif font-bold text-3xl text-neutral-900">{article.title}</h2>
+                <small class="text-base text-neutral-900 opacity-50">{article.category}</small>
+              </a>
+            </article>
+          );
+        })}
+      </div>
+      <div class="my-8 flex justify-between">
+        {page.url.prev ? <a href={page.url.prev}>Previous</a> : null}
+        {page.url.next ? <a href={page.url.next}>Next</a> : null}
+      </div>
     </div>
   </main>
 </Layout>
