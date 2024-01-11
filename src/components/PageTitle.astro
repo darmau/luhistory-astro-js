@@ -4,6 +4,8 @@ const { title, subtitle, bgWhite } = Astro.props;
 
 <!--TODO 根据文本长度不同，调整字号-->
 <hgroup class="max-w-5xl mx-auto mb-44 mt-16">
-  <h1 class="font-serif font-bold text-neutral-900 text-9xl">{title}</h1>
-  {subtitle && <h2>{subtitle}</h2>}
+  <h1 class="font-serif font-bold text-neutral-900 text-9xl leading-snug">{title}</h1>
+  {subtitle &&
+    <h2 class="font-serif font-semibold text-2xl text-neutral-900 my-8">{subtitle}</h2>
+  }
 </hgroup>

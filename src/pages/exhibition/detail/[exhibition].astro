@@ -3,6 +3,7 @@ import {sanityClient} from "sanity:client";
 import Layout from "../../../layouts/Layout.astro";
 import {Image} from 'astro:assets'
 import PageBlock from "../../../components/PageBlock.astro";
+import PageTitle from "../../../components/PageTitle.astro";
 export async function getStaticPaths() {
   const slugs = await sanityClient.fetch(`*[_type == 'exhibition' && defined(slug)]{
     title,
@@ -100,12 +101,8 @@ function formatDate(start, end) {
 ---
 
 <Layout>
-  <div class="frame p-8 max-w-screen-xl mx-auto">
-    <div class="rectangle"></div>
-    <h1 class="font-serif font-bold text-8xl text-neutral-900 leading-snug">
-      {title}
-    </h1>
-    <aside class="info space-y-8">
+  <div class="max-w-8xl mx-auto grid grid-cols-12 gap-8">
+    <aside class="space-y-8 col-start-1 col-end-3 sticky top-1/4 h-fit">
       { curator &&
         <div>
           <h3 class="text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Curator</h3>
@@ -121,10 +118,8 @@ function formatDate(start, end) {
           <p class="text-lg font-semibold font-serif">{place}</p>
         </div> }
     </aside>
-    <main class="content flex-1">
-      <h2 class="font-serif font-semibold text-2xl text-neutral-900 my-8">
-        {subtitle}
-      </h2>
+    <main class="col-start-4 col-end-11">
+      <PageTitle title={title} subtitle={subtitle} />
       { cover &&
         <Image src={cover} alt={title} width="640" height="420" class="w-4/5 my-16" />
       }
@@ -133,33 +128,3 @@ function formatDate(start, end) {
     </main>
   </div>
 </Layout>
-
-<style>
-  .frame {
-    display: grid;
-    gap: 36px;
-    grid-template-columns: 1fr auto;
-    grid-template-rows: 1fr auto;
-    grid-template-areas:
-      "placeholder title"
-      "info main";
-  }
-
-  .rectangle {
-    grid-area: placeholder;
-    width: 100%;
-  }
-
-  .title {
-    grid-area: title;
-  }
-
-  .info {
-    grid-area: info;
-    min-width: 240px;
-  }
-
-  .content {
-    grid-area: main;
-  }
-</style>

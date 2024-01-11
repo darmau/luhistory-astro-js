@@ -21,7 +21,11 @@ export default {
 			'8xl': '6rem',
 			'9xl': '7.5rem',
 		},
-		extend: {},
+		extend: {
+			maxWidth: {
+				'8xl': '1312px',
+			}
+		},
 	},
 	plugins: [],
 }
