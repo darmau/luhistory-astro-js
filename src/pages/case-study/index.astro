@@ -1,0 +1,60 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import {sanityClient} from "sanity:client";
+import PageTitle from "../../components/PageTitle.astro";
+const caseStudyRawData = await sanityClient.fetch(`
+  *[_type == 'caseStudy' && defined(publishDate)]|order(publishDate desc){
+    title,
+    "year": publishDate,
+    "slug": slug.current
+}`);
+
+// 遍历caseStudy，将caseStudy中的每个元素，分别push进两个数组。如：caseStudyYears = [2019,
+// 2020]，caseStudyByYears = [[{}, {}, {}], [{}, {}, {}]]
+const caseStudyYears = [];
+const caseStudyByYears = [];
+caseStudyRawData.forEach((caseStudy) => {
+  const year = caseStudy.year.split("-")[0];
+  if (caseStudyYears.indexOf(year) === -1) {
+    caseStudyYears.push(year);
+    caseStudyByYears.push([caseStudy]);
+  } else {
+    caseStudyByYears[caseStudyYears.indexOf(year)].push(caseStudy);
+  }
+});
+
+---
+<Layout>
+  <main class="max-w-5xl mx-auto">
+    <div class="grid grid-cols-10">
+      <div class="col-span-2"></div>
+      <div class="col-span-8">
+        <PageTitle title="Case Stuies" />
+      </div>
+    </div>
+    <div class="mb-40">
+      {
+        caseStudyYears.map((year) => (
+          <div class="grid grid-cols-10">
+            <h2 class="col-span-2 font-serif font-bold proportional-nums text-3xl tracking-wider py-6">{year}</h2>
+            <ul class="col-span-8 flex-1">
+              {
+                caseStudyByYears[caseStudyYears.indexOf(year)].map((caseStudy) => (
+                  <li class="flex justify-between items-center py-6 border-b border-neutral-900 text-neutral-900">
+                    <a
+                      href={`/case-study/detail/${caseStudy.slug}`}
+                      class="font-serif font-bold proportional-nums text-3xl text-neutral-900"
+                      data-astro-prefetch
+                    >
+                      {caseStudy.title}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </main>
+</Layout>

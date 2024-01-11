@@ -3,7 +3,6 @@ import {sanityClient} from "sanity:client";
 import Layout from "../../../layouts/Layout.astro";
 import PageTitle from "../../../components/PageTitle.astro";
 import Category from "../../../data/ArchiveCategory";
-import Uppercase from "../../../function/Uppercase";
 export async function getStaticPaths({paginate}) {
   const allArticles = await sanityClient.fetch(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
