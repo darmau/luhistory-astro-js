@@ -16,7 +16,7 @@ const { articles } = Astro.props
   <ul class="space-y-8">
     {articles.map((article) => (
       <li>
-        <a href={`/article/${article.slug}`}>
+        <a href={`/archive/detail/${article.slug}`}>
           <h3 class="font-serif font-bold text-3xl text-neutral-900 mb-3">{article.title}</h3>
           <small class="font-sans text-base text-neutral-900 opacity-50">{generageCategory(article.category)}</small>
         </a>

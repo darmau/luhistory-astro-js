@@ -1,0 +1,27 @@
+---
+import { PortableText } from "astro-portabletext";
+function ifPresent(endDate) {
+  if (endDate.present) {
+    return 'to present'
+  } else {
+    return new Date(endDate.endDate).getFullYear()
+  }
+}
+
+const {title, records} = Astro.props;
+---
+
+<div>
+  <h2>{title}</h2>
+  {records.map((record) => {
+    return (
+        <li>
+          <div>
+            <span>{new Date(record.startDate).getFullYear()}</span>
+            <span>{ifPresent(record.endDate)}</span>
+          </div>
+          <PortableText value={record.details} />
+        </li>
+    )
+  })}
+</div>

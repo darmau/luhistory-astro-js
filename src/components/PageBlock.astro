@@ -2,6 +2,8 @@
 import RelatedBooks from "./page-block/RelatedBooks.astro";
 import RelatedDocuments from "./page-block/RelatedDocuments.astro";
 import Gallery from "./page-block/Gallery.astro";
+import Timeline from "./page-block/Timeline.astro";
+import TextBlock from "./text-block/TextBlock.astro";
 const { blocks } = Astro.props
 ---
 
@@ -15,6 +17,10 @@ const { blocks } = Astro.props
         return <RelatedDocuments {...block} />;
       case "gallery":
         return <Gallery {...block} />;
+      case "timeline":
+        return <Timeline {...block} />;
+      case "content":
+        return <TextBlock overview={block.content} />;
       default:
         return null;
     }

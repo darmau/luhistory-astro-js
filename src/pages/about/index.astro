@@ -2,13 +2,58 @@
 import {sanityClient} from "sanity:client";
 import PageTitle from "../../components/PageTitle.astro";
 import Layout from "../../layouts/Layout.astro";
+import TextBlock from "../../components/text-block/TextBlock.astro";
+import PageBlock from "../../components/PageBlock.astro";
 const profileData = await sanityClient.fetch(`*[_type == 'profile' ]{
-  overview,
-  "blocks": pageBlock,
-  "cvLink": cvLink.asset->url
+  "cvLink": cvLink.asset->url,
+  "overview": overview[] {
+    _type == 'imageBlock' => {
+      type,
+      "url": image.asset->url,
+      "caption": image.caption
+    },
+    _type == 'gallery' => {
+      type,
+      title,
+      "pictures": images[]{
+        "url": asset->url,
+        caption
+      }
+    },
+    ...
+  },
+  "blocks": pageBlock[]{
+    _type == 'gallery' => {
+      title, 
+      "type": 'gallery',
+      "gallery": type,
+      "pictures": images[]{
+        caption,
+        "url": asset->url
+      }
+    },
+    _type == 'timeline' => {
+      "type": 'timeline',
+      ...
+    },
+    _type == 'content' => {
+      "type": 'content',
+      ...
+    },
+    ...
+  }
 }`);
+
+const {overview, blocks, cvLink} = profileData[0];
 ---
 
 <Layout>
   <PageTitle title="About" />
+  <main class="max-w-7xl mx-auto grid grid-cols-12 px-8 py-16">
+    <h2 class="col-span-2 space-y-2">Link</h2>
+    <div class="col-start-4 col-end-12">
+      <TextBlock overview={overview} />
+      {blocks && <PageBlock blocks={blocks} />}
+    </div>
+  </main>
 </Layout>
