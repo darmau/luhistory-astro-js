@@ -1,22 +1,19 @@
 ---
-function toPlainText(blocks = []) {
-  return blocks
-  // loop through each block
-  .map(block => {
-    // if it's not a text block with children,
-    // return nothing
-    if (block._type !== 'block' || !block.children) {
-      return ''
-    }
-    // loop through the children spans, and join the
-    // text strings
-    return block.children.map(child => child.text).join('')
-  })
-  // join the paragraphs leaving split by two linebreaks
-  .join('\n\n')
-}
+import { PortableText } from "astro-portabletext";
+import SingleImage from "./SingleImage.astro";
+import Gallery from "../page-block/Gallery.astro";
 
 const { overview } = Astro.props;
 ---
 
-<h1>{toPlainText(overview)}</h1>
+<div>
+  { overview.map((block) => {
+    if (block._type === 'gallery') {
+      return <Gallery gallery={block.type} title={block.title} images={block.pictures} />
+    } else if (block._type === 'imageBlock') {
+      return <SingleImage url={block.url} size={block.type} caption={block.caption} />
+    } else {
+      return <PortableText value={block} />
+    }
+  })}
+</div>

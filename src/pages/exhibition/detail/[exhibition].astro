@@ -4,6 +4,7 @@ import Layout from "../../../layouts/Layout.astro";
 import {Image} from 'astro:assets'
 import PageBlock from "../../../components/PageBlock.astro";
 import PageTitle from "../../../components/PageTitle.astro";
+import TextBlock from "../../../components/text-block/TextBlock.astro";
 export async function getStaticPaths() {
   const slugs = await sanityClient.fetch(`*[_type == 'exhibition' && defined(slug)]{
     title,
@@ -14,7 +15,22 @@ export async function getStaticPaths() {
     "cover": cover.asset->url,
     "curator": curator,
     "place": location->place,
-    overview,
+    "overview": overview[] {
+      _type == 'imageBlock' => {
+        type,
+        "url": image.asset->url,
+        "caption": image.caption
+    },
+      _type == 'gallery' => {
+        type,
+        title,
+        "pictures": images[]{
+          "url": asset->url,
+          caption
+        }
+    },
+      ...
+    },
     "blocks": pageBlocks[]
       {
         _type == 'gallery' => {
@@ -76,6 +92,7 @@ const {
   curator,
   place,
   blocks,
+  overview
 } = Astro.props
 
 // 将2023-12-09和2023-12-16转换成Dec 9 - 16, 2023
@@ -123,7 +140,7 @@ function formatDate(start, end) {
       { cover &&
         <Image src={cover} alt={title} width="640" height="420" class="w-4/5 my-16" />
       }
-      <p>正文部分需要专门处理，暂时跳过</p>
+      <TextBlock overview={overview} />
       {blocks && <PageBlock blocks={blocks} />}
     </main>
   </div>
