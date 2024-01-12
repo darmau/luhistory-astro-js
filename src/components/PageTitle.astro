@@ -1,11 +1,54 @@
 ---
-const { title, subtitle, bgWhite = true } = Astro.props;
+const {title, subtitle, bgWhite = true} = Astro.props;
 ---
 
 <!--TODO 根据文本长度不同，调整字号-->
-<hgroup class="max-w-5xl mx-auto mb-44 mt-16">
-  <h1 class="font-serif font-bold text-neutral-900 text-9xl leading-snug">{title}</h1>
-  {subtitle &&
-    <h2 class="font-serif font-semibold text-2xl text-neutral-900 my-8">{subtitle}</h2>
+<header>
+  { bgWhite === true ?
+    <hgroup class = "max-w-5xl mx-auto mb-44 mt-16">
+      <h1
+        class = "font-serif font-bold text-neutral-900 text-9xl leading-snug"
+      >{title}</h1>
+      {subtitle &&
+        <h2
+          class = "font-serif font-semibold text-2xl text-neutral-900 my-8"
+        >{subtitle}</h2>
+      }
+    </hgroup>
+      :
+    <hgroup class = "bg-img">
+      <div class="w-full max-w-7xl mx-auto grid grid-cols-12 px-8 z-10">
+        <h1
+          class = "col-start-4 col-end-12 font-serif font-bold text-white text-9xl leading-snug"
+        >{title}</h1>
+        {subtitle &&
+          <h2
+            class = "col-start-4 col-end-12 font-serif font-semibold text-2xl text-white my-8"
+          >{subtitle}</h2>
+        }
+      </div>
+      <div class="overlay"></div>
+    </hgroup>
   }
-</hgroup>
+</header>
+
+<style>
+  .bg-img {
+    background-image: url('/src/assets/images/cover.jpg');
+    width: 100vw;
+    height: 800px;
+    margin-top: -104px;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .overlay {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.35);
+    position: absolute;
+    top: 0;
+    z-index: 1;
+  }
+</style>
