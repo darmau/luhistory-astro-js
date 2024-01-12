@@ -24,7 +24,7 @@ export default function App({title, images}) {
         </hgroup>
 
         <div className = "grid grid-cols-3 gap-6 max-w-3xl">
-          {images.map((image, index) => (
+          {images.slice(0, 6).map((image, index) => (
               <div onClick={
                 () => {
                   setIndex(index);
