@@ -7,6 +7,8 @@ function generateLink(type, slug) {
       return `/book/detail/${slug}`;
     case 'exhibition':
       return `/exhibition/detail/${slug}`;
+    default:
+      return `/`;
   }
 }
 
