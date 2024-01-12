@@ -3,6 +3,7 @@ import Layout from "../../../layouts/Layout.astro";
 import {sanityClient} from "sanity:client";
 import {Image} from 'astro:assets'
 import PageTitle from "../../../components/PageTitle.astro";
+import PublicationCategory from "../../../data/PublicationCategory";
 
 const books = await sanityClient.fetch(`*[_type == 'book' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
@@ -16,11 +17,47 @@ const books = await sanityClient.fetch(`*[_type == 'book' && defined(slug) && de
 <Layout>
   <PageTitle title="Publications" subtitle="Repellat molestiae nihil iusto quo quia. In voluptatum hic libero omnis ullam deleniti. Quia vel voluptatem voluptatem excepturi omnis id." bgWhite="flase" />
 
-  {books.map((book) => (
-    <div>
-      <h2>{book.title}</h2>
-      <Image src={book.cover} alt={book.title} width="120" height="120" />
-      <p>{book.publishDate.split('-')[0]}</p>
-    </div>
-  ))}
+  <main class="max-w-7xl mx-auto grid grid-cols-12 px-8 py-16">
+    <ul class="col-span-2 space-y-2">
+      <li class="text-sm text-neutral-900 tracking-wider">
+        ALL
+      </li>
+      {PublicationCategory.map((category) => {
+        return (
+          <li>
+            <a
+              class="text-sm text-neutral-900 opacity-50 tracking-wider hover:opacity-100"
+              href={`/book/category/${category}`}
+              data-astro-prefetch>
+              {category.split('-').join(' ').toUpperCase()}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+    <ul class="col-start-4 col-end-12 grid grid-cols-4 gap-8">
+      {books.map((book) => (
+        <li>
+          <a href={`/book/detail/${book.slug}`} class="flex flex-col gap-4" data-astro-prefetch>
+            <div class="h-45 w-45 aspect-square bg-neutral-100 flex items-center justify-center shrink-0">
+              {book.cover && (
+                <Image
+                  src={book.cover}
+                  alt={book.title}
+                  class="h-3/4 w-3/4 object-contain"
+                  height="128"
+                  width="128"
+                />
+              )
+              }
+            </div>
+            <div class="space-y-2">
+              <h3 class="font-serif font-bold text-neutral-900 text-2xl">{book.title}</h3>
+              <p class="text-neutral-900 opacity-50">{new Date(book.publishDate).getFullYear()}</p>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </main>
 </Layout>
