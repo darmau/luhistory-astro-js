@@ -20,7 +20,7 @@ export async function getStaticPaths() {
         type,
         "url": image.asset->url,
         "caption": image.caption
-    },
+      },
       _type == 'gallery' => {
         type,
         title,
@@ -28,7 +28,7 @@ export async function getStaticPaths() {
           "url": asset->url,
           caption
         }
-    },
+      },
       ...
     },
     "blocks": pageBlocks[]
