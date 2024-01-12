@@ -118,6 +118,7 @@ function formatDate(start, end) {
 ---
 
 <Layout>
+  <PageTitle title={title} subtitle={subtitle} />
   <div class="max-w-8xl mx-auto grid grid-cols-12 gap-8">
     <aside class="space-y-8 col-start-1 col-end-3 sticky top-1/4 h-fit">
       { curator &&
@@ -136,7 +137,6 @@ function formatDate(start, end) {
         </div> }
     </aside>
     <main class="col-start-4 col-end-11">
-      <PageTitle title={title} subtitle={subtitle} />
       { cover &&
         <Image src={cover} alt={title} width="640" height="420" class="w-4/5 my-16" />
       }

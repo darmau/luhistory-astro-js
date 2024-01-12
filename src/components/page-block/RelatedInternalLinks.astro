@@ -1,0 +1,31 @@
+---
+function generateLink(type, slug) {
+  switch (type) {
+    case 'article':
+      return `/archive/detail/${slug}`;
+    case 'book':
+      return `/book/detail/${slug}`;
+    case 'exhibition':
+      return `/exhibition/detail/${slug}`;
+  }
+}
+
+const {links} = Astro.props;
+---
+
+<div class = "my-32">
+  <h2 class = "font-serif font-bold text-6xl text-neutral-900 mb-16">
+    Details</h2>
+  <div class = "flex flex-col gap-8">
+    {links.map((page) => {
+      return (
+        <a href = {generateLink(page.type, page.slug)} class = "space-y-2">
+          <h3
+            class = "font-serif font-bold text-3xl md:text-3xl text-neutral-900"
+          >{page.title}</h3>
+          <p class = "text-neutral-900 opacity-50 capitalize">{page.type}</p>
+        </a>
+      )
+    })}
+  </div>
+</div>

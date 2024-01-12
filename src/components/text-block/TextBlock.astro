@@ -7,7 +7,7 @@ const { overview } = Astro.props;
 ---
 
 <div>
-  { overview.map((block) => {
+  { overview && overview.map((block) => {
     if (block._type === 'gallery') {
       return <Gallery gallery={block.type} title={block.title} images={block.pictures} />
     } else if (block._type === 'imageBlock') {
