@@ -1,0 +1,19 @@
+---
+import { PortableText } from "astro-portabletext";
+import SingleImage from "./SingleImage.astro";
+import Gallery from "../page-block/Gallery.astro";
+
+const { overview } = Astro.props;
+---
+
+<div>
+  { overview.map((block) => {
+    if (block._type === 'gallery') {
+      return <Gallery gallery={block.type} title={block.title} images={block.pictures} />
+    } else if (block._type === 'imageBlock') {
+      return <SingleImage url={block.url} size={block.type} caption={block.caption} />
+    } else {
+      return <PortableText value={block} />
+    }
+  })}
+</div>

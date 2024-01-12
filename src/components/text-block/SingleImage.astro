@@ -1,0 +1,23 @@
+---
+import {Image} from 'astro:assets'
+const { url, caption, size } = Astro.props;
+---
+
+<div class="my-8">
+  {size === 'fullWidth' ?
+    <Image
+      class="w-full"
+      src={url}
+      alt={caption || '图片'}
+      width="800"
+      height="600"
+    />
+  :
+    <Image
+      class="w-4/5"
+      src={url}
+      alt={caption || '图片'}
+      width="800"
+      height="600"
+    />}
+</div>
