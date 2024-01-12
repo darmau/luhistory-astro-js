@@ -17,7 +17,7 @@ const {title, subtitle, bgWhite = true} = Astro.props;
     </hgroup>
       :
     <hgroup class = "bg-img">
-      <div class="w-full max-w-7xl mx-auto grid grid-cols-12 px-8">
+      <div class="w-full max-w-7xl mx-auto grid grid-cols-12 px-8 z-10">
         <h1
           class = "col-start-4 col-end-12 font-serif font-bold text-white text-9xl leading-snug"
         >{title}</h1>
@@ -40,5 +40,15 @@ const {title, subtitle, bgWhite = true} = Astro.props;
     margin-top: -104px;
     display: flex;
     align-items: center;
+    position: relative;
+  }
+
+  .overlay {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.35);
+    position: absolute;
+    top: 0;
+    z-index: 1;
   }
 </style>
