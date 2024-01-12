@@ -32,6 +32,9 @@ dependencies:
   astro:
     specifier: ^4.1.1
     version: 4.1.1
+  astro-portabletext:
+    specifier: ^0.9.6
+    version: 0.9.6
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -2088,6 +2091,13 @@ packages:
   /arrify@1.0.1:
     resolution: {integrity: sha512-3CYzex9M9FGQjCGMGyi6/31c8GJbgb0qGyrx5HWxPd0aCwh4cB2YjMb2Xf9UuoogrMrlO9cTqnB5rI5GHZTcUA==}
     engines: {node: '>=0.10.0'}
+    dev: false
+
+  /astro-portabletext@0.9.6:
+    resolution: {integrity: sha512-v8YKRgjCpaxr94NefXRsH5ti9YoXqCrYah46epdJ4AdwtvIiLZA8vONFQjk5Y2cJ2UEEeGd+/8lo+tWmlo3aPw==}
+    dependencies:
+      '@portabletext/toolkit': 2.0.10
+      '@portabletext/types': 2.0.8
     dev: false
 
   /astro@4.1.1:
