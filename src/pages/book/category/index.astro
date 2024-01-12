@@ -2,6 +2,7 @@
 import Layout from "../../../layouts/Layout.astro";
 import {sanityClient} from "sanity:client";
 import {Image} from 'astro:assets'
+import PageTitle from "../../../components/PageTitle.astro";
 
 const books = await sanityClient.fetch(`*[_type == 'book' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
@@ -13,7 +14,8 @@ const books = await sanityClient.fetch(`*[_type == 'book' && defined(slug) && de
 ---
 
 <Layout>
-  <h1>全部图书</h1>
+  <PageTitle title="Publications" subtitle="Repellat molestiae nihil iusto quo quia. In voluptatum hic libero omnis ullam deleniti. Quia vel voluptatem voluptatem excepturi omnis id." bgWhite="flase" />
+
   {books.map((book) => (
     <div>
       <h2>{book.title}</h2>
