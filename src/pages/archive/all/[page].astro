@@ -10,7 +10,7 @@ export async function getStaticPaths({paginate}) {
     category,
     "slug": slug.current,
   }`);
-  return paginate(allArticles, { pageSize: 5 });
+  return paginate(allArticles, { pageSize: 10 });
 }
 
 const ArticleCategories = Category;

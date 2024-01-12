@@ -15,7 +15,7 @@ export async function getStaticPaths({paginate}) {
     const filteredArticles = allArticles.filter((article) => article.category === category);
     return paginate(filteredArticles, {
       params: {category},
-      pageSize: 5,
+      pageSize: 10,
     })
   })
 }
