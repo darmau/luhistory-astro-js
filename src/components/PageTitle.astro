@@ -1,13 +1,26 @@
 ---
 const {title, subtitle, bgWhite = true} = Astro.props;
+// 根据title的长度，返回一个4-9之间的数字
+function getTextSize(size) {
+  if (size < 20) {
+    return 'text-9xl';
+  } else if (size < 50) {
+    return 'text-8xl';
+  } else if (size < 80) {
+    return 'text-7xl';
+  } else {
+    return 'text-6xl';
+  }
+}
+
+const titleSize = getTextSize(title.length);
 ---
 
-<!--TODO 根据文本长度不同，调整字号-->
 <header>
   {bgWhite === true ?
-    <hgroup class = "w-full max-w-7xl mx-auto grid grid-cols-12 px-8 z-10 py-24">
+    <hgroup class = "w-full max-w-8xl mx-auto grid grid-cols-12 px-8 z-10 py-24">
       <h1
-        class = "col-start-4 col-end-12 font-serif font-bold text-neutral-900 text-9xl leading-snug"
+        class = {`col-start-4 col-end-12 font-serif font-bold text-neutral-900 ${titleSize} leading-snug`}
       >{title}</h1>
       {subtitle &&
         <h2
@@ -17,9 +30,9 @@ const {title, subtitle, bgWhite = true} = Astro.props;
     </hgroup>
       :
     <hgroup class = "bg-img">
-      <div class = "w-full max-w-7xl mx-auto grid grid-cols-12 px-8 z-10">
+      <div class = "w-full max-w-8xl mx-auto grid grid-cols-12 px-8 z-10">
         <h1
-          class = "col-start-4 col-end-12 font-serif font-bold text-white text-9xl leading-snug"
+          class = {`col-start-4 col-end-12 font-serif font-bold text-neutral-900 ${titleSize} leading-snug`}
         >{title}</h1>
         {subtitle &&
           <h2

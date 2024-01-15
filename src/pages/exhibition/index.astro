@@ -26,13 +26,8 @@ exhibitionRawData.forEach((exhibition) => {
 
 ---
 <Layout>
+  <PageTitle title="Exhibitions" />
   <main class="max-w-5xl mx-auto">
-    <div class="grid grid-cols-10">
-      <div class="col-span-2"></div>
-      <div class="col-span-8">
-        <PageTitle title="Exhibitions" />
-      </div>
-    </div>
     <div class="mb-40">
       {
         exhibitionYears.map((year) => (
@@ -41,15 +36,15 @@ exhibitionRawData.forEach((exhibition) => {
             <ul class="col-span-8 flex-1">
               {
                 exhibitionByYears[exhibitionYears.indexOf(year)].map((exhibition) => (
-                  <li class="flex justify-between items-center py-6 border-b border-neutral-900 text-neutral-900">
+                  <li class="grid grid-cols-5 gap-6 items-center py-6 border-b border-neutral-900 text-neutral-900">
                     <a
                       href={`/exhibition/detail/${exhibition.slug}`}
-                      class="font-serif font-bold proportional-nums text-3xl text-neutral-900"
+                      class="col-span-4 font-serif font-bold proportional-nums text-3xl text-neutral-900"
                       data-astro-prefetch
                     >
                       {exhibition.title}
                     </a>
-                    <p class="font-sans text-base font-normal text-neutral-900 opacity-50">{exhibition.city}</p>
+                    <p class="col-span-1 font-sans text-base font-normal text-neutral-900 opacity-50">{exhibition.city}</p>
                   </li>
                 ))
               }

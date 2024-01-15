@@ -25,13 +25,8 @@ caseStudyRawData.forEach((caseStudy) => {
 
 ---
 <Layout>
+  <PageTitle title="Case Stuies" />
   <main class="max-w-5xl mx-auto">
-    <div class="grid grid-cols-10">
-      <div class="col-span-2"></div>
-      <div class="col-span-8">
-        <PageTitle title="Case Stuies" />
-      </div>
-    </div>
     <div class="mb-40">
       {
         caseStudyYears.map((year) => (
@@ -40,7 +35,7 @@ caseStudyRawData.forEach((caseStudy) => {
             <ul class="col-span-8 flex-1">
               {
                 caseStudyByYears[caseStudyYears.indexOf(year)].map((caseStudy) => (
-                  <li class="flex justify-between items-center py-6 border-b border-neutral-900 text-neutral-900">
+                  <li class="items-center py-6 border-b border-neutral-900 text-neutral-900">
                     <a
                       href={`/case-study/detail/${caseStudy.slug}`}
                       class="font-serif font-bold proportional-nums text-3xl text-neutral-900"
