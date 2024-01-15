@@ -1,4 +1,63 @@
 ---
+import Layout from "../../layouts/Layout.astro";
+import PageTitle from "../../components/PageTitle.astro";
+import {sanityClient} from "sanity:client";
+import PageBlock from "../../components/PageBlock.astro";
+import Timeline from "../../components/page-block/Timeline.astro";
+import RelatedInternalLinks
+  from "../../components/page-block/RelatedInternalLinks.astro";
+
+const teachingData = await sanityClient.fetch(`*[_type == 'teaching']{
+  "experience": {
+    "type": 'timeline',
+    "records": experience[]
+  },
+  "overview": overview->{
+    title, 
+    "slug": slug.current,
+    "content": body[0].children[0].text
+  },
+  "links": content.links[]->{
+    _type == 'article' => {
+      "type": _type,
+      "title": title,
+      "slug": slug.current
+    },
+    _type == 'book' => {
+      "type": _type,
+      title,
+      "slug": slug.current
+    },
+    _type == 'exhibition' => {
+        "type": _type,
+        title,
+        "slug": slug.current
+    },
+  }
+}`);
+
+const {overview, experience, links} = teachingData[0];
 ---
 
-<h1>Teaching</h1>
+<Layout>
+  <PageTitle title="Teaching" subtitle="Praesentium ea asperiores molestias aperiam enim accusantium. Voluptatibus dicta quam eum labore dolorum eum nobis deleniti eum." bgWhite="false" />
+  <div class="max-w-8xl mx-auto px-8 grid grid-cols-12 gap-8 mb-48">
+    <main class="col-start-4 col-end-12 w-full">
+      {experience &&
+        <Timeline title="Experience" records={experience.records} />
+      }
+      {overview &&
+        <div class="my-32 flex flex-col">
+          <h2 class="font-serif font-bold text-6xl text-neutral-900 mb-16">Overview</h2>
+          <p class="font-serif font-semibold text-2xl text-neutral-900">{overview.content}</p>
+          <a href={`/archive/detail/${overview.slug}`}
+            class="font-serif text-neutral-900 text-2xl py-8 self-end hover:font-bold"
+          >Learn more →</a>
+        </div>
+      }
+      {links &&
+          <RelatedInternalLinks title="Teaching materials" links={links} />
+      }
+    </main>
+  </div>
+</Layout>
