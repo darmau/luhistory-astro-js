@@ -6,6 +6,7 @@ import Timeline from "./page-block/Timeline.astro";
 import TextBlock from "./text-block/TextBlock.astro";
 import RelatedInternalLinks from "./page-block/RelatedInternalLinks.astro";
 import RelatedExternalLinks from "./page-block/RelatedExternalLinks.astro";
+import RelatedExhibitions from "./page-block/RelatedExhibitions.astro";
 const { blocks } = Astro.props
 ---
 
@@ -27,6 +28,8 @@ const { blocks } = Astro.props
         return <RelatedInternalLinks {...block} />;
       case "relatedExternalLinks":
         return <RelatedExternalLinks {...block} />;
+      case "exhibitions":
+        return <RelatedExhibitions {...block} />;
       default:
         return null;
     }

@@ -1,27 +1,99 @@
 ---
 import { sanityClient } from "sanity:client";
 import Layout from "../../../layouts/Layout.astro";
+import PageTitle from "../../../components/PageTitle.astro";
+import {Image} from 'astro:assets'
+import TextBlock from "../../../components/text-block/TextBlock.astro";
+import PageBlock from "../../../components/PageBlock.astro";
 
 export async function getStaticPaths() {
-  const slugs = await sanityClient.fetch(`*[_type == 'caseStudy' && defined(slug)]{
-  "slug": slug.current,
-  "title": title
+  const slugs = await sanityClient.fetch(`*[_type == 'caseStudy' && defined(slug)]|order(publishDate desc){
+    "slug": slug.current,
+    title,
+    publishDate,
+    "cover": cover.image.asset->url,
+    "overview": overview[] {
+      _type == 'imageBlock' => {
+        type,
+        "url": image.asset->url,
+        "caption": image.caption
+      },
+      _type == 'gallery' => {
+        type,
+        title,
+        "pictures": images[]{
+          "url": asset->url,
+          caption
+        }
+      },
+      ...
+    },
+    "blocks": pageBlocks[]
+      {
+        _type == 'gallery' => {
+          title, 
+          "type": 'gallery',
+          "gallery": type, 
+          "images": images[]{
+            caption,
+            "url": asset->url
+          }
+        },
+        _type == 'relatedBooks' => {
+          "type": 'books',
+          "books": books[]->{
+            title,
+            publishDate,
+            "slug": slug.current,
+            "cover": cover.asset->url
+          }
+        },
+        _type == 'relatedArticles' => {
+           "type": 'articles',
+          "articles": articles[]->{
+            title,
+            "slug": slug.current,
+            category
+          }
+        },
+        _type == 'relatedExhibition' => {
+           "type": 'exhibitions',
+          "exhibitions": exhibitions[]->{
+            title,
+            "slug": slug.current,
+            "date": dateRange.startDate,
+            "city": location.city
+          }
+        }
+      }
   }`);
   const paths = await slugs.map((caseStudy) => {
     return {
       params: {
         caseStudy: caseStudy.slug,
       },
-      props: {title: caseStudy.title}
+      props: {
+        title: caseStudy.title,
+        cover: caseStudy.cover,
+        overview: caseStudy.overview,
+        publishDate: caseStudy.publishDate,
+        blocks: caseStudy.blocks,
+      }
     };
   });
   return paths;
 }
 
-const {title} = Astro.props
+const {title, cover, overview, publishDate, blocks} = Astro.props;
 ---
+
 <Layout>
-  <div>
-    <h1>{title}</h1>
+  <PageTitle title={title} />
+  <div class="max-w-8xl mx-auto grid grid-cols-12 gap-8">
+    <main class="col-start-4 col-end-12 mb-24">
+      <Image src={cover} alt={title} width="640" height="427" />
+      <TextBlock overview={overview} />
+      {blocks && <PageBlock blocks={blocks} />}
+    </main>
   </div>
 </Layout>
