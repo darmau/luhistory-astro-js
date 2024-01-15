@@ -5,7 +5,7 @@ const {title, subtitle, bgWhite = true} = Astro.props;
 <!--TODO 根据文本长度不同，调整字号-->
 <header>
   {bgWhite === true ?
-    <hgroup class = "w-full max-w-7xl mx-auto grid grid-cols-12 px-8 z-10 py-24">
+    <hgroup class = "w-full max-w-8xl mx-auto grid grid-cols-12 px-8 z-10 py-24">
       <h1
         class = "col-start-4 col-end-12 font-serif font-bold text-neutral-900 text-9xl leading-snug"
       >{title}</h1>
@@ -17,7 +17,7 @@ const {title, subtitle, bgWhite = true} = Astro.props;
     </hgroup>
       :
     <hgroup class = "bg-img">
-      <div class = "w-full max-w-7xl mx-auto grid grid-cols-12 px-8 z-10">
+      <div class = "w-full max-w-8xl mx-auto grid grid-cols-12 px-8 z-10">
         <h1
           class = "col-start-4 col-end-12 font-serif font-bold text-white text-9xl leading-snug"
         >{title}</h1>
