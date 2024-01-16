@@ -2,12 +2,29 @@
 import {sanityClient} from "sanity:client";
 import Layout from "../../../layouts/Layout.astro";
 import PageTitle from "../../../components/PageTitle.astro";
+import TextBlock from "../../../components/text-block/TextBlock.astro";
 export async function getStaticPaths() {
-  const data = await sanityClient.fetch(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
+  const data = await sanityClient.fetch(`*[_type == 'article' && defined(slug) && defined(publishDate)] {
     title,
     publishDate,
-    category,
+    author,
     "slug": slug.current,
+    "body": body[]{
+      _type == 'imageBlock' => {
+        type,
+        "url": image.asset->url,
+        "caption": image.caption
+      },
+      _type == 'gallery' => {
+        type,
+        title,
+        "pictures": images[]{
+          "url": asset->url,
+          caption
+        }
+      },
+      ...
+    }
   }`);
   const paths = data.map((article) => {
     return {
@@ -17,16 +34,42 @@ export async function getStaticPaths() {
       props: {
         title: article.title,
         publishDate: article.publishDate,
+        author: article.author,
+        body: article.body
       }
     }
   });
   return paths;
 }
 
-const {title, publishDate} = Astro.props;
+const {title, publishDate, author, body} = Astro.props;
+
+// 将2023-12-16转换成Dec 16, 2023
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const month = date.toLocaleString('default', { month: 'short' });
+  const day = date.getDate();
+  const year = date.getFullYear();
+  return `${month} ${day}, ${year}`;
+}
 ---
 
 <Layout>
   <PageTitle title={title} />
-  <p>{publishDate}</p>
+  <div class="max-w-8xl mx-auto grid grid-cols-12 gap-8">
+    <aside class="space-y-8 col-start-1 col-end-3 sticky top-1/4 h-fit">
+      { author &&
+        <div>
+          <h3 class="text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Author</h3>
+          <p class="text-lg font-semibold font-serif">{author}</p>
+        </div> }
+      <div>
+        <h3 class="text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Date</h3>
+        <p class="text-lg font-semibold font-serif">{formatDate(publishDate)}</p>
+      </div>
+    </aside>
+    <main class="col-start-4 col-end-11 mb-24">
+      <TextBlock overview={body} />
+    </main>
+  </div>
 </Layout>
