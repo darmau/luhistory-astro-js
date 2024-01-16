@@ -1,7 +1,7 @@
 ---
-import { PortableText } from "astro-portabletext";
 import SingleImage from "./SingleImage.astro";
 import Gallery from "../page-block/Gallery.astro";
+import { PortableText } from "astro-portabletext";
 
 const { overview } = Astro.props;
 ---
@@ -17,3 +17,103 @@ const { overview } = Astro.props;
     }
   })}
 </div>
+
+<style is:global>
+  h2 {
+    font-family: 'Cormorant', serif;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 56px;
+    color: #171717;;
+    margin-top: 48px;
+    margin-bottom: 24px;
+  }
+
+  h3 {
+    font-family: 'Cormorant', serif;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 40px;
+    color: #171717;;
+    margin-top: 36px;
+    margin-bottom: 24px;
+  }
+
+  h4 {
+    font-family: 'Cormorant', serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 32px;
+    color: #171717;;
+    margin-top: 32px;
+    margin-bottom: 24px;
+  }
+
+  p {
+    font-family: 'Cormorant', serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 36px;
+    color: #171717;
+    margin-top: 24px;
+    margin-bottom: 24px;
+  }
+
+  blockquote {
+    font-family: 'Cormorant', serif;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 48px;
+    color: #171717;
+    margin-top: 36px;
+    margin-bottom: 36px;
+    border-left: 2px solid #171717;
+    padding-left: 16px;
+  }
+
+  code {
+    font-family: monospace;
+    font-weight: 400;
+    font-size: 16px;
+    background-color: #F5F5F5;
+    padding: 2px 4px;
+  }
+
+  a {
+    color: #171717;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+    text-decoration-color: #a3a3a3;
+  }
+
+  a:hover {
+    text-decoration-color: #171717;
+    text-decoration-thickness: 3px;
+    transition: all 0.3s ease-in-out;
+  }
+
+  ul {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    padding-left: 24px;
+    list-style-type: disc;
+    font-family: 'Cormorant', serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 36px;
+    color: #171717;
+  }
+
+  ol {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    padding-left: 24px;
+    list-style-type: decimal;
+    font-family: 'Cormorant', serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 36px;
+    color: #171717;
+  }
+</style>
