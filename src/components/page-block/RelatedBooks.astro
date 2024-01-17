@@ -13,10 +13,10 @@ const { books } = Astro.props
     <h2 class="font-serif font-bold text-neutral-900 text-5xl">Publications</h2>
     <p class="font-sans text-base text-neutral-900 opacity-50">{books.length} books</p>
   </hgroup>
-  <ul class="grid grid-rows-2 justify-items-start grid-flow-col gap-8 overflow-scroll">
+  <ul class="grid grid-rows-2 justify-items-start grid-flow-col gap-8 overflow-scroll pl-0">
     {books.map((book) => (
-      <li class="w-96">
-        <a class="flex gap-6" href={`/book/detail/${book.slug}`}>
+      <li class="w-96 list-none">
+        <a class="no-underline flex gap-6" href={`/book/detail/${book.slug}`}>
           {book.cover && (
             <div class="aspect-square bg-gray-50 flex justify-center items-center">
               <Image class="object-contain h-3/4 w-3/4" src={book.cover} alt={book.title} width="160" height="160" />
