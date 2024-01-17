@@ -21,41 +21,53 @@ import menuIcon from '../assets/icons/menu.svg';
     class = "grid grid-cols-1 gap-16 px-8 md:grid-cols-2 md:p-8 lg:grid-cols-5 lg:gap-3 lg:p-16"
   >
     <ul
-      class = "col-span-1 lg:col-span-3 lg:mx-auto text-white font-serif font-bold text-4xl md:text-5xl space-y-6"
+      class = "col-span-1 lg:col-span-3 lg:mx-auto space-y-6"
     >
-      <li class = "w-fit">
-        <a href = "/about">About</a>
+      <li class = "w-fit list-none">
+        <a
+          class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
+          href = "/about">About</a>
       </li>
-      <li class = "w-fit">
-        <a href = "/exhibition" data-astro-prefetch = "load">Exhibitions</a>
+      <li class = "w-fit list-none">
+        <a
+          class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
+          href = "/exhibition" data-astro-prefetch = "load">Exhibitions</a>
       </li>
-      <li class = "w-fit">
-        <a href = "/book/category" data-astro-prefetch = "load">Books</a>
+      <li class = "w-fit list-none">
+        <a
+          class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
+          href = "/book/category" data-astro-prefetch = "load">Books</a>
       </li>
-      <li class = "w-fit">
-        <a href = "/teaching">Teaching</a>
+      <li class = "w-fit list-none">
+        <a
+          class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
+          href = "/teaching">Teaching</a>
       </li>
-      <li class = "w-fit">
-        <a href = "/archive/all/1/" data-astro-prefetch = "load">Archive</a>
+      <li class = "w-fit list-none">
+        <a
+          class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
+          href = "/archive/all/1/" data-astro-prefetch = "load">Archive</a>
       </li>
-      <li class = "w-fit">
-        <a href = "/case-study">Case Studies</a>
+      <li class = "w-fit list-none">
+        <a
+          class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
+          href = "/case-study">Case Studies</a>
       </li>
     </ul>
-    <div class = "text-white col-span-1 space-y-12 lg:col-span-2">
+    <div class = "col-span-1 space-y-12 lg:col-span-2">
       <div class = "space-y-4">
         <h3
-          class = "font-normal font-sans text-sm uppercase opacity-50 tracking-widest"
+          class = "text-white font-normal font-sans text-sm uppercase opacity-50 tracking-widest"
         >Social</h3>
-        <h4 class = "font-serif font-bold text-3xl md:text-4xl">Facebook</h4>
-        <h4 class = "font-serif font-bold text-3xl md:text-4xl">Weibo</h4>
+        <h4 class = "text-white font-serif font-bold text-3xl md:text-4xl">Facebook</h4>
+        <h4 class = "text-white font-serif font-bold text-3xl md:text-4xl">Weibo</h4>
       </div>
       <div class = "space-y-4">
         <h3
-          class = "font-normal font-sans text-sm uppercase opacity-50 tracking-widest"
+          class = "text-white font-normal font-sans text-sm uppercase opacity-50 tracking-widest"
         >Contact</h3>
         <h4 class = "font-serif font-bold text-3xl md:text-4xl">
-          <a href = "mailto:info@luhistory.com" target = "_blank">info@luhistory.com</a>
+          <a class="text-white no-underline" href = "mailto:info@luhistory.com" target = "_blank">info@luhistory.com</a>
         </h4>
       </div>
     </div>
