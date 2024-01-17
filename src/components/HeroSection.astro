@@ -10,8 +10,7 @@ const homepageData = await sanityClient.fetch(`
 
 const headerString = homepageData[0].slogan.split(', ');
 ---
-<div class="grid grid-cols-12 gap-8 max-w-8xl mx-auto">
-  <div class = "col-start-2 col-span-11 flex px-4 items-center justify-between mb-16">
+  <div class = "col-start-2 col-span-10 flex px-4 items-center justify-between mb-16">
     <h1
       class = "z-10 font-bold font-serif leading-tight text-6xl md:text-8xl mr-[-50%]"
       id = "hero-text"
@@ -33,7 +32,6 @@ const headerString = homepageData[0].slogan.split(', ');
       height = "704"
     />
   </div>
-</div>
 
 <style>
   .hero-img {
