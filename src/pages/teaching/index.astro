@@ -41,7 +41,7 @@ const {overview, experience, links} = teachingData[0];
 
 <Layout>
   <PageTitle title="Teaching" subtitle="Praesentium ea asperiores molestias aperiam enim accusantium. Voluptatibus dicta quam eum labore dolorum eum nobis deleniti eum." bgWhite="false" />
-  <div class="max-w-8xl mx-auto px-8 grid grid-cols-12 gap-8 mb-48">
+  <div class="max-w-8xl mx-auto grid grid-cols-12 gap-8 my-40">
     <main class="col-start-4 col-end-12 w-full">
       {experience &&
         <Timeline title="Experience" records={experience.records} />
@@ -49,7 +49,7 @@ const {overview, experience, links} = teachingData[0];
       {overview &&
         <div class="my-32 flex flex-col">
           <h2 class="font-serif font-bold text-6xl text-neutral-900 mb-16">Overview</h2>
-          <p class="font-serif font-semibold text-2xl text-neutral-900">{overview.content}</p>
+          <p class="font-serif text-2xl text-neutral-900">{overview.content}</p>
           <a href={`/archive/detail/${overview.slug}`}
             class="font-serif text-neutral-900 text-2xl py-8 self-end hover:font-bold"
           >Learn more →</a>
