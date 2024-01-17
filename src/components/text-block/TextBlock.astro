@@ -6,14 +6,18 @@ import { PortableText } from "astro-portabletext";
 const { overview } = Astro.props;
 ---
 
-<div>
+<div class="col-span-8 grid grid-cols-8 gap-8">
   { overview && overview.map((block) => {
     if (block._type === 'gallery') {
       return <Gallery gallery={block.type} title={block.title} images={block.pictures} />
     } else if (block._type === 'imageBlock') {
       return <SingleImage url={block.url} size={block.type} caption={block.caption} />
     } else {
-      return <PortableText value={block} />
+      return (
+        <div class="col-span-8">
+          <PortableText value={block} />
+        </div>
+      )
     }
   })}
 </div>
@@ -25,8 +29,8 @@ const { overview } = Astro.props;
     font-size: 40px;
     line-height: 56px;
     color: #171717;;
-    margin-top: 48px;
-    margin-bottom: 24px;
+    margin-top: 32px;
+    margin-bottom: 16px;
   }
 
   h3 {
@@ -35,8 +39,8 @@ const { overview } = Astro.props;
     font-size: 32px;
     line-height: 40px;
     color: #171717;;
-    margin-top: 36px;
-    margin-bottom: 24px;
+    margin-top: 24px;
+    margin-bottom: 16px;
   }
 
   h4 {
@@ -45,8 +49,8 @@ const { overview } = Astro.props;
     font-size: 24px;
     line-height: 32px;
     color: #171717;;
-    margin-top: 32px;
-    margin-bottom: 24px;
+    margin-top: 24px;
+    margin-bottom: 16px;
   }
 
   p {
@@ -55,8 +59,8 @@ const { overview } = Astro.props;
     font-size: 20px;
     line-height: 36px;
     color: #171717;
-    margin-top: 24px;
-    margin-bottom: 24px;
+    margin-top: 8px;
+    margin-bottom: 8px;
   }
 
   blockquote {
@@ -65,8 +69,8 @@ const { overview } = Astro.props;
     font-size: 32px;
     line-height: 48px;
     color: #171717;
-    margin-top: 36px;
-    margin-bottom: 36px;
+    margin-top: 16px;
+    margin-bottom: 16px;
     border-left: 2px solid #171717;
     padding-left: 16px;
   }
@@ -94,8 +98,8 @@ const { overview } = Astro.props;
   }
 
   ul {
-    margin-top: 24px;
-    margin-bottom: 24px;
+    margin-top: 16px;
+    margin-bottom: 16px;
     padding-left: 24px;
     list-style-type: disc;
     font-family: 'Cormorant', serif;
@@ -106,8 +110,8 @@ const { overview } = Astro.props;
   }
 
   ol {
-    margin-top: 24px;
-    margin-bottom: 24px;
+    margin-top: 16px;
+    margin-bottom: 16px;
     padding-left: 24px;
     list-style-type: decimal;
     font-family: 'Cormorant', serif;

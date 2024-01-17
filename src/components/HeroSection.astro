@@ -10,28 +10,28 @@ const homepageData = await sanityClient.fetch(`
 
 const headerString = homepageData[0].slogan.split(', ');
 ---
-<div class = "flex px-4 max-w-5xl mx-auto items-center justify-between mb-16">
-  <h1
-    class = "z-10 font-bold font-serif leading-tight text-6xl md:text-8xl mr-[-50%]"
-    id = "hero-text"
-  >
-    {headerString.map((word, index) => {
-      return (
-        <span class = "block" style = {{'--delay': `${index * 0.1}s`}}>
+  <div class = "col-start-2 col-span-10 flex px-4 items-center justify-between mb-16">
+    <h1
+      class = "z-10 font-bold font-serif leading-tight text-6xl md:text-8xl mr-[-50%]"
+      id = "hero-text"
+    >
+      {headerString.map((word, index) => {
+        return (
+          <span class = "block" style = {{'--delay': `${index * 0.1}s`}}>
           {word}{index < headerString.length - 1 && <span>,</span>}
         </span>
-      )
-    })}
-  </h1>
-  <Image
-    src = {homepageData[0].image.url}
-    alt = {homepageData[0].slogan}
-    class = "hero-img z-0 aspect-[3/4] w-3/5 md:w-1/2 object-cover brightness-95"
-    id = "hero-img"
-    width = "528"
-    height = "704"
-  />
-</div>
+        )
+      })}
+    </h1>
+    <Image
+      src = {homepageData[0].image.url}
+      alt = {homepageData[0].slogan}
+      class = "hero-img z-0 aspect-[3/4] w-3/5 md:w-1/2 object-cover brightness-95"
+      id = "hero-img"
+      width = "528"
+      height = "704"
+    />
+  </div>
 
 <style>
   .hero-img {

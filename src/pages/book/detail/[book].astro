@@ -71,7 +71,7 @@ const {
 ---
 <Layout>
   <PageTitle title={title} subtitle={subtitle} />
-  <div class="max-w-8xl mx-auto px-8 grid grid-cols-12 gap-8 mb-48">
+  <div class="max-w-8xl mx-auto grid grid-cols-12 gap-8 mb-48">
     <aside class="space-y-8 col-start-1 col-end-3 sticky top-1/4 h-fit">
       <!--相关人-->
       {people && (
@@ -101,13 +101,13 @@ const {
         </div>
       )}
     </aside>
-    <main class="col-start-4 col-end-11 w-full">
+    <main class="col-start-4 col-end-12 grid grid-cols-8 gap-8">
       { cover &&
-        <div class="w-4/5 bg-gray-50 p-16">
-          <Image src={cover} alt={title} width="640" height="420" class="mx-auto w-1/3 shadow-2xl" />
+        <div class="col-start-1 col-span-8 grid grid-cols-8 gap-8 w-4/5 bg-gray-50 p-16">
+          <Image src={cover} alt={title} width="640" height="420" class="col-start-1 col-span-6 shadow-2xl" />
         </div>
       }
-      <div class="my-16">
+      <div class="col-span-8">
         <TextBlock overview={overview} />
       </div>
       {blocks && <PageBlock blocks={blocks} />}

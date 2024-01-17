@@ -13,9 +13,9 @@ const exhibitionData = await sanityClient.fetch(`
     }
   }`)
 ---
-<div class = "w-full mx-auto mb-24 px-4 overflow-hidden">
+<div class = "col-start-2 col-span-10 mb-24 overflow-hidden">
   <hgroup
-    class = "max-w-5xl mx-auto flex justify-between items-center text-neutral-900 mb-8 px-4"
+    class = "flex justify-between items-center text-neutral-900 mb-8"
   >
     <h2 class = "font-bold text-4xl md:text-5xl font-serif">Exhibitions</h2>
     <div class = "flex items-center gap-2">
@@ -94,24 +94,24 @@ const exhibitionData = await sanityClient.fetch(`
 
 <script>
   // 获取屏幕宽度，减去1024px, 除以2，得到左右两边的空白宽度为n，并将#exhibition-list向右移动n个px。并且更改窗口大小时，也要重新计算。
-  function getScreenWidth() {
-    return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-  }
-
-  function moveExhibitionList() {
-    const exhibitionList = document.getElementById('exhibition-list');
-    let screenWidth = getScreenWidth();
-    let exhibitionListOffset = (screenWidth - 1024) / 2;
-    if (exhibitionListOffset <= 0) {
-      exhibitionListOffset = 0;
-    }
-    exhibitionList.style.transform = `translateX(${exhibitionListOffset}px)`;
-  }
-
-  document.addEventListener('DOMContentLoaded', moveExhibitionList);
-  document.addEventListener('astro:after-swap', moveExhibitionList);
-
-  window.addEventListener('resize', function() {
-    moveExhibitionList();
-  });
+  // function getScreenWidth() {
+  //   return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  // }
+  //
+  // function moveExhibitionList() {
+  //   const exhibitionList = document.getElementById('exhibition-list');
+  //   let screenWidth = getScreenWidth();
+  //   let exhibitionListOffset = (screenWidth - 1024) / 2;
+  //   if (exhibitionListOffset <= 0) {
+  //     exhibitionListOffset = 0;
+  //   }
+  //   exhibitionList.style.transform = `translateX(${exhibitionListOffset}px)`;
+  // }
+  //
+  // document.addEventListener('DOMContentLoaded', moveExhibitionList);
+  // document.addEventListener('astro:after-swap', moveExhibitionList);
+  //
+  // window.addEventListener('resize', function() {
+  //   moveExhibitionList();
+  // });
 </script>

@@ -3,10 +3,10 @@ import {Image} from 'astro:assets'
 const { url, caption, size } = Astro.props;
 ---
 
-<div class="my-8">
+<div class="my-8 col-span-8">
   {size === 'fullWidth' ?
     <Image
-      class="w-full"
+      class=""
       src={url}
       alt={caption || '图片'}
       width="800"
@@ -14,7 +14,7 @@ const { url, caption, size } = Astro.props;
     />
   :
     <Image
-      class="w-4/5"
+      class=""
       src={url}
       alt={caption || '图片'}
       width="800"
