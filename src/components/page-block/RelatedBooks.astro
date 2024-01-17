@@ -5,17 +5,18 @@ function getYear(date) {
   return new Date(date).getFullYear()
 }
 
-const { books } = Astro.props
+const { books } = Astro.props;
+const slicedBooks = books.slice(0, 4);
 ---
 
-<div class="my-24">
-  <hgroup class="my-12 flex justify-between items-baseline max-w-3xl">
+<div class="col-start-1 col-span-6">
+  <hgroup class="flex justify-between items-baseline max-w-3xl">
     <h2 class="font-serif font-bold text-neutral-900 text-5xl">Publications</h2>
     <p class="font-sans text-base text-neutral-900 opacity-50">{books.length} books</p>
   </hgroup>
-  <ul class="grid grid-rows-2 justify-items-start grid-flow-col gap-8 overflow-scroll pl-0">
-    {books.map((book) => (
-      <li class="w-96 list-none">
+  <ul class="ababsolute left-0 w-fit grid grid-rows-2 justify-items-start grid-flow-col gap-8 overflow-scroll pl-0">
+    {slicedBooks.map((book) => (
+      <li class="w-[480px] list-none">
         <a class="no-underline flex gap-6" href={`/book/detail/${book.slug}`}>
           {book.cover && (
             <div class="aspect-square bg-gray-50 flex justify-center items-center">
@@ -23,7 +24,7 @@ const { books } = Astro.props
             </div>
           )}
           <div class="flex-1">
-            <h3 class="font-serif font-bold text-3xl text-neutral-900 mb-3">{book.title}</h3>
+            <h3 class="my-0 font-serif font-bold text-3xl text-neutral-900 mb-2">{book.title}</h3>
             <small class="font-sans text-base text-neutral-900 opacity-50">{getYear(book.publishDate)}</small>
           </div>
         </a>

@@ -123,22 +123,22 @@ function formatDate(start, end) {
     <aside class="space-y-8 col-start-1 col-end-3 sticky top-1/4 h-fit">
       { curator &&
         <div>
-          <h3 class="text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Curator</h3>
-          <p class="text-lg font-semibold font-serif">{curator}</p>
+          <h3 class="my-0 text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Curator</h3>
+          <p class="mt-0 text-lg font-semibold font-serif">{curator}</p>
         </div> }
       <div>
-        <h3 class="text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Date</h3>
-        <p class="text-lg font-semibold font-serif">{formatDate(start, end)}</p>
+        <h3 class="my-0 text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Date</h3>
+        <p class="mt-0 text-lg font-semibold font-serif">{formatDate(start, end)}</p>
       </div>
       { place &&
         <div>
-          <h3 class="text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Location</h3>
-          <p class="text-lg font-semibold font-serif">{place}</p>
+          <h3 class="my-0 text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Location</h3>
+          <p class="mt-0 text-lg font-semibold font-serif">{place}</p>
         </div> }
     </aside>
-    <main class="col-start-4 col-end-11">
+    <main class="col-start-4 col-end-12 grid grid-cols-8 gap-8">
       { cover &&
-        <Image src={cover} alt={title} width="640" height="420" class="w-4/5 my-16" />
+        <Image src={cover} alt={title} width="640" height="420" class="col-start-1 col-span-6 my-16" />
       }
       <TextBlock overview={overview} />
       {blocks && <PageBlock blocks={blocks} />}
