@@ -75,11 +75,11 @@ const {
     <aside class="space-y-8 col-start-1 col-end-3 sticky top-1/4 h-fit">
       <!--相关人-->
       {people && (
-        <ul class="space-y-8">
+        <ul class="space-y-8 pl-0 list-none">
           {people.map((person) => (
             <li>
-              <h3 class="text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">{person.title}</h3>
-              <p class="text-lg font-semibold font-serif">{person.name}</p>
+              <h3 class="my-4 text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">{person.title}</h3>
+              <p class="my-2 text-lg font-semibold font-serif">{person.name}</p>
             </li>
           ))}
         </ul>
@@ -88,16 +88,16 @@ const {
       <!--出版社-->
       {publisher && (
         <div class="space-y-2">
-          <h3 class="text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Publisher</h3>
-          <p class="text-lg font-semibold font-serif">{publisher}</p>
+          <h3 class="my-4 text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Publisher</h3>
+          <p class="my-2 text-lg font-semibold font-serif">{publisher}</p>
         </div>
       )}
 
       <!--出版日期-->
       {publishDate && (
         <div class="space-y-2">
-          <h3 class="text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Publication Date</h3>
-          <p class="text-lg font-semibold font-serif">{new Date(publishDate).getFullYear()}</p>
+          <h3 class="my-4 text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Publication Date</h3>
+          <p class="my-2 text-lg font-semibold font-serif">{new Date(publishDate).getFullYear()}</p>
         </div>
       )}
     </aside>

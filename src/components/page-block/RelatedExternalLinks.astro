@@ -7,9 +7,9 @@ const {links} = Astro.props;
     Details</h2>
   <div class="flex flex-col gap-8">
     {links.map(website => (
-      <a href = {website.url} target = "_blank" class="space-y-2">
-        <h3 class="font-serif font-bold text-3xl md:text-3xl text-neutral-900">{website.title}</h3>
-        <p class="text-neutral-900 opacity-50 capitalize">{website.tag}</p>
+      <a href = {website.url} target = "_blank" class="space-y-2 no-underline">
+        <h3 class="my-4 font-serif font-bold text-3xl md:text-3xl text-neutral-900">{website.title}</h3>
+        <p class="my-4 text-neutral-900 opacity-50 capitalize">{website.tag}</p>
       </a>
     ))}
   </div>
