@@ -5,26 +5,16 @@ const articlesData = await sanityClient.fetch(`
     title,
     "slug": slug.current,
     category
-}[0...5]
+}[0...4]
 `)
 
-// 将xxx-xxx的字符串去掉-
 ---
 
 <div class="col-start-2 col-span-10 mb-24">
   <hgroup class = "flex justify-between items-center text-neutral-900 mb-8">
     <h2 class = "font-bold text-4xl md:text-5xl font-serif">Documents</h2>
     <div class = "flex items-center gap-2">
-      <a href="/archive/all/1" class = "text-2xl font-thin font-serif" data-astro-prefetch>View more</a>
-      <svg
-        xmlns = "http://www.w3.org/2000/svg" fill = "none" viewBox = "0 0 24 24"
-        stroke-width = "1.5" stroke = "currentColor" class = "w-5 h-5"
-      >
-        <path
-          stroke-linecap = "round" stroke-linejoin = "round"
-          d = "M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
-        />
-      </svg>
+      <a href="/archive/all/1" class = "text-2xl font-thin font-serif" data-astro-prefetch>View more →</a>
     </div>
   </hgroup>
   <ul class="space-y-8 md:space-y-10">

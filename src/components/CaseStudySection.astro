@@ -1,0 +1,71 @@
+---
+import {sanityClient} from "sanity:client";
+import {Image} from 'astro:assets';
+const casesData = await sanityClient.fetch(`
+*[_type == "caseStudy"]|order(publishDate){
+    title,
+    "slug": slug.current,
+    "cover": cover.image.asset->url
+    }`)
+---
+<div class = "col-start-2 col-span-10 mb-24 overflow-hidden">
+  <hgroup
+    class = "flex justify-between items-center text-neutral-900 mb-8"
+  >
+    <h2 class = "font-bold text-4xl md:text-5xl font-serif">Case Studies</h2>
+    <div class = "flex items-center gap-2">
+      <a
+        href = "/case-study" class = "text-2xl font-thin font-serif"
+        data-astro-prefetch = "viewport"
+      >View more →</a>
+    </div>
+  </hgroup>
+  <div class = "w-full">
+    <div class = "overflow-auto">
+      <ul
+        class = "flex gap-8 overflow-auto touch-pan-x cursor-grab w-fit pr-12"
+        style = "scroll-snap-type: x mandatory;"
+        id="exhibition-list"
+      >
+        {casesData.map((caseStudy) => (
+          <li>
+            <a
+              href = {`/case-study/detail/${caseStudy.slug}`}
+              class = "space-y-4"
+            >
+              <div class = "cover-img aspect-[3/2] bg-gray-200">
+                {caseStudy.cover && (
+                  <Image
+                    src = {caseStudy.cover}
+                    alt = {caseStudy.title}
+                    class = "object-cover w-full h-full"
+                    width = "528"
+                    height = "352"
+                  />
+                )}
+              </div>
+              <h3
+                class = "line-clamp-2 font-serif font-bold text-3xl text-neutral-900"
+              >{caseStudy.title}</h3>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cover-img {
+    width: 320px;
+    height: 213px;
+  }
+
+  @media (min-width: 768px) {
+    .cover-img {
+      width: 528px;
+      height: 352px;
+    }
+  }
+</style>
+

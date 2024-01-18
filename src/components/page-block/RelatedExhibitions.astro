@@ -6,10 +6,12 @@ const {exhibitions} = Astro.props;
   <hgroup class="my-12">
     <h2 class="font-serif font-bold text-neutral-900 text-5xl">Exhibitions</h2>
   </hgroup>
-  <ul class="space-y-8">
+  <ul class="space-y-8 pl-0 list-none">
     {exhibitions.map((exhibition) => (
       <li>
-        <a href={`/exhibition/detail/${exhibition.slug}`}>
+        <a
+          class="no-underline"
+          href={`/exhibition/detail/${exhibition.slug}`}>
           <h3 class="font-serif font-bold text-3xl text-neutral-900 mb-3">{exhibition.title}</h3>
           <small class="font-sans text-base text-neutral-900 opacity-50">
             <span>{exhibition.date.split('-')[0]}</span>
