@@ -1,0 +1,58 @@
+---
+import {sanityClient} from "sanity:client";
+const latestArchives = await sanityClient.fetch(`*[_type == 'article' && isTop == true]|order(publishDate desc){
+  title,
+  subtitle,
+  "slug": slug.current,
+  "cover": cover.asset->url
+}[0...3]`);
+---
+
+<div class="col-start-2 col-span-10 mb-24">
+  <div class="w-full">
+    <div class="overflow-visible">
+      {latestArchives && (
+        <div class="flex gap-8 overflow-auto touch-pan-x cursor-grab w-max">
+          {latestArchives.map((article) => (
+            <a
+              href={`/archive/detail/${article.slug}`}
+              class="cover w-full aspect-[2/1] bg-gray-500 flex flex-col justify-end items-start p-8"
+              style={`
+                background-image: url(${article.cover});
+              `}>
+              <h3 class="text-white font-serif text-6xl font-bold">
+                {article.title}
+              </h3>
+              <h4 class="text-white font-serif text-2xl font-semibold">{article.subtitle}</h4>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</div>
+
+<script>
+  function getScreenWidth() {
+    return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  }
+
+  // 屏幕宽度如果大于1312，就按照1312计算，如果小于1312，就按照屏幕宽度计算。将宽度分成12列，之间有32px间距，返回10列的实际宽度
+  function setImageWidth() {
+    const archiveCard = document.getElementsByClassName('cover');
+    const screenWidth = getScreenWidth();
+    const colWidth = screenWidth > 1312 ? 1312 : screenWidth;
+    const width = (colWidth - 32 * 11) / 12 * 10 + 32 * 9;
+
+    for (let i = 0; i < archiveCard.length; i++) {
+      archiveCard[i].style.width = width + 'px';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', setImageWidth);
+  document.addEventListener('astro:after-swap', setImageWidth);
+
+  window.addEventListener('resize', function() {
+    setImageWidth();
+  });
+</script>
