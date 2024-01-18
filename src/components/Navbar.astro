@@ -4,6 +4,8 @@ import favicon from '../assets/icons/favicon.svg';
 import faviconWhite from '../assets/icons/favicon-white.svg';
 import closeWhite from '../assets/icons/close-white.svg';
 import menuIcon from '../assets/icons/menu.svg';
+
+const {link, backText, backUrl } = Astro.props;
 ---
 <!--该部分为全屏导航-->
 <div
@@ -74,13 +76,20 @@ import menuIcon from '../assets/icons/menu.svg';
   </div>
 </div>
 <!--导航-->
-<nav class = "fixed w-full flex justify-between items-center p-8 z-10">
-  <div class = "w-28 h-8 flex justify-center items-center">
+<nav class = "grid grid-cols-12 gap-8 max-w-8xl w-full mx-auto items-center p-8 z-10">
+  <div class = "col-start-1 w-28 h-8 flex justify-center items-center">
     <a href = "/">
       <Image src = {favicon} alt = "logo" class = "cursor-pointer"/>
     </a>
   </div>
-  <div class = "w-10 h-10 menu-button">
+  {backUrl && backText && (
+    <a
+      href={backUrl}
+      class="col-start-4 col-span-3 no-underline text-neutral-900 opacity-50 uppercase tracking-widest hover:font-bold hover:opacity-80 transition-all">
+      ← &nbsp;{backText}
+    </a>
+  )}
+  <div class = "col-start-12 justify-self-end w-10 h-10 menu-button">
     <Image
       src = {menuIcon} alt = "menu" class = "w-full h-full cursor-pointer"
     />

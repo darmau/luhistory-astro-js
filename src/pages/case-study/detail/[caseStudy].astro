@@ -87,7 +87,7 @@ export async function getStaticPaths() {
 const {title, cover, overview, publishDate, blocks} = Astro.props;
 ---
 
-<Layout>
+<Layout  title={title} backUrl="/case-study" backText="Case Studies">
   <PageTitle title={title} />
   <div class="max-w-8xl mx-auto grid grid-cols-12 gap-8">
     <main class="col-start-4 col-end-12 mb-24">
