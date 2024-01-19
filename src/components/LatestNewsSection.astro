@@ -8,7 +8,9 @@ const latestArchives = await sanityClient.fetch(`*[_type == 'article' && isTop =
 }[0...3]`);
 ---
 
-<div class="col-start-2 col-span-10 mb-24">
+<div
+  id="latest-container"
+  class="col-start-2 col-span-10 mb-24">
   <div class="w-full">
     <div class="overflow-visible">
       {latestArchives && (
@@ -32,6 +34,20 @@ const latestArchives = await sanityClient.fetch(`*[_type == 'article' && isTop =
   </div>
 </div>
 
+<style>
+  #latest-container {
+    transition: all 0.5s ease-in-out;
+  }
+
+  .invisible {
+    opacity: 0;
+  }
+
+  .visible {
+    opacity: 1;
+  }
+</style>
+
 <script>
   function getScreenWidth() {
     return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -48,6 +64,33 @@ const latestArchives = await sanityClient.fetch(`*[_type == 'article' && isTop =
       archiveCard[i].style.width = width + 'px';
     }
   }
+
+  // 选择container，在进入viewport的时候添加class
+  function showContainer() {
+    const container = document.getElementById('latest-container');
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          entry.target.classList.remove('invisible');
+        } else {
+          entry.target.classList.remove('visible');
+          entry.target.classList.add('invisible');
+        }
+      });
+    }, options);
+
+    observer.observe(container);
+  }
+
+  document.addEventListener('DOMContentLoaded', showContainer);
+  document.addEventListener('astro:after-swap', showContainer);
 
   document.addEventListener('DOMContentLoaded', setImageWidth);
   document.addEventListener('astro:after-swap', setImageWidth);

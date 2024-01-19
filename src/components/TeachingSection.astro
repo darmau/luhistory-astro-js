@@ -8,7 +8,9 @@ const teachingData = await sanityClient.fetch(`
 
 ---
 
-<div class="col-start-2 col-span-10 mb-24">
+<div
+  id="teaching-container"
+  class="col-start-2 col-span-10 mb-24">
   <hgroup class = "flex justify-between items-center text-neutral-900 mb-8">
     <h2 class = "font-bold text-4xl md:text-5xl font-serif">Teaching</h2>
     <div class = "flex items-center gap-2">
@@ -17,3 +19,46 @@ const teachingData = await sanityClient.fetch(`
   </hgroup>
   <p class = "font-serif font-bold line-clamp-2 text-2xl md:text-3xl text-neutral-900 mb-8">{teachingData[0].overview}}</p>
 </div>
+
+<style>
+  #teaching-container {
+    transition: all 0.5s ease-in-out;
+  }
+
+  .invisible {
+    opacity: 0;
+  }
+
+  .visible {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  // 选择container，在进入viewport的时候添加class
+  function showContainer() {
+    const container = document.getElementById('teaching-container');
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          entry.target.classList.remove('invisible');
+        } else {
+          entry.target.classList.remove('visible');
+          entry.target.classList.add('invisible');
+        }
+      });
+    }, options);
+
+    observer.observe(container);
+  }
+
+  document.addEventListener('DOMContentLoaded', showContainer);
+  document.addEventListener('astro:after-swap', showContainer);
+</script>

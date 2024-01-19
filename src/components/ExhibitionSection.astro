@@ -13,7 +13,10 @@ const exhibitionData = await sanityClient.fetch(`
     }
   }`)
 ---
-<div class = "container invisible col-start-2 col-span-10 mb-24 overflow-hidden">
+<div
+  id = "exhibition-container"
+  class = "invisible col-start-2 col-span-10 mb-24 overflow-hidden"
+>
   <hgroup
     class = "flex justify-between items-center text-neutral-900 mb-8"
   >
@@ -30,7 +33,7 @@ const exhibitionData = await sanityClient.fetch(`
       <ul
         class = "flex gap-8 overflow-auto touch-pan-x cursor-grab w-fit pr-12"
         style = "scroll-snap-type: x mandatory;"
-        id="exhibition-list"
+        id = "exhibition-list"
       >
         {exhibitionData.map((exhibition) => {
           const info = `
@@ -82,12 +85,11 @@ const exhibitionData = await sanityClient.fetch(`
     }
   }
 
-  .container {
-    transition: all 0.5s ease-in-out;
+  #exhibition-container {
+    transition: opacity 0.5s ease-in-out;
   }
 
   .invisible {
-    translate: 0 32px;
     opacity: 0;
   }
 
@@ -99,7 +101,7 @@ const exhibitionData = await sanityClient.fetch(`
 <script>
   // 选择container，在进入viewport的时候添加class
   function showContainer() {
-    const container = document.querySelector('.container');
+    const container = document.getElementById('exhibition-container');
     const options = {
       root: null,
       rootMargin: '0px',
