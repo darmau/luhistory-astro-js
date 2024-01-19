@@ -8,7 +8,10 @@ const casesData = await sanityClient.fetch(`
     "cover": cover.image.asset->url
     }`)
 ---
-<div class = "col-start-2 col-span-10 mb-24 overflow-hidden">
+<div
+  id = "cases-container"
+  class = "col-start-2 col-span-10 mb-24 overflow-hidden"
+>
   <hgroup
     class = "flex justify-between items-center text-neutral-900 mb-8"
   >
@@ -25,7 +28,7 @@ const casesData = await sanityClient.fetch(`
       <ul
         class = "flex gap-8 overflow-auto touch-pan-x cursor-grab w-fit pr-12"
         style = "scroll-snap-type: x mandatory;"
-        id="exhibition-list"
+        id = "exhibition-list"
       >
         {casesData.map((caseStudy) => (
           <li>
@@ -67,5 +70,45 @@ const casesData = await sanityClient.fetch(`
       height: 352px;
     }
   }
+
+  #cases-container {
+    transition: all 0.5s ease-in-out;
+  }
+
+  .invisible {
+    opacity: 0;
+  }
+
+  .visible {
+    opacity: 1;
+  }
 </style>
 
+<script>
+  // 选择container，在进入viewport的时候添加class
+  function showContainer() {
+    const container = document.getElementById('cases-container');
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          entry.target.classList.remove('invisible');
+        } else {
+          entry.target.classList.remove('visible');
+          entry.target.classList.add('invisible');
+        }
+      });
+    }, options);
+
+    observer.observe(container);
+  }
+
+  document.addEventListener('DOMContentLoaded', showContainer);
+  document.addEventListener('astro:after-swap', showContainer);
+</script>

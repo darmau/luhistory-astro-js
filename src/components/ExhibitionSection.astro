@@ -13,7 +13,10 @@ const exhibitionData = await sanityClient.fetch(`
     }
   }`)
 ---
-<div class = "col-start-2 col-span-10 mb-24 overflow-hidden">
+<div
+  id = "exhibition-container"
+  class = "invisible col-start-2 col-span-10 mb-24 overflow-hidden"
+>
   <hgroup
     class = "flex justify-between items-center text-neutral-900 mb-8"
   >
@@ -30,7 +33,7 @@ const exhibitionData = await sanityClient.fetch(`
       <ul
         class = "flex gap-8 overflow-auto touch-pan-x cursor-grab w-fit pr-12"
         style = "scroll-snap-type: x mandatory;"
-        id="exhibition-list"
+        id = "exhibition-list"
       >
         {exhibitionData.map((exhibition) => {
           const info = `
@@ -81,28 +84,45 @@ const exhibitionData = await sanityClient.fetch(`
       height: 352px;
     }
   }
+
+  #exhibition-container {
+    transition: opacity 0.5s ease-in-out;
+  }
+
+  .invisible {
+    opacity: 0;
+  }
+
+  .visible {
+    opacity: 1;
+  }
 </style>
 
 <script>
-  // 获取屏幕宽度，减去1024px, 除以2，得到左右两边的空白宽度为n，并将#exhibition-list向右移动n个px。并且更改窗口大小时，也要重新计算。
-  function getScreenWidth() {
-    return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  // 选择container，在进入viewport的时候添加class
+  function showContainer() {
+    const container = document.getElementById('exhibition-container');
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          entry.target.classList.remove('invisible');
+        } else {
+          entry.target.classList.remove('visible');
+          entry.target.classList.add('invisible');
+        }
+      });
+    }, options);
+
+    observer.observe(container);
   }
 
-  function moveExhibitionList() {
-    const exhibitionList = document.getElementById('exhibition-list');
-    let screenWidth = getScreenWidth();
-    let exhibitionListOffset = (screenWidth - 1024) / 2;
-    if (exhibitionListOffset <= 0) {
-      exhibitionListOffset = 0;
-    }
-    exhibitionList.style.transform = `translateX(${exhibitionListOffset}px)`;
-  }
-
-  document.addEventListener('DOMContentLoaded', moveExhibitionList);
-  document.addEventListener('astro:after-swap', moveExhibitionList);
-
-  window.addEventListener('resize', function() {
-    moveExhibitionList();
-  });
+  document.addEventListener('DOMContentLoaded', showContainer);
+  document.addEventListener('astro:after-swap', showContainer);
 </script>

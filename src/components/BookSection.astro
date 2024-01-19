@@ -11,35 +11,93 @@ const booksData = await sanityClient.fetch(`
 `)
 ---
 
-<div class="col-start-2 col-span-10 mb-24">
+<div
+  id = "books-container"
+  class = "col-start-2 col-span-10 mb-24"
+>
   <hgroup class = "flex justify-between items-center text-neutral-900 mb-8">
     <h2 class = "font-bold text-4xl md:text-5xl font-serif">Publications</h2>
     <div class = "flex items-center gap-2">
-      <a href="/book/category" class = "text-2xl font-thin font-serif" data-astro-prefetch>View more&nbsp;&nbsp;→</a>
+      <a
+        href = "/book/category" class = "text-2xl font-thin font-serif"
+        data-astro-prefetch
+      >View more&nbsp;&nbsp;→</a>
     </div>
   </hgroup>
-  <ul class="grid grid-cols-1 gap-8 md:grid-cols-2">
+  <ul class = "grid grid-cols-1 gap-8 md:grid-cols-2">
     {booksData.map((book) => (
-        <li>
-          <a href={`/book/detail/${book.slug}`} class="flex gap-4" data-astro-prefetch>
-            <div class="h-32 w-32 bg-neutral-100 flex items-center justify-center shrink-0">
-              {book.cover && (
-                <Image
-                  src={book.cover.url}
-                  alt={book.title}
-                  class="h-3/4 w-3/4 object-contain"
-                  height="128"
-                  width="128"
-                />
-              )
-              }
-            </div>
-            <div class="space-y-2">
-              <h3 class="font-serif font-bold text-neutral-900 text-3xl">{book.title}</h3>
-              <p class="text-neutral-900 opacity-50">{new Date(book.publishDate).getFullYear()}</p>
-            </div>
-          </a>
-        </li>
+      <li>
+        <a
+          href = {`/book/detail/${book.slug}`} class = "flex gap-4"
+          data-astro-prefetch
+        >
+          <div
+            class = "h-32 w-32 bg-neutral-100 flex items-center justify-center shrink-0"
+          >
+            {book.cover && (
+              <Image
+                src = {book.cover.url}
+                alt = {book.title}
+                class = "h-3/4 w-3/4 object-contain"
+                height = "128"
+                width = "128"
+              />
+            )
+            }
+          </div>
+          <div class = "space-y-2">
+            <h3
+              class = "font-serif font-bold text-neutral-900 text-3xl"
+            >{book.title}</h3>
+            <p
+              class = "text-neutral-900 opacity-50"
+            >{new Date(book.publishDate).getFullYear()}</p>
+          </div>
+        </a>
+      </li>
     ))}
   </ul>
 </div>
+
+<style>
+  #books-container {
+    transition: all 0.5s ease-in-out;
+  }
+
+  .invisible {
+    opacity: 0;
+  }
+
+  .visible {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  // 选择container，在进入viewport的时候添加class
+  function showContainer() {
+    const container = document.getElementById('books-container');
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          entry.target.classList.remove('invisible');
+        } else {
+          entry.target.classList.remove('visible');
+          entry.target.classList.add('invisible');
+        }
+      });
+    }, options);
+
+    observer.observe(container);
+  }
+
+  document.addEventListener('DOMContentLoaded', showContainer);
+  document.addEventListener('astro:after-swap', showContainer);
+</script>
