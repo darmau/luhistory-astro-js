@@ -11,11 +11,10 @@ const homepageData = await sanityClient.fetch(`
 const headerString = homepageData[0].slogan.split(', ');
 ---
 <div
-  id = "hero-container"
-  class = "container invisible col-start-2 col-span-10 flex px-4 items-center justify-between mb-40"
+  class = "col-start-2 col-span-10 flex items-center justify-between mb-40"
 >
   <h1
-    class = "z-10 font-bold font-serif leading-tight text-6xl md:text-8xl mr-[-50%]"
+    class = "z-10 font-bold font-serif leading-tight text-6xl md:text-8xl mr-[-50%] -ml-[2px]"
     id = "hero-text"
   >
     {headerString.map((word, index) => {
@@ -41,45 +40,4 @@ const headerString = homepageData[0].slogan.split(', ');
     min-height: 560px;
     min-width: 360px;
   }
-
-  #hero-container {
-    transition: all 0.5s ease-in-out;
-  }
-
-  .invisible {
-    opacity: 0;
-  }
-
-  .visible {
-    opacity: 1;
-  }
 </style>
-
-<script>
-  // 选择container，在进入viewport的时候添加class
-  function showContainer() {
-    const container = document.getElementById('hero-container');
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
-
-    const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          entry.target.classList.remove('invisible');
-        } else {
-          entry.target.classList.remove('visible');
-          entry.target.classList.add('invisible');
-        }
-      });
-    }, options);
-
-    observer.observe(container);
-  }
-
-  document.addEventListener('DOMContentLoaded', showContainer);
-  document.addEventListener('astro:after-swap', showContainer);
-</script>
