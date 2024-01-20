@@ -1,11 +1,9 @@
 /** @type {import('tailwindcss').Config} */
+
+const defaultTheme = require('tailwindcss/defaultTheme')
 export default {
 	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
 	theme: {
-		fontFamily: {
-			serif: ['Cormorant', 'serif'],
-			sans: ['Inter', 'sans-serif'],
-		},
 		fontSize: {
 			xs: '0.75rem',
 			sm: '0.875rem',
@@ -22,6 +20,10 @@ export default {
 			'9xl': '7.5rem',
 		},
 		extend: {
+			fontFamily: {
+				'serif': ['Cormorant', ...defaultTheme.fontFamily.serif],
+				'sans': ['Inter', ...defaultTheme.fontFamily.sans],
+			},
 			maxWidth: {
 				'8xl': '1312px',
 			}

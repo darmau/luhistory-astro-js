@@ -1,8 +1,6 @@
 ---
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
-import '@fontsource/cormorant';
-import '@fontsource/inter';
 import { ViewTransitions } from "astro:transitions";
 const { title, backText, backUrl  } = Astro.props;
 ---
@@ -13,6 +11,9 @@ const { title, backText, backUrl  } = Astro.props;
   <meta name = "generator" content = {Astro.generator}/>
   <title>{title}</title>
   <ViewTransitions />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="min-h-screen flex flex-col relative">

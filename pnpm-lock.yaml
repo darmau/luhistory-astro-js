@@ -11,12 +11,6 @@ dependencies:
   '@astrojs/tailwind':
     specifier: ^5.1.0
     version: 5.1.0(astro@4.1.1)(tailwindcss@3.4.1)
-  '@fontsource/cormorant':
-    specifier: ^5.0.8
-    version: 5.0.8
-  '@fontsource/inter':
-    specifier: ^5.0.16
-    version: 5.0.16
   '@sanity/astro':
     specifier: ^2.2.0
     version: 2.2.0(@sanity/client@6.11.0)(astro@4.1.1)(react-dom@18.2.0)(react-is@18.2.0)(react@18.2.0)(sanity@3.23.4)(styled-components@6.1.8)
@@ -957,14 +951,6 @@ packages:
 
   /@floating-ui/utils@0.2.1:
     resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
-    dev: false
-
-  /@fontsource/cormorant@5.0.8:
-    resolution: {integrity: sha512-2HGCW7LAQ+PfGSe64b0c3/7VueN4fCsIunxrVdg+2TYTQjXlQnzk9a7oqnsLBOoEHRF+bFtLJd89cD9ZJuY8qQ==}
-    dev: false
-
-  /@fontsource/inter@5.0.16:
-    resolution: {integrity: sha512-qF0aH5UiZvCmneX5orJbVRoc2VTyLTV3X/7laMp03Qt28L+B9tFlZODOGUL64wDWc69YVdi1LeJB0cIgd51lvw==}
     dev: false
 
   /@img/sharp-darwin-arm64@0.33.1:
