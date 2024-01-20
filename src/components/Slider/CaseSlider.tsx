@@ -18,7 +18,7 @@ export default ({cases}) => {
       >
         {cases.map((item) => (
             <SwiperSlide>
-              <a href={`/exhibition/detail/${item.slug}`}
+              <a href={`/case-study/detail/${item.slug}`}
               >
                 {item.cover && (
                     <img
