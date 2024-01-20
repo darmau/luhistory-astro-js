@@ -1,11 +1,12 @@
 ---
 import {sanityClient} from "sanity:client";
+import ExhibitionSlider from "./Slider/ExhibitionSlider.tsx"
 import {Image} from 'astro:assets';
 const exhibitionData = await sanityClient.fetch(`
   *[_type == 'exhibition' && defined(dateRange) && defined(cover)]|order(dateRange.endDate desc){
     title,
     "slug": slug.current,
-    "year": dateRange.endDate,
+    "year ": dateRange.endDate,
     "city": location.city,
     "cover": {
       "url": cover.asset->url,
@@ -15,7 +16,7 @@ const exhibitionData = await sanityClient.fetch(`
 ---
 <div
   id = "exhibition-container"
-  class = "invisible col-start-2 col-span-10 mb-24 overflow-hidden"
+  class = "invisible col-start-2 col-span-10 mb-40"
 >
   <hgroup
     class = "flex justify-between items-center text-neutral-900 mb-8"
@@ -29,45 +30,10 @@ const exhibitionData = await sanityClient.fetch(`
     </div>
   </hgroup>
   <div class = "w-full">
-    <div class = "overflow-auto">
-      <ul
-        class = "flex gap-8 overflow-auto touch-pan-x cursor-grab w-fit pr-12"
-        style = "scroll-snap-type: x mandatory;"
-        id = "exhibition-list"
-      >
-        {exhibitionData.map((exhibition) => {
-          const info = `
-        ${exhibition.year.split('-')[0]}
-        ${exhibition.city ? ' · ' + exhibition.city : ''}
-      `
-          return (
-            <li>
-              <a
-                href = {`/exhibition/detail/${exhibition.slug}`}
-                class = "space-y-4"
-              >
-                <div class = "cover-img aspect-[3/2] bg-gray-200">
-                  {exhibition.cover.url && (
-                    <Image
-                      src = {exhibition.cover.url}
-                      alt = {exhibition.cover.caption ?? exhibition.title}
-                      class = "object-cover w-full h-full"
-                      width = "528"
-                      height = "352"
-                    />
-                  )}
-                </div>
-                <h3
-                  class = "line-clamp-2 font-serif font-bold text-3xl text-neutral-900"
-                >{exhibition.title}</h3>
-                <p class = "text-neutral-900 opacity-50">
-                  {info}
-                </p>
-              </a>
-            </li>
-          )
-        })}
-      </ul>
+    <div class = "overflow-visible">
+      {exhibitionData && (
+          <ExhibitionSlider client:only="react" exhibitions={exhibitionData} />
+      )}
     </div>
   </div>
 </div>
