@@ -1,6 +1,8 @@
 ---
 import {sanityClient} from "sanity:client";
 import {Image} from 'astro:assets';
+import CaseSlider from "./Slider/CaseSlider.tsx"
+
 const casesData = await sanityClient.fetch(`
 *[_type == "caseStudy"]|order(publishDate){
     title,
@@ -10,7 +12,7 @@ const casesData = await sanityClient.fetch(`
 ---
 <div
   id = "cases-container"
-  class = "col-start-2 col-span-10 mb-40 overflow-hidden"
+  class = "col-start-2 col-span-10 mb-40"
 >
   <hgroup
     class = "flex justify-between items-center text-neutral-900 mb-8"
@@ -24,36 +26,10 @@ const casesData = await sanityClient.fetch(`
     </div>
   </hgroup>
   <div class = "w-full">
-    <div class = "overflow-auto">
-      <ul
-        class = "flex gap-8 overflow-auto touch-pan-x cursor-grab w-fit pr-12"
-        style = "scroll-snap-type: x mandatory;"
-        id = "exhibition-list"
-      >
-        {casesData.map((caseStudy) => (
-          <li>
-            <a
-              href = {`/case-study/detail/${caseStudy.slug}`}
-              class = "space-y-4"
-            >
-              <div class = "cover-img aspect-[3/2] bg-gray-200">
-                {caseStudy.cover && (
-                  <Image
-                    src = {caseStudy.cover}
-                    alt = {caseStudy.title}
-                    class = "object-cover w-full h-full"
-                    width = "528"
-                    height = "352"
-                  />
-                )}
-              </div>
-              <h3
-                class = "line-clamp-2 font-serif font-bold text-3xl text-neutral-900"
-              >{caseStudy.title}</h3>
-            </a>
-          </li>
-        ))}
-      </ul>
+    <div class = "overflow-visible">
+      {casesData && (
+          <CaseSlider client:only="react" cases={casesData} />
+      )}
     </div>
   </div>
 </div>
