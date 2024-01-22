@@ -36,12 +36,12 @@ const params = Astro.params;
     subtitle = "Praesentium ea asperiores molestias aperiam enim accusantium. Voluptatibus dicta quam eum labore dolorum eum nobis deleniti eum."
     bgWhite="false"
   />
-  <main class="max-w-8xl mx-auto grid grid-cols-12 gap-8 py-40">
+  <main id="main-content" class="max-w-8xl mx-auto grid grid-cols-12 gap-8 py-40">
     <ul class="col-span-2 space-y-2">
       <li class="text-sm text-neutral-900 tracking-wider">
         <a
           class="text-sm text-neutral-900 opacity-50 tracking-wider hover:opacity-100"
-          href={`/archive/all/1`}
+          href={`/archive/all/1#main-content`}
           data-astro-prefetch>
           ALL
         </a>
@@ -51,7 +51,7 @@ const params = Astro.params;
           <li>
             <a
               class={`${category === params.category ? 'text-neutral-900' : 'text-neutral-900 opacity-50'} text-sm tracking-wider hover:opacity-100`}
-              href={`/archive/category/${category}/1`}
+              href={`/archive/category/${category}/1#main-content`}
               data-astro-prefetch>
               {toUppercase(category)}
             </a>
