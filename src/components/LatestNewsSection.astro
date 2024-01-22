@@ -9,15 +9,16 @@ const latestArchives = await sanityClient.fetch(`*[_type == 'article' && isTop =
 }[0...3]`);
 ---
 
+{latestArchives && (
 <div
-  id="latest-container"
-  class="col-start-2 col-span-10 mb-24">
-    <div class="overflow-visible">
-      {latestArchives && (
-        <LatestNewsSlider client:only="react" news={latestArchives} />
-      )}
-    </div>
+  id = "latest-container"
+  class = "col-start-2 col-span-10 mb-24"
+>
+  <div class = "overflow-visible">
+    <LatestNewsSlider client:only = "react" news = {latestArchives}/>
+  </div>
 </div>
+    )}
 
 <style>
   #latest-container {
