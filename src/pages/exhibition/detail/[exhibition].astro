@@ -120,7 +120,7 @@ function formatDate(start, end) {
 <Layout title={title} backUrl="/exhibition" backText="Exhibitions">
   <PageTitle title={title} subtitle={subtitle} />
   <div class="max-w-8xl mx-auto grid grid-cols-12 gap-8 mb-24">
-    <aside class="space-y-8 col-start-1 col-end-3 sticky top-1/4 h-fit">
+    <aside class="space-y-8 col-start-1 col-end-3 sticky top-0 h-fit">
       { curator &&
         <div>
           <h3 class="my-0 text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Curator</h3>
@@ -138,10 +138,17 @@ function formatDate(start, end) {
     </aside>
     <main class="col-start-4 col-end-12 grid grid-cols-8 gap-8">
       { cover &&
-        <Image src={cover} alt={title} width="640" height="420" class="col-start-1 col-span-6 my-16" />
+        <Image src={cover} alt={title} width="640" height="420" class="col-start-1 col-span-6" />
       }
       <TextBlock overview={overview} />
       {blocks && <PageBlock blocks={blocks} />}
     </main>
   </div>
 </Layout>
+
+
+<style is:global>
+  .swiper {
+    overflow: visible !important;
+  }
+</style>

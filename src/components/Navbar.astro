@@ -13,7 +13,9 @@ const {link, backText, backUrl } = Astro.props;
   class = "hidden bg-neutral-900 w-screen h-screen fixed inset-0"
 >
   <hgroup class = "w-full flex justify-between items-center p-8">
-    <Image src = {faviconWhite} alt = "logo" class = "cursor-pointer"/>
+    <a href="/" data-astro-reload>
+      <Image src = {faviconWhite} alt = "logo" class = "cursor-pointer"/>
+    </a>
     <Image
       id = "close-button" src = {closeWhite} alt = "close button"
       class = "cursor-pointer"
@@ -28,32 +30,44 @@ const {link, backText, backUrl } = Astro.props;
       <li class = "w-fit list-none">
         <a
           class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
-          href = "/about">About</a>
+          href = "/about"
+          data-astro-prefetch = "load"
+        >About</a>
       </li>
       <li class = "w-fit list-none">
         <a
           class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
-          href = "/exhibition" data-astro-prefetch = "load">Exhibitions</a>
+          href = "/exhibition"
+          data-astro-prefetch = "load"
+        >Exhibitions</a>
       </li>
       <li class = "w-fit list-none">
         <a
           class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
-          href = "/book/category" data-astro-prefetch = "load">Books</a>
+          href = "/book/category"
+          data-astro-prefetch = "load"
+        >Books</a>
       </li>
       <li class = "w-fit list-none">
         <a
           class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
-          href = "/teaching">Teaching</a>
+          href = "/teaching"
+          data-astro-prefetch = "load"
+        >Teaching</a>
       </li>
       <li class = "w-fit list-none">
         <a
           class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
-          href = "/archive/all/1/" data-astro-prefetch = "load">Archive</a>
+          href = "/archive/all/1/"
+          data-astro-prefetch = "load"
+        >Archive</a>
       </li>
       <li class = "w-fit list-none">
         <a
           class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
-          href = "/case-study">Case Studies</a>
+          href = "/case-study"
+          data-astro-prefetch = "load"
+        >Case Studies</a>
       </li>
     </ul>
     <div class = "col-span-1 space-y-12 lg:col-span-2">
@@ -78,7 +92,7 @@ const {link, backText, backUrl } = Astro.props;
 <!--导航-->
 <nav class = "fixed grid grid-cols-12 gap-8 max-w-8xl w-full mx-auto items-center p-8 z-10 top-0 left-1/2 -translate-x-1/2">
   <div class = "col-start-1 w-28 h-8 flex justify-center items-center">
-    <a href = "/">
+    <a href = "/" data-astro-reload>
       <Image src = {favicon} alt = "logo" class = "cursor-pointer"/>
     </a>
   </div>

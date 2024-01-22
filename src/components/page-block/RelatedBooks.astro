@@ -9,7 +9,7 @@ const { books } = Astro.props;
 const slicedBooks = books.slice(0, 4);
 ---
 
-<div class="col-start-1 col-span-6">
+<div class="col-start-1 col-span-6 my-16">
   <hgroup class="flex justify-between items-baseline max-w-3xl">
     <h2 class="font-serif font-bold text-neutral-900 text-5xl">Publications</h2>
     <p class="font-sans text-base text-neutral-900 opacity-50">{books.length} books</p>
