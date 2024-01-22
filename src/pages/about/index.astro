@@ -25,22 +25,21 @@ const profileData = await sanityClient.fetch(`*[_type == 'profile' ]{
   "blocks": pageBlock[]{
     _type == 'gallery' => {
       title, 
-      "type": 'gallery',
-      "gallery": type,
-      "pictures": images[]{
+      "category": 'gallery',
+      "gallery": type, 
+      "images": images[]{
         caption,
         "url": asset->url
       }
     },
     _type == 'timeline' => {
-      "type": 'timeline',
+      "category": 'timeline',
       ...
     },
     _type == 'content' => {
-      "type": 'content',
+      "category": 'content',
       ...
     },
-    ...
   }
 }`);
 

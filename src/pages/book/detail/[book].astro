@@ -19,7 +19,7 @@ export async function getStaticPaths() {
     "people": people[]{name, title},
     "blocks": pageBlocks[] {
       _type == 'relatedExternalLinks' => {
-        "type": _type,
+        "category": _type,
         "links": links[]{
           title,
           tag,
@@ -27,7 +27,7 @@ export async function getStaticPaths() {
         }
       },
       _type == 'relatedInternalLinks' => {
-        "type": _type,
+        "category": _type,
         "links": links[]->{
           "type": _type,
           title,

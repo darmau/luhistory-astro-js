@@ -17,7 +17,7 @@ const {title, records} = Astro.props;
     {records.map((record) => {
       return (
         <li class="grid grid-cols-4 gap-8">
-          <div class="col-span-1">
+          <div class="col-span-1 my-4">
             <span>{new Date(record.startDate).getFullYear()}</span>
             <span>{ifPresent(record.endDate)}</span>
           </div>
