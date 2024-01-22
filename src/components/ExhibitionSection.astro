@@ -6,7 +6,7 @@ const exhibitionData = await sanityClient.fetch(`
   *[_type == 'exhibition' && defined(dateRange) && defined(cover)]|order(dateRange.endDate desc){
     title,
     "slug": slug.current,
-    "year ": dateRange.endDate,
+    "year": dateRange.endDate,
     "city": location.city,
     "cover": {
       "url": cover.asset->url,
