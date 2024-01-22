@@ -13,7 +13,7 @@ const { blocks } = Astro.props
 <div class="page-block col-span-8 grid grid-cols-8 gap-8">
   <!--根据block.type分别传入不同组件-->
   {blocks.map((block) => {
-    switch (block.type) {
+    switch (block.category) {
       case "books":
         return <RelatedBooks {...block} />;
       case "articles":
@@ -23,7 +23,7 @@ const { blocks } = Astro.props
       case "timeline":
         return <Timeline {...block} />;
       case "content":
-        return <TextBlock overview={block.content} />;
+        return <TextBlock overview={block.content} title={block.title} />;
       case "relatedInternalLinks":
         return <RelatedInternalLinks {...block} />;
       case "relatedExternalLinks":

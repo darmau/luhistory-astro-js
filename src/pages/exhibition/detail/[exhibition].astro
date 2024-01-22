@@ -6,7 +6,7 @@ import PageBlock from "../../../components/PageBlock.astro";
 import PageTitle from "../../../components/PageTitle.astro";
 import TextBlock from "../../../components/text-block/TextBlock.astro";
 export async function getStaticPaths() {
-  const slugs = await sanityClient.fetch(`*[_type == 'exhibition' && defined(slug)]{
+  const slugs = await sanityClient.fetch(`*[_type == 'exhibition' && defined(slug)] | order(dateRange.startDate desc){
     title,
     "slug": slug.current,
     "subtitle": subtitle,
@@ -35,7 +35,7 @@ export async function getStaticPaths() {
       {
         _type == 'gallery' => {
           title, 
-          "type": 'gallery',
+          "category": 'gallery',
           "gallery": type, 
           "images": images[]{
             caption,
@@ -43,7 +43,7 @@ export async function getStaticPaths() {
           }
         },
         _type == 'relatedBooks' => {
-          "type": 'books',
+          "category": 'books',
           "books": books[]->{
             title,
             publishDate,
@@ -52,7 +52,7 @@ export async function getStaticPaths() {
           }
         },
         _type == 'relatedArticles' => {
-           "type": 'articles',
+           "category": 'articles',
           "articles": articles[]->{
             title,
             "slug": slug.current,

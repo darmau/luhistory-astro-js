@@ -33,7 +33,7 @@ export default function App({title, images}) {
               } key = {image.url}>
                 <img
                     className = "aspect-square object-cover w-full cursor-pointer"
-                    src = {`${image.url}?h=192`}
+                    src = {`${image.url}?h=320`}
                     alt = {image.caption || 'image'}
                     width = "192"
                     height = "192"

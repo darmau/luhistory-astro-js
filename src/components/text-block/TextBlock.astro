@@ -3,10 +3,13 @@ import SingleImage from "./SingleImage.astro";
 import Gallery from "../page-block/Gallery.astro";
 import { PortableText } from "astro-portabletext";
 
-const { overview } = Astro.props;
+const { overview, title } = Astro.props;
 ---
 
 <div class="col-span-8 grid grid-cols-8 gap-8">
+  {title && (
+      <h2 class="col-span-8 font-serif font-bold text-6xl text-neutral-900 mb-16">{title}</h2>
+  )}
   { overview && overview.map((block) => {
     if (block._type === 'gallery') {
       return <Gallery gallery={block.type} title={block.title} images={block.pictures} />

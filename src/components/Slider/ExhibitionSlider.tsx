@@ -16,14 +16,14 @@ export default ({exhibitions}) => {
           centeredSlides = {false}
           modules = {[Pagination]}
       >
-        {exhibitions.map((item) => (
-            <SwiperSlide>
+        {exhibitions.map((item, index) => (
+            <SwiperSlide key={index}>
               <a href={`/exhibition/detail/${item.slug}`}
               >
                 {item.cover && (
                       <img
                           src = {`${item.cover.url}?h=352`}
-                          alt = {item.title}
+                          alt = {item.cover.caption || item.title}
                           className = "bg-gray-50 object-cover h-[352px] w-full mb-6"
                       />
                 )}
@@ -31,7 +31,7 @@ export default ({exhibitions}) => {
                   {item.title}
                 </h3>
                 <p className = "text-neutral-900 opacity-50">
-                  {`${item.year} · ${item.city}`}
+                  {item.year.split('-')[0]} · {item.city}
                 </p>
               </a>
             </SwiperSlide>
