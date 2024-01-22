@@ -3,6 +3,10 @@ import Lightbox from "yet-another-react-lightbox";
 import Captions from "yet-another-react-lightbox/plugins/captions";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/captions.css";
+import {Pagination} from "swiper/modules";
+import {Swiper, SwiperSlide} from "swiper/react";
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 export default function App({images}) {
   const [open, setOpen] = React.useState(false);
@@ -13,28 +17,34 @@ export default function App({images}) {
   });
 
   return (
-      <div className="">
-        <div className = "flex gap-4">
-          {images.map((image, index) => (
-              <div
-                  className=""
-                  onClick = {
-                    () => {
-                      setIndex(index);
-                      setOpen(true);
-                    }
-                  } key = {image.url}
-              >
-                <img
-                    className = "aspect-[3/4] object-cover w-full cursor-pointer"
-                    src = {image.url}
-                    alt = {image.caption || 'image'}
-                    width = "192"
-                    height = "192"
-                />
-              </div>
+      <div>
+        <Swiper
+            spaceBetween = {32}
+            slidesPerView = {'auto'}
+            centeredSlides = {false}
+            modules = {[Pagination]}
+        >
+          {images.map((item) => (
+              <SwiperSlide>
+                {({isActive}) => (
+                    <div
+                        onClick = {
+                          () => {
+                            setIndex(index);
+                            setOpen(true);
+                          }
+                        } key = {item.url}
+                    >
+                      <img
+                          src = {item.url}
+                          alt = {item.caption || 'Gallery Image'}
+                          className = {`bg-gray-50 object-cover h-[480px] w-full ${!isActive && 'grayscale'}`}
+                      />
+                    </div>
+                )}
+              </SwiperSlide>
           ))}
-        </div>
+        </Swiper>
 
         <Lightbox
             open = {open}

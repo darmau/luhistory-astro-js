@@ -1,9 +1,14 @@
 ---
 import Slider from './gallery/Slider.tsx';
 import Grid from './gallery/Grid.tsx'
-const { gallery, title, images } = Astro.props;
+const {gallery, title, images} = Astro.props;
 ---
 
-<div class="col-start-1 col-span-6 my-16">
-  { gallery === 'slider' ? <Slider images={images} client:only /> : <Grid title={title} images={images} client:only />}
+<div class = "col-start-1 col-span-6 my-16 w-full">
+  {gallery === 'slider' ?
+    <div class="overflow-visible">
+      <Slider images = {images} client:only = "react"/>
+    </div>
+      :
+    <Grid title = {title} images = {images} client:only = "react"/>}
 </div>
