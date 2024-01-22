@@ -2,12 +2,15 @@
 import Layout from "../../layouts/Layout.astro";
 import {sanityClient} from "sanity:client";
 import PageTitle from "../../components/PageTitle.astro";
+import HoverImagePreview from "../../components/HoverImagePreview.tsx";
+
 const exhibitionRawData = await sanityClient.fetch(`
   *[_type == 'exhibition' && defined(dateRange)]|order(dateRange.startDate desc){
     title,
     "year": dateRange.startDate,
     "city": location.city,
-    "slug": slug.current
+    "slug": slug.current,
+    "cover": cover.asset->url
 }`);
 
 // 遍历exhibitions，将exhibitions中的每个元素，分别push进两个数组。如：exhibitionYears = [2019,
@@ -36,16 +39,14 @@ exhibitionRawData.forEach((exhibition) => {
             <ul class="col-span-8 flex-1">
               {
                 exhibitionByYears[exhibitionYears.indexOf(year)].map((exhibition) => (
-                  <li class="grid grid-cols-5 gap-6 items-center py-6 border-b border-neutral-900 text-neutral-900">
-                    <a
-                      href={`/exhibition/detail/${exhibition.slug}`}
-                      class="col-span-4 font-serif font-bold proportional-nums text-3xl text-neutral-900"
-                      data-astro-prefetch
-                    >
-                      {exhibition.title}
-                    </a>
-                    <p class="col-span-1 font-sans text-base font-normal text-neutral-900 opacity-50">{exhibition.city}</p>
-                  </li>
+                  <HoverImagePreview
+                    client:only="react"
+                    title={exhibition.title}
+                    slug={exhibition.slug}
+                    type="exhibition"
+                    location={exhibition.city}
+                    imgUrl={exhibition.cover}
+                  />
                 ))
               }
             </ul>
