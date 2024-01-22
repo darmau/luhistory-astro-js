@@ -22,7 +22,7 @@ export default ({cases}) => {
               >
                 {item.cover && (
                     <img
-                        src = {item.cover}
+                        src = {`${item.cover}?h=352`}
                         alt = {item.title}
                         className = "bg-gray-50 object-cover h-[352px] w-full mb-6"
                     />
