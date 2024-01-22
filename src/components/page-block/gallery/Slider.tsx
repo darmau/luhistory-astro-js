@@ -13,7 +13,7 @@ export default function App({images}) {
   });
 
   return (
-      <div>
+      <div className="">
         <div className = "flex gap-4">
           {images.map((image, index) => (
               <div

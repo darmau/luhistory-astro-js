@@ -4,6 +4,6 @@ import Grid from './gallery/Grid.tsx'
 const { gallery, title, images } = Astro.props;
 ---
 
-<div class="col-start-1 col-span-6">
+<div class="col-start-1 col-span-6 my-16">
   { gallery === 'slider' ? <Slider images={images} client:only /> : <Grid title={title} images={images} client:only />}
 </div>
