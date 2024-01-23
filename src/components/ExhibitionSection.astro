@@ -1,6 +1,6 @@
 ---
 import {sanityClient} from "sanity:client";
-import ExhibitionSlider from "./Slider/ExhibitionSlider.tsx"
+import ExhibitionSlider from "./slider/ExhibitionSlider.tsx"
 import {Image} from 'astro:assets';
 const exhibitionData = await sanityClient.fetch(`
   *[_type == 'exhibition' && defined(dateRange) && defined(cover)] | order(dateRange.startDate desc){

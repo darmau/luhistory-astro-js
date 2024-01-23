@@ -1,7 +1,7 @@
 ---
 import {sanityClient} from "sanity:client";
 import {Image} from 'astro:assets';
-import CaseSlider from "./Slider/CaseSlider.tsx"
+import CaseSlider from "./slider/CaseSlider.tsx"
 
 const casesData = await sanityClient.fetch(`
 *[_type == "caseStudy" && defined(slug)] | order(publishDate) {
