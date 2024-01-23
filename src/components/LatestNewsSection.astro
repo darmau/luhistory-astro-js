@@ -1,6 +1,6 @@
 ---
 import {sanityClient} from "sanity:client";
-import LatestNewsSlider from "./Slider/LatestNewsSlider.tsx"
+import LatestNewsSlider from "./slider/LatestNewsSlider.tsx"
 const latestArchives = await sanityClient.fetch(`*[_type == 'article' && isTop == true && defined(slug)] | order(publishDate desc){
   title,
   subtitle,

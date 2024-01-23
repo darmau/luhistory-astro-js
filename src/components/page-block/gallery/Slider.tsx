@@ -7,6 +7,10 @@ import {Pagination} from "swiper/modules";
 import {Swiper, SwiperSlide} from "swiper/react";
 import 'swiper/css';
 import 'swiper/css/pagination';
+import Counter from "yet-another-react-lightbox/plugins/counter";
+import ArrowLeft from "../../react-icon/ArrowLeft.tsx";
+import ArrowRight from "../../react-icon/ArrowRight.tsx";
+import Close from "../../react-icon/Close.tsx";
 
 export default function App({images}) {
   const [open, setOpen] = React.useState(false);
@@ -48,15 +52,28 @@ export default function App({images}) {
 
         <Lightbox
             open = {open}
-            plugins = {[Captions]}
+            plugins = {[Captions, Counter]}
             index = {index}
             close = {() => setOpen(false)}
             slides = {imageUrl}
             styles = {{
-              container: {background: "white"},
+              container: {
+                background: "white",
+              },
+              root: {
+                "--yarl__button_filter": "filter: none",
+                "--yarl__counter_color": "black",
+                "--yarl__counter_filter": "filter: none",
+              },
               captionsDescriptionContainer: {background: "white"},
               captionsDescription: {color: "black", textAlign: "center"},
             }}
+            render = {{
+              iconPrev: () => <ArrowLeft/>,
+              iconNext: () => <ArrowRight/>,
+              iconClose: () => <Close/>,
+            }}
+            counter = {{container: {style: {top: 0}}}}
         />
       </div>
   );
