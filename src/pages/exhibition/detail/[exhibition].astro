@@ -6,7 +6,7 @@ import PageBlock from "../../../components/PageBlock.astro";
 import PageTitle from "../../../components/PageTitle.astro";
 import TextBlock from "../../../components/text-block/TextBlock.astro";
 export async function getStaticPaths() {
-  const slugs = await sanityClient.fetch(`*[_type == 'exhibition' && defined(slug)] | order(dateRange.startDate desc){
+  const slugs = await sanityClient.fetch(`*[_type == 'exhibition' && defined(slug) && defined(dateRange)] {
     title,
     "slug": slug.current,
     "subtitle": subtitle,

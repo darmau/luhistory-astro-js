@@ -7,7 +7,7 @@ import TextBlock from "../../../components/text-block/TextBlock.astro";
 import PageBlock from "../../../components/PageBlock.astro";
 
 export async function getStaticPaths() {
-  const slugs = await sanityClient.fetch(`*[_type == 'caseStudy' && defined(slug)]|order(publishDate desc){
+  const slugs = await sanityClient.fetch(`*[_type == 'caseStudy' && defined(slug)] {
     "slug": slug.current,
     title,
     publishDate,

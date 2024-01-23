@@ -3,10 +3,10 @@ import {sanityClient} from "sanity:client";
 import ExhibitionSlider from "./Slider/ExhibitionSlider.tsx"
 import {Image} from 'astro:assets';
 const exhibitionData = await sanityClient.fetch(`
-  *[_type == 'exhibition' && defined(dateRange) && defined(cover)]|order(dateRange.endDate desc){
+  *[_type == 'exhibition' && defined(dateRange) && defined(cover)] | order(dateRange.startDate desc){
     title,
     "slug": slug.current,
-    "year": dateRange.endDate,
+    "year": dateRange.startDate,
     "city": location.city,
     "cover": {
       "url": cover.asset->url,

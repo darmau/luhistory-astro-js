@@ -4,7 +4,7 @@ import {Image} from 'astro:assets';
 import CaseSlider from "./Slider/CaseSlider.tsx"
 
 const casesData = await sanityClient.fetch(`
-*[_type == "caseStudy"]|order(publishDate){
+*[_type == "caseStudy" && defined(slug)] | order(publishDate) {
     title,
     "slug": slug.current,
     "cover": cover.image.asset->url

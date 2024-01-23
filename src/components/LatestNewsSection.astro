@@ -1,12 +1,12 @@
 ---
 import {sanityClient} from "sanity:client";
 import LatestNewsSlider from "./Slider/LatestNewsSlider.tsx"
-const latestArchives = await sanityClient.fetch(`*[_type == 'article' && isTop == true]|order(publishDate desc){
+const latestArchives = await sanityClient.fetch(`*[_type == 'article' && isTop == true && defined(slug)] | order(publishDate desc){
   title,
   subtitle,
   "slug": slug.current,
   "cover": cover.asset->url
-}[0...3]`);
+}[0...5]`);
 ---
 
 {latestArchives && (
