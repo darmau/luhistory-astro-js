@@ -22,7 +22,7 @@ export default ({exhibitions}) => {
               >
                 {item.cover && (
                       <img
-                          src = {`${item.cover.url}?h=352`}
+                          src = {`${item.cover.url}?h=480`}
                           alt = {item.cover.caption || item.title}
                           className = "bg-gray-50 object-cover h-[352px] w-full mb-6"
                       />

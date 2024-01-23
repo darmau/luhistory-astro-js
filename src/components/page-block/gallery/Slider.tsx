@@ -36,7 +36,7 @@ export default function App({images}) {
                         } key = {item.url}
                     >
                       <img
-                          src = {`${item.url}?h=480`}
+                          src = {`${item.url}?h=640`}
                           alt = {item.caption || 'Gallery Image'}
                           className = {`bg-gray-50 object-cover h-[480px] w-full ${!isActive && 'grayscale'}`}
                       />
