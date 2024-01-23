@@ -1,7 +1,7 @@
 ---
 import {sanityClient} from "sanity:client";
 const articlesData = await sanityClient.fetch(`
-  *[_type == 'article']|order(publishDate desc){
+  *[_type == 'article' && defined(slug) && defined(category)] | order(publishDate desc){
     title,
     "slug": slug.current,
     category
