@@ -1,11 +1,13 @@
 import {defineConfig} from 'astro/config';
 import {sanityIntegration} from "@sanity/astro";
 import react from "@astrojs/react";
+import sitemap from '@astrojs/sitemap';
 
 import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://luhistory.com",
   integrations: [
     sanityIntegration({
       projectId: 'aemgaomh',
@@ -14,7 +16,8 @@ export default defineConfig({
       useCdn: false
     }),
     react(),
-    tailwind()],
+    tailwind(),
+    sitemap()],
   image: {
     domains: ["cdn.sanity.io"],
     remotePatterns: [{ protocol: "https"}]
