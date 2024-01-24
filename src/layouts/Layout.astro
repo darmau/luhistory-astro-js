@@ -1,29 +1,30 @@
 ---
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
-import { ViewTransitions } from "astro:transitions";
-const { title, backText, backUrl  } = Astro.props;
+import {ViewTransitions} from "astro:transitions";
+const {title, description, backText, backUrl} = Astro.props;
 ---
-<html lang = "en" class="scroll-smooth">
+<html lang = "en" class = "scroll-smooth">
 <head>
   <meta charset = "UTF-8">
   <meta name = "viewport" content = "width=device-width, initial-scale=1">
   <meta name = "generator" content = {Astro.generator}/>
+  <link rel = "icon" href = "/favicon.svg" type = "image/svg+xml"/>
   <title>{title}</title>
-  <ViewTransitions />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="sitemap" href="/sitemap-index.xml" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <meta name = "description" content = {description}/>
+  <ViewTransitions/>
+  <link rel = "preconnect" href = "https://fonts.googleapis.com">
+  <link rel = "preconnect" href = "https://fonts.gstatic.com" crossorigin>
+  <link href = "https://fonts.googleapis.com/css2?family=Cormorant:wght@400;600;700&display=swap" rel = "stylesheet">
+  <link rel = "sitemap" href = "/sitemap-index.xml"/>
 </head>
 <body>
-  <div class="min-h-screen flex flex-col relative">
-    <Navbar backText= {backText} backUrl= {backUrl} />
-    <div class="grow w-full mt-[104px] overflow-hidden">
-      <slot/>
-    </div>
-    <Footer/>
+<div class = "min-h-screen flex flex-col relative">
+  <Navbar backText = {backText} backUrl = {backUrl}/>
+  <div class = "grow w-full mt-[104px] overflow-hidden">
+    <slot/>
   </div>
+  <Footer/>
+</div>
 </body>
 </html>
