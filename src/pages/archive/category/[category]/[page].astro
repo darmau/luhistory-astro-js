@@ -22,7 +22,7 @@ export async function getStaticPaths({paginate}) {
 
 // 转换成大写
 function toUppercase (str) {
-  return str.replace(/-/g, '').toUpperCase();
+  return str.replace(/-/g, ' ').toUpperCase();
 }
 
 const ArticleCategories = Category;
@@ -30,7 +30,7 @@ const {category, page} = Astro.props;
 const params = Astro.params;
 ---
 
-<Layout>
+<Layout title = {`${params.category.replace(/-/g, ' ')} - Archives`}>
   <PageTitle
     title = "Archive"
     subtitle = "Praesentium ea asperiores molestias aperiam enim accusantium. Voluptatibus dicta quam eum labore dolorum eum nobis deleniti eum."

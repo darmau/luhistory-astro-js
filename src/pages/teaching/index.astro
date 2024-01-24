@@ -39,7 +39,7 @@ const teachingData = await sanityClient.fetch(`*[_type == 'teaching']{
 const {overview, experience, links} = teachingData[0];
 ---
 
-<Layout>
+<Layout title = "Teaching">
   <PageTitle title="Teaching" subtitle="Praesentium ea asperiores molestias aperiam enim accusantium. Voluptatibus dicta quam eum labore dolorum eum nobis deleniti eum." bgWhite="false" />
   <div class="max-w-8xl mx-auto grid grid-cols-12 gap-8 my-40">
     <main class="col-start-4 col-end-12 w-full">

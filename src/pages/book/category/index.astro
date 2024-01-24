@@ -14,7 +14,7 @@ const books = await sanityClient.fetch(`*[_type == 'book' && defined(slug) && de
 }`);
 ---
 
-<Layout>
+<Layout title = "All Books">
   <PageTitle title="Publications" subtitle="Repellat molestiae nihil iusto quo quia. In voluptatum hic libero omnis ullam deleniti. Quia vel voluptatem voluptatem excepturi omnis id." bgWhite="flase" />
 
   <main class="max-w-8xl mx-auto grid grid-cols-12 gap-8 py-16 mb-24">
