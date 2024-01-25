@@ -42,8 +42,8 @@ const { page } = Astro.props;
         );
       })}
     </ul>
-    <div class="col-start-4 col-end-12">
-      <div class="space-y-8">
+    <div class="col-start-4 col-end-12 grid grid-cols-8">
+      <div class="space-y-8 col-span-8">
         {page.data.map((article) => {
           return (
             <article>
@@ -55,9 +55,17 @@ const { page } = Astro.props;
           );
         })}
       </div>
-      <div class="my-8 flex justify-between">
-        {page.url.prev ? <a href={page.url.prev}>Previous</a> : null}
-        {page.url.next ? <a href={page.url.next}>Next</a> : null}
+      <div class="mt-40 flex justify-between col-start-1 col-span-6">
+        <a
+          class=`${page.url.prev ? '' : 'opacity-0'}`
+          href={page.url.prev}>
+          ←&nbsp;Previous
+        </a>
+        <a
+          class=`${page.url.next ? '' : 'opacity-0'}`
+          href={page.url.next}>
+          Next&nbsp;→
+        </a>
       </div>
     </div>
   </main>
