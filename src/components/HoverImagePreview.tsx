@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 
 const HoverImagePreview = ({ type, slug, title, location, imgUrl }) => {
   const [isHovering, setIsHovering] = useState(false);
@@ -69,11 +69,11 @@ const HoverImagePreview = ({ type, slug, title, location, imgUrl }) => {
       >
         <a
             href={`/${type}/detail/${slug}`}
-            className="col-span-4 font-serif font-bold proportional-nums text-3xl text-neutral-900"
+            className = "col-span-4 font-serif font-bold proportional-nums text-3xl text-neutral-900 line-clamp-2"
             data-astro-prefetch
         >{title}</a>
         <p
-            className="col-span-1 font-sans text-base font-normal text-neutral-900 opacity-50"
+            className = "text-end col-span-1 font-sans text-base font-normal text-neutral-900 opacity-50"
         >{location}</p>
         {isHovering && <img src={imgUrl} alt={title} style={imageStyle} />}
       </li>
