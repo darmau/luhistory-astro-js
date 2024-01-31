@@ -2,25 +2,25 @@
 ---
 import {sanityClient} from "sanity:client";
 import findNextAndLast from "../../functions/next-and-last";
-const exhibitionList = await sanityClient.fetch(`*[_type == 'exhibition' && defined(slug) && defined(dateRange)]|order(dateRange.startDate desc) {
+const archiveList = await sanityClient.fetch(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)]|order(publishDate desc) {
   title,
   "slug": slug.current,
 }`);
 const {slug} = Astro.props;
-const currentIndex = findNextAndLast(exhibitionList, slug);
+const currentIndex = findNextAndLast(archiveList, slug);
 ---
 
-{exhibitionList.length > 1 && currentIndex < exhibitionList.length - 1 && (
+{archiveList.length > 1 && currentIndex < archiveList.length - 1 && (
 <div class = "col-start-1 col-span-8 my-16">
   <h4 class = "font-sans font-normal text-base text-neutral-900">Next</h4>
   <a
-    href = {`/exhibition/detail/${exhibitionList[currentIndex + 1].slug}`}
+    href = {`/archive/detail/${archiveList[currentIndex + 1].slug}`}
     data-astro-prefetch = "hover"
     class = "flex gap-8 justify-between items-center text-6xl font-serif font-bold no-underline hover:underline text-neutral-900"
   >
-      <span
-        class = "line-clamp-2" title = {exhibitionList[currentIndex + 1].title}
-      >{exhibitionList[currentIndex + 1].title}</span>
+        <span
+          class = "line-clamp-2" title = {archiveList[currentIndex + 1].title}
+        >{archiveList[currentIndex + 1].title}</span>
     <svg xmlns = "http://www.w3.org/2000/svg" viewBox = "0 0 24 24" fill = "currentColor" class = "w-12 h-12">
       <path
         fillRule = "evenodd"
