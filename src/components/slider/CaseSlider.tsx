@@ -27,7 +27,10 @@ export default ({cases}) => {
                         className = "bg-gray-50 object-cover h-[352px] w-full mb-6"
                     />
                 )}
-                <h3 className = "font-serif font-bold text-neutral-900 text-3xl line-clamp-2 mb-3">
+                <h3
+                    title = {item.title}
+                    className = "font-serif font-bold text-neutral-900 text-3xl line-clamp-2 mb-3"
+                >
                   {item.title}
                 </h3>
               </a>
