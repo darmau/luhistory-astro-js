@@ -14,7 +14,7 @@ export async function getStaticPaths() {
     "end": dateRange.endDate,
     "cover": cover.asset->url,
     "curator": curator,
-    "place": location->place,
+    "place": location.place,
     "overview": overview[] {
       _type == 'imageBlock' => {
         type,
