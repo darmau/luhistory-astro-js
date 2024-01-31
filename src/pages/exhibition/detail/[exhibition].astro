@@ -5,6 +5,7 @@ import {Image} from 'astro:assets'
 import PageBlock from "../../../components/PageBlock.astro";
 import PageTitle from "../../../components/PageTitle.astro";
 import TextBlock from "../../../components/text-block/TextBlock.astro";
+import NextExhibition from "../../../components/order/NextExhibition.astro";
 export async function getStaticPaths() {
   const slugs = await sanityClient.fetch(`*[_type == 'exhibition' && defined(slug) && defined(dateRange)] {
     title,
@@ -142,6 +143,8 @@ function formatDate(start, end) {
       }
       <TextBlock overview={overview} />
       {blocks && <PageBlock blocks={blocks} />}
+
+      <NextExhibition slug = {Astro.params.exhibition}/>
     </main>
   </div>
 </Layout>
