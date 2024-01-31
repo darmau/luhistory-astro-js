@@ -9,8 +9,6 @@ import {Pagination} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-// 检测屏幕宽度，根据宽度，返回不同的值
-
 export default ({news}) => {
   const [spaceBetween, setSpaceBetween] = useState(32);
 
