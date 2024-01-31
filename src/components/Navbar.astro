@@ -22,49 +22,49 @@ const {link, backText, backUrl } = Astro.props;
     />
   </hgroup>
   <div
-    class = "grid grid-cols-1 gap-16 px-8 md:grid-cols-2 md:p-8 lg:grid-cols-5 lg:gap-3 lg:p-16"
+    class = "h-full grid grid-cols-1 gap-16 px-8 md:grid-cols-2 md:p-8 lg:grid-cols-5 lg:gap-3 lg:p-16"
   >
     <ul
-      class = "col-span-1 lg:col-span-3 lg:mx-auto space-y-8"
+      class = "col-span-1 lg:col-span-3 lg:mx-auto space-y-4 md:space-y-8"
     >
       <li class = "w-fit list-none">
         <a
-          class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
+          class = "text-white font-serif font-bold text-3xl md:text-5xl no-underline"
           href = "/about"
           data-astro-prefetch = "load"
         >About</a>
       </li>
       <li class = "w-fit list-none">
         <a
-          class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
+          class = "text-white font-serif font-bold text-3xl md:text-5xl no-underline"
           href = "/exhibition"
           data-astro-prefetch = "load"
         >Exhibitions</a>
       </li>
       <li class = "w-fit list-none">
         <a
-          class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
+          class = "text-white font-serif font-bold text-3xl md:text-5xl no-underline"
           href = "/book/category"
           data-astro-prefetch = "load"
         >Books</a>
       </li>
       <li class = "w-fit list-none">
         <a
-          class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
+          class = "text-white font-serif font-bold text-3xl md:text-5xl no-underline"
           href = "/teaching"
           data-astro-prefetch = "load"
         >Teaching</a>
       </li>
       <li class = "w-fit list-none">
         <a
-          class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
+          class = "text-white font-serif font-bold text-3xl md:text-5xl no-underline"
           href = "/archive/all/1/"
           data-astro-prefetch = "load"
         >Archive</a>
       </li>
       <li class = "w-fit list-none">
         <a
-          class="text-white font-serif font-bold text-4xl md:text-5xl no-underline"
+          class = "text-white font-serif font-bold text-3xl md:text-5xl no-underline"
           href = "/case-study"
           data-astro-prefetch = "load"
         >Case Studies</a>
@@ -75,14 +75,14 @@ const {link, backText, backUrl } = Astro.props;
         <h3
           class = "text-white font-normal font-sans text-sm uppercase opacity-50 tracking-widest"
         >Social</h3>
-        <h4 class = "text-white font-serif font-bold text-3xl md:text-4xl">Facebook</h4>
-        <h4 class = "text-white font-serif font-bold text-3xl md:text-4xl">Weibo</h4>
+        <h4 class = "text-white font-serif font-bold text-2xl md:text-4xl">Facebook</h4>
+        <h4 class = "text-white font-serif font-bold text-2xl md:text-4xl">Weibo</h4>
       </div>
       <div class = "space-y-4">
         <h3
           class = "text-white font-normal font-sans text-sm uppercase opacity-50 tracking-widest"
         >Contact</h3>
-        <h4 class = "font-serif font-bold text-3xl md:text-4xl">
+        <h4 class = "font-serif font-bold text-2xl md:text-4xl">
           <a class="text-white no-underline" href = "mailto:info@luhistory.com" target = "_blank">info@luhistory.com</a>
         </h4>
       </div>
@@ -91,9 +91,9 @@ const {link, backText, backUrl } = Astro.props;
 </div>
 <!--导航-->
 <nav
-  class = "fixed grid grid-cols-12 gap-8 max-w-8xl w-full mx-auto items-center py-8 z-10 top-0 left-1/2 -translate-x-1/2"
+  class = "fixed flex justify-between items-center p-4 md:p-8 max-w-8xl w-full mx-auto 8xl:grid 8xl:grid-cols-12 8xl:gap-8 8xl:py-8 z-10 top-0 left-1/2 -translate-x-1/2"
 >
-  <div class = "col-start-1 w-28 h-8 flex justify-center items-center">
+  <div class = "col-start-1 h-4 w-14 md:w-28 md:h-8 flex justify-center items-center">
     <a href = "/" data-astro-reload>
       <Image src = {favicon} alt = "logo" class = "cursor-pointer"/>
     </a>
@@ -105,7 +105,7 @@ const {link, backText, backUrl } = Astro.props;
       ← &nbsp;{backText}
     </a>
   )}
-  <div class = "col-start-12 justify-self-end w-10 h-10 menu-button">
+  <div class = "col-start-12 justify-self-end w-5 h-5 md:w-10 md:h-10 menu-button">
     <Image
       src = {menuIcon} alt = "menu" class = "w-full h-full cursor-pointer"
     />
