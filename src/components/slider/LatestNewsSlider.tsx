@@ -15,6 +15,11 @@ export default ({news}) => {
           slidesPerView = {'auto'}
           centeredSlides = {true}
           modules = {[Pagination]}
+          keyboard = {{
+            enabled: true,
+            onlyInViewport: true,
+            pageUpDown: true,
+          }}
       >
         {news.map((item, index) => (
             <SwiperSlide>

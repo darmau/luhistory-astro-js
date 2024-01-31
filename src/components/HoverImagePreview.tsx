@@ -68,6 +68,7 @@ const HoverImagePreview = ({ type, slug, title, location, imgUrl }) => {
           className="grid grid-cols-5 gap-6 items-center py-6 border-b border-neutral-900 text-neutral-900"
       >
         <a
+            title = {title}
             href={`/${type}/detail/${slug}`}
             className = "col-span-4 font-serif font-bold proportional-nums text-3xl text-neutral-900 line-clamp-2"
             data-astro-prefetch

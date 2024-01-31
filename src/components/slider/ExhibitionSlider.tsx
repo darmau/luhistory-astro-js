@@ -15,6 +15,11 @@ export default ({exhibitions}) => {
           slidesPerView = {2}
           centeredSlides = {false}
           modules = {[Pagination]}
+          keyboard = {{
+            enabled: true,
+            onlyInViewport: true,
+            pageUpDown: true,
+          }}
       >
         {exhibitions.map((item, index) => (
             <SwiperSlide key={index}>
@@ -27,7 +32,10 @@ export default ({exhibitions}) => {
                           className = "bg-gray-50 object-cover h-[352px] w-full mb-6"
                       />
                 )}
-                <h3 className = "font-serif font-bold text-neutral-900 text-3xl line-clamp-2 mb-3">
+                <h3
+                    title = {item.title}
+                    className = "font-serif font-bold text-neutral-900 text-3xl line-clamp-2 mb-3"
+                >
                   {item.title}
                 </h3>
                 <p className = "text-neutral-900 opacity-50">
