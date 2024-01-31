@@ -50,7 +50,7 @@ export default ({news}) => {
         {news.map((item, index) => (
             <SwiperSlide>
               <a href={`/archive/detail/${item.slug}`}
-                 className = "relative bg-gray-50 h-[240px] md:h-[544px] flex flex-col justify-end p-4 md:p-10"
+                 className = "relative bg-gray-50 h-[240px] sm:h-[360px] md:h-[544px] flex flex-col justify-end p-4 md:p-10"
               >
                 {item.cover && (
                     <>
