@@ -15,6 +15,11 @@ export default ({exhibitions}) => {
           slidesPerView = {2}
           centeredSlides = {false}
           modules = {[Pagination]}
+          keyboard = {{
+            enabled: true,
+            onlyInViewport: true,
+            pageUpDown: true,
+          }}
       >
         {exhibitions.map((item, index) => (
             <SwiperSlide key={index}>

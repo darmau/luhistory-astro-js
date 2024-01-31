@@ -15,6 +15,11 @@ export default ({cases}) => {
           slidesPerView = {2}
           centeredSlides = {false}
           modules = {[Pagination]}
+          keyboard = {{
+            enabled: true,
+            onlyInViewport: true,
+            pageUpDown: true,
+          }}
       >
         {cases.map((item) => (
             <SwiperSlide>
