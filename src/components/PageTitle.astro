@@ -2,11 +2,11 @@
 const {title, subtitle, bgWhite = true} = Astro.props;
 // 根据title的长度，返回一个4-9之间的数字
 function getTextSize(size) {
-  if (size < 20) {
-    return 'text-7xl md:text-9xl';
-  } else if (size < 50) {
+  if (size < 16) {
+    return 'text-6xl md:text-9xl';
+  } else if (size < 32) {
     return 'text-6xl md:text-8xl';
-  } else if (size < 80) {
+  } else if (size < 48) {
     return 'text-5xl md:text-7xl';
   } else {
     return 'text-4xl md:text-6xl';
@@ -24,7 +24,7 @@ const titleSize = getTextSize(title.length);
       >{title}</h1>
       {subtitle &&
         <h2
-          class = "col-start-4 col-end-12 font-serif font-semibold text-2xl text-neutral-900 my-8"
+          class = "col-start-4 col-end-12 font-serif font-semibold text-lg md:text-2xl text-neutral-900 my-4 md:my-8"
         >{subtitle}</h2>
       }
     </hgroup>
