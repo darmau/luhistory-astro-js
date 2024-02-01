@@ -4,7 +4,7 @@ import Grid from './gallery/Grid.tsx'
 const {gallery, title, images} = Astro.props;
 ---
 
-<div class = "col-start-1 col-span-6 my-16 w-full">
+<div class = "col-start-1 col-span-8 lg:col-span-6 my-4 lg:my-16 w-full">
   {gallery === 'slider' ?
     <div class="overflow-visible">
       <Slider images = {images} client:only = "react"/>

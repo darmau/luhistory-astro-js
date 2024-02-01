@@ -20,15 +20,15 @@ export default function App({title, images}) {
   return (
       <div>
         <hgroup
-            className = "mb-6 flex justify-between items-baseline max-w-3xl"
+            className = "md:mb-6 flex justify-between items-baseline max-w-3xl"
         >
-          <h2 className = "font-serif font-bold text-neutral-900 text-5xl">{title}</h2>
+          <h2 className = "font-serif font-bold text-neutral-900 text-3xl md:text-5xl">{title}</h2>
           <small
               className = "font-sans text-base text-neutral-900 opacity-50"
           >{images.length} photos</small>
         </hgroup>
 
-        <div className = "grid grid-cols-3 gap-8">
+        <div className = "grid grid-cols-3 gap-4 lg:gap-8">
           {images.slice(0, 6).map((image, index) => (
               <div
                   onClick = {

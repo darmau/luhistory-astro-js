@@ -65,16 +65,16 @@ const HoverImagePreview = ({ type, slug, title, location, imgUrl }) => {
           onMouseMove={handleMouseMove}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          className="grid grid-cols-5 gap-6 items-center py-6 border-b border-neutral-900 text-neutral-900"
+          className = "flex flex-col py-6 gap-2 border-b border-neutral-900 border-opacity-20 sm:border-opacity-100 text-neutral-900 md:grid md:grid-cols-5 md:items-center md:gap-6"
       >
         <a
             title = {title}
             href={`/${type}/detail/${slug}`}
-            className = "col-span-4 font-serif font-bold proportional-nums text-3xl text-neutral-900 line-clamp-2"
+            className = "col-span-4 font-serif font-bold proportional-nums text-2xl sm:text-3xl text-neutral-900 line-clamp-2 hover:underline"
             data-astro-prefetch
         >{title}</a>
         <p
-            className = "text-end col-span-1 font-sans text-base font-normal text-neutral-900 opacity-50"
+            className = "md:text-end col-span-1 font-sans text-base font-normal text-neutral-900 opacity-50"
         >{location}</p>
         {isHovering && <img src={imgUrl} alt={title} style={imageStyle} />}
       </li>

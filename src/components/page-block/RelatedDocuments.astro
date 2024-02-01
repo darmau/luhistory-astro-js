@@ -10,9 +10,9 @@ function generageCategory(category) {
 const { articles } = Astro.props
 ---
 
-<div class="col-start-1 col-span-8 my-16">
+<div class = "col-start-1 col-span-8 my-4 lg:my-16">
   <hgroup class="my-12">
-    <h2 class="font-serif font-bold text-neutral-900 text-5xl">Archive</h2>
+    <h2 class = "font-serif font-bold text-neutral-900 text-3xl md:text-5xl">Archive</h2>
   </hgroup>
   <ul class="space-y-8 pl-0">
     {articles.map((article) => (

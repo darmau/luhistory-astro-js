@@ -10,7 +10,7 @@ import RelatedExhibitions from "./page-block/RelatedExhibitions.astro";
 const { blocks } = Astro.props
 ---
 
-<div class="page-block col-span-8 grid grid-cols-8 gap-8">
+<div class = "page-block col-span-8 flex flex-col gap-2 md:grid md:grid-cols-8 md:gap-8">
   <!--根据block.type分别传入不同组件-->
   {blocks.map((block) => {
     switch (block.category) {

@@ -2,14 +2,14 @@
 const {title, subtitle, bgWhite = true} = Astro.props;
 // 根据title的长度，返回一个4-9之间的数字
 function getTextSize(size) {
-  if (size < 20) {
-    return 'text-9xl';
-  } else if (size < 50) {
-    return 'text-8xl';
-  } else if (size < 80) {
-    return 'text-7xl';
+  if (size < 16) {
+    return 'text-6xl md:text-9xl';
+  } else if (size < 32) {
+    return 'text-6xl md:text-8xl';
+  } else if (size < 48) {
+    return 'text-5xl md:text-7xl';
   } else {
-    return 'text-6xl';
+    return 'text-4xl md:text-6xl';
   }
 }
 
@@ -18,13 +18,13 @@ const titleSize = getTextSize(title.length);
 
 <header>
   {bgWhite === true ?
-    <hgroup class = "w-full max-w-8xl mx-auto grid grid-cols-12 gap-8 z-10 pt-12 pb-10">
+    <hgroup class = "w-full max-w-8xl mx-auto z-10 p-4 lg:p-0 lg:grid lg:grid-cols-12 lg:gap-8 lg:pt-12 lg:pb-10">
       <h1
         class = {`col-start-4 col-end-12 font-serif font-bold text-neutral-900 ${titleSize} leading-tight`}
       >{title}</h1>
       {subtitle &&
         <h2
-          class = "col-start-4 col-end-12 font-serif font-semibold text-2xl text-neutral-900 my-8"
+          class = "col-start-4 col-end-12 font-serif font-semibold text-lg md:text-2xl text-neutral-900 my-4 md:my-8"
         >{subtitle}</h2>
       }
     </hgroup>
@@ -32,7 +32,7 @@ const titleSize = getTextSize(title.length);
     <hgroup class = "bg-img">
       <div class = "w-full max-w-8xl mx-auto grid grid-cols-12 px-8 z-10">
         <h1
-          class = {`col-start-4 col-end-12 text-white font-serif font-bold text-neutral-900 ${titleSize} leading-snug`}
+          class = {`col-start-4 col-end-12 text-white font-serif font-bold ${titleSize} leading-snug`}
         >{title}</h1>
         {subtitle &&
           <h2
