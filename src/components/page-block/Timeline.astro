@@ -16,8 +16,8 @@ const {title, records} = Astro.props;
   <ul class = "text-xl font-serif pl-0 space-y-4">
     {records.map((record) => {
       return (
-        <li class="grid grid-cols-4 gap-8">
-          <div class = "col-span-1">
+        <li class = "flex flex-col gap-2 lg:grid lg:grid-cols-4 lg:gap-8">
+          <div class = "col-span-1 font-semibold proportional-nums text-2xl lg:text-lg lg:font-normal">
             <span>{new Date(record.startDate).getFullYear()}</span>
             <span>{ifPresent(record.endDate)}</span>
           </div>
