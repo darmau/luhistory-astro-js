@@ -3,13 +3,13 @@ const {title, subtitle, bgWhite = true} = Astro.props;
 // 根据title的长度，返回一个4-9之间的数字
 function getTextSize(size) {
   if (size < 20) {
-    return 'text-9xl';
+    return 'text-7xl md:text-9xl';
   } else if (size < 50) {
-    return 'text-8xl';
+    return 'text-6xl md:text-8xl';
   } else if (size < 80) {
-    return 'text-7xl';
+    return 'text-5xl md:text-7xl';
   } else {
-    return 'text-6xl';
+    return 'text-4xl md:text-6xl';
   }
 }
 
@@ -18,7 +18,7 @@ const titleSize = getTextSize(title.length);
 
 <header>
   {bgWhite === true ?
-    <hgroup class = "w-full max-w-8xl mx-auto grid grid-cols-12 gap-8 z-10 pt-12 pb-10">
+    <hgroup class = "w-full max-w-8xl mx-auto z-10 p-4 md:p-0 md:grid md:grid-cols-12 md:gap-8 md:pt-12 md:pb-10">
       <h1
         class = {`col-start-4 col-end-12 font-serif font-bold text-neutral-900 ${titleSize} leading-tight`}
       >{title}</h1>
