@@ -52,6 +52,9 @@ export default function App({images}) {
             slidesPerView = {'auto'}
             centeredSlides = {false}
             modules = {[Pagination]}
+            pagination = {{
+              dynamicBullets: true,
+            }}
         >
           {images.map((item) => (
               <SwiperSlide>
