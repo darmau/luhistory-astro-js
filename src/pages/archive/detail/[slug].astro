@@ -57,7 +57,7 @@ function formatDate(dateString) {
 
 <Layout title = {title} backUrl = "/archive/all/1" backText = "Archives">
   <PageTitle title = {title}/>
-  <div class = "max-w-8xl mx-auto grid grid-cols-12 gap-8">
+  <div class = "max-w-8xl mx-auto grid grid-cols-12 gap-8 mb-24">
     <aside class = "space-y-8 col-start-1 col-end-3 h-fit">
       {author &&
         <div>
@@ -71,8 +71,8 @@ function formatDate(dateString) {
     </aside>
     <main class = "col-start-4 col-end-12 mb-24">
       <TextBlock overview = {body}/>
-      <NextArchive slug = {Astro.params.slug}/>
     </main>
+    <NextArchive slug = {Astro.params.slug}/>
   </div>
 </Layout>
 

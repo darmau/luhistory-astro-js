@@ -11,12 +11,12 @@ const currentIndex = findNextAndLast(exhibitionList, slug);
 ---
 
 {exhibitionList.length > 1 && currentIndex < exhibitionList.length - 1 && (
-<div class = "col-start-1 col-span-8 my-16">
-  <h4 class = "font-sans font-normal text-base text-neutral-900">Next</h4>
+<div class = "col-start-2 col-end-12 grid grid-cols-10 gap-4 mt-16 pt-16 border-t border-neutral-900 border-opacity-20">
+  <h4 class = "col-start-3 col-span-8 font-sans font-normal text-base text-neutral-900">Next</h4>
   <a
     href = {`/exhibition/detail/${exhibitionList[currentIndex + 1].slug}`}
     data-astro-prefetch = "hover"
-    class = "flex gap-8 justify-between items-center text-6xl font-serif font-bold no-underline hover:underline text-neutral-900"
+    class = "col-start-3 col-span-8 flex gap-8 justify-between items-center text-6xl font-serif font-bold no-underline hover:underline text-neutral-900"
   >
       <span
         class = "line-clamp-2" title = {exhibitionList[currentIndex + 1].title}
