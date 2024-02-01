@@ -5,6 +5,7 @@ import PageTitle from "../../../components/PageTitle.astro";
 import {Image} from 'astro:assets'
 import TextBlock from "../../../components/text-block/TextBlock.astro";
 import PageBlock from "../../../components/PageBlock.astro";
+import NextCase from "../../../components/order/NextCase.astro";
 
 export async function getStaticPaths() {
   const slugs = await sanityClient.fetch(`*[_type == 'caseStudy' && defined(slug)] {
@@ -89,12 +90,13 @@ const {title, cover, overview, publishDate, blocks} = Astro.props;
 
 <Layout  title={title} backUrl="/case-study" backText="Case Studies">
   <PageTitle title={title} />
-  <div class="max-w-8xl mx-auto grid grid-cols-12 gap-8">
+  <div class = "max-w-8xl mx-auto grid grid-cols-12 gap-8 mb-24">
     <main class="col-start-4 col-end-12 mb-24">
       <Image src={cover} alt={title} width="640" height="427" />
       <TextBlock overview={overview} />
       {blocks && <PageBlock blocks={blocks} />}
     </main>
+    <NextCase slug = {Astro.params.caseStudy}/>
   </div>
 </Layout>
 
