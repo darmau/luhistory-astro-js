@@ -21,7 +21,7 @@ export async function getStaticPaths({paginate}) {
 }
 
 // 转换成大写
-function toUppercase (str) {
+function toUppercase(str) {
   return str.replace(/-/g, ' ').toUpperCase();
 }
 
@@ -34,15 +34,16 @@ const params = Astro.params;
   <PageTitle
     title = "Archive"
     subtitle = "Praesentium ea asperiores molestias aperiam enim accusantium. Voluptatibus dicta quam eum labore dolorum eum nobis deleniti eum."
-    bgWhite="false"
+    bgWhite = "false"
   />
-  <main id="main-content" class="max-w-8xl mx-auto grid grid-cols-12 gap-8 py-40">
-    <ul class="col-span-2 space-y-2">
-      <li class="text-sm text-neutral-900 tracking-wider">
+  <main id = "main-content" class = "max-w-8xl mx-auto grid grid-cols-12 gap-8 py-40">
+    <ul class = "col-span-2 space-y-2">
+      <li class = "text-sm text-neutral-900 tracking-wider">
         <a
-          class="text-sm text-neutral-900 opacity-50 tracking-wider hover:opacity-100"
-          href={`/archive/all/1#main-content`}
-          data-astro-prefetch>
+          class = "text-sm text-neutral-900 opacity-50 tracking-wider hover:opacity-100"
+          href = {`/archive/all/1#main-content`}
+          data-astro-prefetch
+        >
           ALL
         </a>
       </li>
@@ -50,40 +51,48 @@ const params = Astro.params;
         return (
           <li>
             <a
-              class={`${category === params.category ? 'text-neutral-900' : 'text-neutral-900 opacity-50'} text-sm tracking-wider hover:opacity-100`}
-              href={`/archive/category/${category}/1#main-content`}
-              data-astro-prefetch>
+              class = {`${category === params.category ? 'text-neutral-900' : 'text-neutral-900 opacity-50'} text-sm tracking-wider hover:opacity-100`}
+              href = {`/archive/category/${category}/1#main-content`}
+              data-astro-prefetch
+            >
               {toUppercase(category)}
             </a>
           </li>
         );
       })}
     </ul>
-      <div class="col-start-4 col-end-12 grid grid-cols-8">
-        <div class="space-y-8 col-span-8">
-          {page.data.map((article) => {
-            return (
-              <article>
-                <a href={`/archive/detail/${article.slug}`}>
-                  <h2 class="font-serif font-bold text-3xl text-neutral-900 mb-2">{article.title}</h2>
-                  <small class="text-base text-neutral-900 opacity-50">{article.category}</small>
-                </a>
-              </article>
-            );
-          })}
-        </div>
-        <div class="mt-40 flex justify-between col-start-1 col-span-6">
-          <a
-            class=`${page.url.prev ? '' : 'opacity-0'}`
-            href={page.url.prev}>
-            ←&nbsp;Previous
-          </a>
-          <a
-            class=`${page.url.next ? '' : 'opacity-0'}`
-            href={page.url.next}>
-            Next&nbsp;→
-          </a>
-        </div>
+    <div class = "col-start-4 col-end-12 grid grid-cols-8">
+      <div class = "space-y-8 col-span-8">
+        {page.data.map((article) => {
+          return (
+            <article>
+              <a href = {`/archive/detail/${article.slug}`}>
+                <h2 class = "font-serif font-bold text-3xl text-neutral-900 mb-2">{article.title}</h2>
+                <small class = "text-base text-neutral-900 opacity-50">{article.category}</small>
+              </a>
+            </article>
+          );
+        })}
       </div>
+    </div>
   </main>
+  <!--如果没有前一页也没有后一页，不显示该模块-->
+  {page.url.prev || page.url.next ? (
+    <div class = "max-w-[1088px] mx-auto grid grid-cols-10 py-40 border-t border-neutral-900 border-opacity-20">
+      <div class = "col-start-3 col-span-6 flex justify-between items-center">
+        <a
+          class = `${page.url.prev ? '' : 'opacity-0'}`
+          href = {page.url.prev}
+        >
+          ←&nbsp;Previous
+        </a>
+        <a
+          class = `${page.url.next ? '' : 'opacity-0'}`
+          href = {page.url.next}
+        >
+          Next&nbsp;→
+        </a>
+      </div>
+    </div>
+  ) : ''}
 </Layout>
