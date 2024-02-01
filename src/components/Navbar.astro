@@ -91,7 +91,7 @@ const {link, backText, backUrl } = Astro.props;
 </div>
 <!--导航-->
 <nav
-  class = "fixed flex justify-between items-center p-4 md:p-8 max-w-8xl w-full mx-auto 8xl:grid 8xl:grid-cols-12 8xl:gap-8 8xl:py-8 z-10 top-0 left-1/2 -translate-x-1/2"
+  class = "fixed flex gap-8 justify-between items-center p-4 md:p-8 max-w-8xl w-full mx-auto 8xl:grid 8xl:grid-cols-12 8xl:py-8 z-10 top-0 left-1/2 -translate-x-1/2"
 >
   <div class = "col-start-1 h-4 w-14 md:w-28 md:h-8 flex justify-center items-center">
     <a href = "/" data-astro-reload>
@@ -101,7 +101,8 @@ const {link, backText, backUrl } = Astro.props;
   {backUrl && backText && (
     <a
       href={backUrl}
-      class="col-start-4 col-span-3 no-underline text-neutral-900 opacity-50 uppercase tracking-widest hover:font-bold hover:opacity-80 transition-all">
+      class = "flex-1 text-sm 8xl:text-base 8xl:col-start-4 8xl:col-span-3 no-underline text-neutral-900 opacity-50 uppercase tracking-widest hover:font-bold hover:opacity-80 transition-all"
+    >
       ← &nbsp;{backText}
     </a>
   )}
