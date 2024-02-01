@@ -8,7 +8,7 @@ const { overview, title } = Astro.props;
 
 <div class = "md:col-span-8 md:grid md:grid-cols-8 md:gap-8">
   {title && (
-      <h2 class="col-span-8 font-serif font-bold text-6xl text-neutral-900 mb-16">{title}</h2>
+    <h2 class = "col-span-8 font-serif font-bold text-4xl md:text-6xl text-neutral-900 mb-8 md:mb-16">{title}</h2>
   )}
   { overview && overview.map((block) => {
     if (block._type === 'gallery') {
