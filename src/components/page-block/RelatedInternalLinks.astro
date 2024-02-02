@@ -16,16 +16,16 @@ const {links, title} = Astro.props;
 ---
 
 <div class = "col-start-1 col-span-8 my-4 lg:my-16">
-  <h2 class = "font-serif font-bold text-3xl md:text-5xl text-neutral-900 mb-16">
+  <h2 class = "font-serif font-bold text-3xl md:text-5xl text-neutral-900 mb-4 lg:mb-16">
     {title ?? 'Details'}</h2>
-  <div class = "flex flex-col gap-8">
+  <div class = "flex flex-col gap-4 lg:gap-8">
     {links.map((page) => {
       return (
         <a href = {generateLink(page.type, page.slug)} class = "no-underline">
           <h3
-            class = "mb-4 mt-4 font-serif font-bold text-3xl md:text-3xl text-neutral-900"
+            class = "my-2 lg:my-4 font-serif font-bold text-2xl md:text-3xl text-neutral-900"
           >{page.title}</h3>
-          <p class = "my-2 text-neutral-900 opacity-50 capitalize">{page.type}</p>
+          <p class = "font-sans my-2 text-sm md:text-base text-neutral-900 opacity-50 capitalize">{page.type}</p>
         </a>
       )
     })}
