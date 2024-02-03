@@ -12,7 +12,7 @@ const {exhibitions} = Astro.props;
         <a
           class="no-underline"
           href={`/exhibition/detail/${exhibition.slug}`}>
-          <h3 class="font-serif font-bold text-3xl text-neutral-900 mb-3">{exhibition.title}</h3>
+          <h3 class = "font-serif font-bold text-3xl text-neutral-900 mb-0 md:mb-2">{exhibition.title}</h3>
           <small class="font-sans text-base text-neutral-900 opacity-50">
             <span>{exhibition.date.split('-')[0]}</span>
             ·
