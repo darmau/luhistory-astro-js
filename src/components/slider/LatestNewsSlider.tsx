@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 // Import Swiper React components
 import {Swiper, SwiperSlide} from 'swiper/react';
 
-import {Pagination} from 'swiper/modules';
+import {Keyboard, Pagination} from 'swiper/modules';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -38,11 +38,9 @@ export default ({news}) => {
           spaceBetween = {spaceBetween}
           slidesPerView = {'auto'}
           centeredSlides = {true}
-          modules = {[Pagination]}
+          modules = {[Pagination, Keyboard]}
           keyboard = {{
             enabled: true,
-            onlyInViewport: true,
-            pageUpDown: true,
           }}
       >
         {news.map((item, index) => (
