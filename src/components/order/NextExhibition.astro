@@ -12,7 +12,7 @@ const currentIndex = findNextAndLast(exhibitionList, slug);
 
 {exhibitionList.length > 1 && currentIndex < exhibitionList.length - 1 && (
 <div
-  class = "col-start-1 lg:col-start-2 col-end-12 grid grid-cols-10 gap-4 mt-8 lg:mt-16 pt-8 lg:pt-16 border-t border-neutral-900 border-opacity-20"
+  class = "col-start-1 lg:col-start-2 col-end-12 grid grid-cols-10 gap-0 md:gap-4 mt-8 lg:mt-16 pt-8 lg:pt-16 border-t border-neutral-900 border-opacity-20"
 >
   <h4 class = "col-start-1 lg:col-start-3 col-span-8 font-sans font-normal text-base text-neutral-900">Next</h4>
   <a
@@ -24,7 +24,7 @@ const currentIndex = findNextAndLast(exhibitionList, slug);
         class = "line-clamp-2" title = {exhibitionList[currentIndex + 1].title}
       >{exhibitionList[currentIndex + 1].title}</span>
     <svg
-      xmlns = "http://www.w3.org/2000/svg" viewBox = "0 0 24 24" fill = "currentColor" class = "w-5 lg:w-12 w-5 lg:h-12"
+      xmlns = "http://www.w3.org/2000/svg" viewBox = "0 0 24 24" fill = "currentColor" class = "w-5 lg:w-12 h-5 lg:h-12"
     >
       <path
         fillRule = "evenodd"
