@@ -34,7 +34,9 @@ const books = await sanityClient.fetch(`*[_type == 'book' && defined(slug) && de
         );
       })}
     </ul>
-    <ul class = "col-span-12 lg:col-start-4 col-end-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <ul
+      class = "col-span-12 lg:col-start-4 col-end-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+    >
       {books.map((book) => (
         <li>
           <a href = {`/book/detail/${book.slug}`} class = "flex lg:flex-col gap-4" data-astro-prefetch>
