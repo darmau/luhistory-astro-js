@@ -15,6 +15,7 @@ export async function getStaticPaths() {
     category,
     publishDate,
     publisher,
+    purchaseLink,
     "heroImage": heroImage.asset->url,
     "cover": cover.asset->url,
     "people": people[]{name, title},
@@ -52,6 +53,7 @@ export async function getStaticPaths() {
         people: book.people,
         overview: book.overview,
         heroImage: book.heroImage,
+        purchaseLink: book.purchaseLink,
         blocks: book.blocks
       }
     };
@@ -69,20 +71,23 @@ const {
   people,
   overview,
   heroImage,
+  purchaseLink,
   blocks
 } = Astro.props
 ---
-<Layout title={title} backUrl="/book/category" backText="Publications">
+<Layout title = {title} backUrl = "/book/category" backText = "Publications">
   <PageTitle title = {title} subtitle = {subtitle} bgWhite = {!Boolean(heroImage)} bgUrl = {heroImage}/>
   <div class = "p-4 mt-8 flex flex-col gap-8 8xl:p-0 lg:max-w-8xl lg:mx-auto lg:grid lg:grid-cols-12 mb-24">
     <aside class = "space-y-4 md:space-y-8 col-start-1 col-end-3 h-fit">
       <!--相关人-->
       {people && (
-        <ul class="space-y-8 pl-0 list-none">
+        <ul class = "space-y-8 pl-0 list-none">
           {people.map((person) => (
             <li>
-              <h3 class="my-4 text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">{person.title}</h3>
-              <p class="my-2 text-lg font-semibold font-serif">{person.name}</p>
+              <h3
+                class = "my-0 text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase"
+              >{person.title}</h3>
+              <p class = "mt-0 text-lg font-semibold font-serif">{person.name}</p>
             </li>
           ))}
         </ul>
@@ -90,30 +95,54 @@ const {
 
       <!--出版社-->
       {publisher && (
-        <div class="space-y-2">
-          <h3 class="my-4 text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Publisher</h3>
-          <p class="my-2 text-lg font-semibold font-serif">{publisher}</p>
+        <div class = "space-y-2">
+          <h3 class = "my-0 text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Publisher</h3>
+          <p class = "mt-0 text-lg font-semibold font-serif">{publisher}</p>
         </div>
       )}
 
       <!--出版日期-->
       {publishDate && (
-        <div class="space-y-2">
-          <h3 class="my-4 text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Publication Date</h3>
-          <p class="my-2 text-lg font-semibold font-serif">{new Date(publishDate).getFullYear()}</p>
+        <div class = "space-y-2">
+          <h3 class = "my-0 text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Publication
+            Date</h3>
+          <p class = "mt-0 text-lg font-semibold font-serif">{new Date(publishDate).getFullYear()}</p>
+        </div>
+      )}
+
+      <!--购买链接-->
+      {purchaseLink && (
+        <div class = "flex gap-2 items-center pt-4">
+          <svg
+            xmlns = "http://www.w3.org/2000/svg" fill = "none" viewBox = "0 0 24 24" strokeWidth = {1.5}
+            stroke = "currentColor"
+            width = "20"
+            height = "20"
+          >
+            <path
+              strokeLinecap = "round" strokeLinejoin = "round"
+              d = "M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+            />
+          </svg>
+
+          <a
+            href = {purchaseLink} target = "_blank"
+            class = "no-underline uppercase text-neutral-900 opacity-50 hover:opacity-100"
+          >Buy</a>
         </div>
       )}
     </aside>
     <main class = "col-start-4 col-end-12 md:grid md:grid-cols-8 md:gap-8">
-      { cover &&
-        <div class="col-start-1 col-span-8 grid grid-cols-8 gap-8 w-4/5 bg-gray-50 p-16">
-          <Image src={cover} alt={title} width="640" height="420" class="col-start-1 col-span-6 shadow-2xl" />
+      {cover &&
+        <div class = "col-start-1 col-span-8 grid grid-cols-8 gap-8 w-4/5 bg-gray-50 p-16">
+          <Image src = {cover} alt = {title} width = "640" height = "420" class = "col-start-1 col-span-6 shadow-2xl"/>
         </div>
       }
-      <div class="col-span-8">
-        <TextBlock overview={overview} />
+      <div class = "col-span-8">
+        <TextBlock overview = {overview}/>
       </div>
-      {blocks && <PageBlock blocks={blocks} />}
+      {blocks &&
+        <PageBlock blocks = {blocks}/>}
     </main>
   </div>
 </Layout>
