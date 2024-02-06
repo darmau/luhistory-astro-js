@@ -1,5 +1,5 @@
 ---
-function generateLink(type, slug) {
+function generateLink(type, slug, url) {
   switch (type) {
     case 'article':
       return `/archive/detail/${slug}`;
@@ -7,21 +7,37 @@ function generateLink(type, slug) {
       return `/book/detail/${slug}`;
     case 'exhibition':
       return `/exhibition/detail/${slug}`;
+    case 'file':
+      return url;
     default:
       return `/`;
   }
 }
 
-const {links, title} = Astro.props;
+const {links, assets, title} = Astro.props;
+
+// 将links和assets的非空元素合并成一个数组
+const mergedArray = links.reduce((result, link, index) => {
+  if (link !== null) {
+    result.push(link);
+  } else if (assets[index] !== null) {
+    result.push(assets[index]);
+  }
+  return result;
+}, []);
+
 ---
 
 <div class = "col-start-1 col-span-8 my-4 lg:my-16">
   <h2 class = "font-serif font-bold text-3xl md:text-5xl text-neutral-900 mb-4 lg:mb-16">
     {title ?? 'Details'}</h2>
   <div class = "flex flex-col gap-4 lg:gap-8">
-    {links.map((page) => {
+    {mergedArray.map((page) => {
       return (
-        <a href = {generateLink(page.type, page.slug)} class = "no-underline">
+        <a
+          href = {generateLink(page.type, page.slug, page.url)} class = "no-underline"
+          target = {`${page.url ? '_blank' : '_self'}`}
+        >
           <h3
             class = "mb-0 md:mb-2 lg:my-4 font-serif font-bold text-2xl md:text-3xl text-neutral-900"
           >{page.title}</h3>
