@@ -2,7 +2,7 @@
 import {sanityClient} from "sanity:client";
 const teachingData = await sanityClient.fetch(`
   *[_type == "teaching"]{
-  "overview": overview->body[0].children[0].text
+  "overview": overview[0].children[0].text
 }
 `)
 
