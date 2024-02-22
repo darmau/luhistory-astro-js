@@ -6,17 +6,29 @@ import PageBlock from "../../components/PageBlock.astro";
 import Timeline from "../../components/page-block/Timeline.astro";
 import RelatedInternalLinks
   from "../../components/page-block/RelatedInternalLinks.astro";
+import TextBlock from "../../components/text-block/TextBlock.astro";
 
 const teachingData = await sanityClient.fetch(`*[_type == 'teaching']{
   "experience": {
     "type": 'timeline',
     "records": experience[]
   },
-  "overview": overview->{
-    title, 
-    "slug": slug.current,
-    "content": body[0].children[0].text
-  },
+  "overview": overview[]{
+      _type == 'imageBlock' => {
+        type,
+        "url": image.asset->url,
+        "caption": image.caption
+      },
+      _type == 'gallery' => {
+        type,
+        title,
+        "pictures": images[]{
+          "url": asset->url,
+          caption
+        }
+      },
+      ...
+    },
   "links": content.links[]->{
     _type == 'article' => {
       "type": _type,
@@ -51,10 +63,7 @@ const {overview, experience, links} = teachingData[0];
       {overview &&
         <div class = "my-16 lg:my-32 flex flex-col">
           <h2 class = "font-serif font-bold text-3xl lg:text-6xl text-neutral-900 mb-8 lg:mb-16">Overview</h2>
-          <p class = "font-serif text-lg md:text-2xl text-neutral-900">{overview.content}</p>
-          <a href={`/archive/detail/${overview.slug}`}
-             class = "font-serif text-neutral-900 text-lg md:text-2xl py-8 self-end hover:font-bold"
-          >Learn more →</a>
+          <TextBlock overview = {overview}/>
         </div>
       }
       {links &&
