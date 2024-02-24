@@ -3,11 +3,10 @@ import {useEffect, useState} from "react";
 // Import Swiper React components
 import {Swiper, SwiperSlide} from 'swiper/react';
 
-import {Keyboard, Pagination} from 'swiper/modules';
+import {Keyboard, Mousewheel} from 'swiper/modules';
 
 // Import Swiper styles
 import 'swiper/css';
-import 'swiper/css/pagination';
 
 export default ({cases}) => {
   const [spaceBetween, setSpaceBetween] = useState(32);
@@ -39,7 +38,8 @@ export default ({cases}) => {
           spaceBetween = {spaceBetween}
           slidesPerView = {itemCount}
           centeredSlides = {false}
-          modules = {[Pagination, Keyboard]}
+          mousewheel = {true}
+          modules = {[Keyboard, Mousewheel]}
           keyboard = {{
             enabled: true,
           }}

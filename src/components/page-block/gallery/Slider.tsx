@@ -4,7 +4,7 @@ import Lightbox from "yet-another-react-lightbox";
 import Captions from "yet-another-react-lightbox/plugins/captions";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/captions.css";
-import {Keyboard, Pagination} from "swiper/modules";
+import {Keyboard, Mousewheel} from "swiper/modules";
 import {Swiper, SwiperSlide} from "swiper/react";
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -51,7 +51,8 @@ export default function App({images}) {
             spaceBetween = {spaceBetween}
             slidesPerView = {'auto'}
             centeredSlides = {false}
-            modules = {[Pagination, Keyboard]}
+            mousewheel = {true}
+            modules = {[Keyboard, Mousewheel]}
             keyboard = {{
               enabled: true,
             }}
