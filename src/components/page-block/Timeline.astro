@@ -3,8 +3,10 @@ import { PortableText } from "astro-portabletext";
 function ifPresent(endDate) {
   if (endDate.present) {
     return 'to present'
-  } else {
+  } else if (endDate.endDate) {
     return ` - ${new Date(endDate.endDate).getFullYear()}`
+  } else {
+    return ''
   }
 }
 
@@ -19,7 +21,7 @@ const {title, records} = Astro.props;
         <li class = "flex flex-col gap-2 lg:grid lg:grid-cols-4 lg:gap-8">
           <div class = "col-span-1 font-semibold proportional-nums text-2xl lg:text-lg lg:font-normal">
             <span>{new Date(record.startDate).getFullYear()}</span>
-            {record.endDate.endDate && <span>{ifPresent(record.endDate)}</span>}
+            <span>{ifPresent(record.endDate)}</span>
           </div>
           <div class="col-span-3">
             <PortableText value={record.details} />
