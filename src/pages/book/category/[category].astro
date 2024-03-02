@@ -33,7 +33,11 @@ const params = Astro.params;
 ---
 
 <Layout title = {`${params.category} - Books`}>
-  <PageTitle title="Publications" subtitle="Repellat molestiae nihil iusto quo quia. In voluptatum hic libero omnis ullam deleniti. Quia vel voluptatem voluptatem excepturi omnis id." bgWhite="flase" />
+  <PageTitle
+    title = "Publications"
+    localImg = "/src/assets/images/book-cover.jpg"
+    bgWhite = "flase"
+  />
 
   <main class = "max-w-8xl mx-auto px-4 flex flex-col gap-8 8xl:px-0 lg:grid lg:grid-cols-12 py-8 lg:py-16 mb-24">
     <ul class = "col-span-12 flex gap-4 flex-wrap lg:flex-col lg:col-span-2">
