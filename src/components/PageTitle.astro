@@ -1,5 +1,5 @@
 ---
-const {title, subtitle, bgWhite = true, bgUrl} = Astro.props;
+const {title, subtitle, bgWhite = true, remoteImg, localImg = '/src/assets/images/cover.jpg'} = Astro.props;
 // 根据title的长度，返回一个4-9之间的数字
 function getTextSize(size) {
   if (size < 16) {
@@ -15,7 +15,7 @@ function getTextSize(size) {
 
 const titleSize = getTextSize(title.length);
 
-const bgUrlResize = bgUrl ? `${bgUrl}?w=1200` : null;
+const bgUrl = remoteImg ? `${remoteImg}?w=1440` : localImg;
 ---
 
 <header>
@@ -36,7 +36,7 @@ const bgUrlResize = bgUrl ? `${bgUrl}?w=1200` : null;
     <hgroup
       class = "bg-img"
       style = {`
-        background-image: url(${bgUrlResize || '/src/assets/images/cover.jpg'});
+        background-image: url(${bgUrl});
         background-size: cover;
       `}
     >
