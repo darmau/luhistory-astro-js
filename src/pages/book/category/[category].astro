@@ -69,13 +69,13 @@ const params = Astro.params;
         <li>
           <a href = {`/book/detail/${book.slug}`} class = "flex lg:flex-col gap-4" data-astro-prefetch>
             <div
-              class = "h-24 md:self-center md:h-32 lg:h-45 aspect-square bg-neutral-100 flex items-center justify-center shrink-0"
+              class = "h-24 md:self-center md:h-32 lg:h-45 aspect-square bg-neutral-100 shrink-0"
             >
               {book.cover && (
                 <Image
                   src={book.cover}
                   alt={book.title}
-                  class="h-3/4 w-3/4 object-contain"
+                  class = "object-cover h-full"
                   height="128"
                   width="128"
                 />
