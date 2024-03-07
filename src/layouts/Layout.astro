@@ -1,7 +1,7 @@
 ---
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
-const {title, description, backText, backUrl} = Astro.props;
+const {title, description, ifHasBack} = Astro.props;
 ---
 <html lang = "en" class = "scroll-smooth">
 <head>
@@ -18,7 +18,7 @@ const {title, description, backText, backUrl} = Astro.props;
 </head>
 <body>
 <div class = "min-h-screen flex flex-col relative">
-  <Navbar backText = {backText} backUrl = {backUrl}/>
+  <Navbar ifHasBack = {ifHasBack}/>
   <div class = "grow w-full mt-[52px] md:mt-[104px] overflow-hidden">
     <slot/>
   </div>
