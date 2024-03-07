@@ -80,7 +80,7 @@ const {
   blocks
 } = Astro.props
 ---
-<Layout title = {title} backUrl = "/book/category" backText = "Publications">
+<Layout title = {title} ifHasBack = "true">
   <PageTitle
     title = {title}
     subtitle = {subtitle}
