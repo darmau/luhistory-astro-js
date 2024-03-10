@@ -1,61 +1,79 @@
 ---
 import {sanityClient} from "sanity:client";
-import Layout from "../../../layouts/Layout.astro";
-import PageTitle from "../../../components/PageTitle.astro";
-import Category from "../../../data/ArchiveCategory";
+import PageTitle from "../../../../components/PageTitle.astro";
+import Layout from "../../../../layouts/Layout.astro";
+import Category from "../../../../data/ArchiveCategory";
 export async function getStaticPaths({paginate}) {
+  const allCategory = Category;
   const allArticles = await sanityClient.fetch(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
     publishDate,
     category,
     "slug": slug.current,
   }`);
-  return paginate(allArticles, { pageSize: 10 });
+  return allCategory.flatMap((category) => {
+    const filteredArticles = allArticles.filter((article) => article.category === category);
+    return paginate(filteredArticles, {
+      params: {category},
+      pageSize: 10,
+    })
+  })
+}
+
+// 转换成大写
+function toUppercase(str) {
+  return str.replace(/-/g, ' ').toUpperCase();
 }
 
 const ArticleCategories = Category;
-const { page } = Astro.props;
+const {category, page} = Astro.props;
+const params = Astro.params;
 ---
 
-<Layout title = "All Archives">
+<Layout title = {`${params.category.replace(/-/g, ' ')} - Collections`}>
   <PageTitle
-    title="Archive"
+    title = "Collections"
     localImg = "/images/archive-cover.jpg"
-    bgWhite="false"
+    bgWhite = "false"
   />
   <main
     id = "main-content"
     class = "max-w-8xl mx-auto px-4 flex flex-col gap-8 8xl:px-0 lg:grid lg:grid-cols-12 py-8 lg:py-16 mb-12 md:mb-24"
   >
     <ul class = "col-span-12 flex gap-4 flex-wrap lg:flex-col lg:col-span-2">
-      <li class="text-sm text-neutral-900 tracking-wider">
-        ALL
+      <li class = "text-sm text-neutral-900 tracking-wider opacity-50 hover:opacity-100">
+        <a
+          href = {`/collection/all/1#main-content`}
+          data-astro-prefetch
+        >
+          ALL
+        </a>
       </li>
       {ArticleCategories.map((category) => {
         return (
           <li
-            class = "text-sm text-neutral-900 uppercase opacity-50 tracking-wider hover:opacity-100"
+            class = {`${category === params.category ? 'text-neutral-900' : 'text-neutral-900 opacity-50'} text-sm tracking-wider hover:opacity-100`}
           >
             <a
-              href={`/archive/category/${category}/1#main-content`}
+              href = {`/collection/category/${category}/1#main-content`}
               data-astro-prefetch
             >
-              {category.split('-').join(' ')}
+              {toUppercase(category)}
             </a>
           </li>
         );
       })}
     </ul>
     <div class = "col-span-12 lg:col-start-4 col-end-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-      <div class="space-y-8 col-span-8">
+      <div class = "space-y-8 col-span-8">
         {page.data.map((article) => {
           return (
             <article>
-              <a href={`/archive/detail/${article.slug}`}>
+              <a href = {`/collection/detail/${article.slug}`}>
                 <h2
                   class = "font-serif font-bold text-2xl md:text-3xl text-neutral-900 mb-0 md:mb-2"
                 >{article.title}</h2>
-                <small class = "text-sm md:text-base capitalize text-neutral-900 opacity-50">{article.category}</small>
+                <small class = "text-sm md:text-base text-neutral-900 opacity-50">{article.category}</small>
               </a>
             </article>
           );
@@ -65,9 +83,7 @@ const { page } = Astro.props;
   </main>
   <!--如果没有前一页也没有后一页，不显示该模块-->
   {page.url.prev || page.url.next ? (
-    <div
-      class = "max-w-[1088px] mx-auto grid grid-cols-10 py-16 lg:py-40 border-t border-neutral-900 border-opacity-20"
-    >
+    <div class = "max-w-[1088px] mx-auto grid grid-cols-10 py-40 border-t border-neutral-900 border-opacity-20">
       <div class = "col-start-2 col-span-8 lg:col-start-3 lg:col-span-6 flex justify-between items-center">
         <a
           class = `${page.url.prev ? '' : 'opacity-0'}`
