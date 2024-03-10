@@ -37,10 +37,10 @@ const { page } = Astro.props;
             class = "text-sm text-neutral-900 uppercase opacity-50 tracking-wider hover:opacity-100"
           >
             <a
-              href = {`/collection/category/${category}/1#main-content`}
+              href = {`/collection/category/${category.slug}/1#main-content`}
               data-astro-prefetch
             >
-              {category.split('-').join(' ')}
+              {category.name}
             </a>
           </li>
         );
