@@ -59,6 +59,19 @@ export async function getStaticPaths() {
             "slug": slug.current,
             category
           }
+        },
+        _type == 'relatedInternalLinks' => {
+        "category": _type,
+        "links": links[]->{
+          "type": _type,
+          title,
+          "slug": slug.current
+        },
+        "assets": links[] {
+          title,
+          "type": "file",
+          "url": asset->url
+          }
         }
       }
   }`);
