@@ -1,7 +1,10 @@
 const Category = [
-  "author",
-  "chief-editor",
-  "translator",
+  "art-history",
+  "art-market",
+  "artists",
+  "catalog",
+  "anthology",
+  "others"
 ]
 
 export default Category
