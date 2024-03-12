@@ -7,33 +7,43 @@ const currentYear = new Date().getFullYear().toString();
 >
   <section class="col-span-4 py-10 border-t md:col-span-10 md:col-start-2">
     <div class="grid md:grid-cols-10 md:gap-8">
-      <ul class = "col-span-10 md:col-span-2 text-base font-sans text-neutral-900">
+      <ul class = "col-span-10 md:col-span-2 list-none pl-0">
         <span class="list__title">Navigation</span>
-        <li><a href="/about">About</a></li>
-        <li><a href = "/exhibition">Exhibitions</a></li>
-        <li><a href = "/book/category">Publications</a></li>
-        <li><a href="/teaching">Teaching</a></li>
-        <li><a href = "/collection/all/1">Collection</a></li>
-        <li><a href="/on-artists">On Artists</a></li>
+        <li><a class = "no-underline" href = "/about">About</a></li>
+        <li><a class = "no-underline" href = "/exhibition">Exhibitions</a></li>
+        <li><a class = "no-underline" href = "/book/category">Publications</a></li>
+        <li><a class = "no-underline" href = "/teaching">Teaching</a></li>
+        <li><a class = "no-underline" href = "/collection/all/1">Collection</a></li>
+        <li><a class = "no-underline" href = "/on-artists">On Artists</a></li>
       </ul>
-      <ul class="col-span-10 md:col-span-2">
+      <ul class = "col-span-10 md:col-span-2 list-none pl-0">
         <span class="list__title">Social</span>
         <li>
           <a
             href="https://facebook.com/"
+            class = "no-underline"
             rel="noopener noreferrer"
             target="_blank">Facebook</a
           >
         </li>
         <li>
-          <a href="https://weibo.com/" rel="noopener noreferrer" target="_blank"
+          <a
+            class = "no-underline"
+            href = "https://weibo.com/" rel = "noopener noreferrer" target = "_blank"
             >Weibo</a
           >
         </li>
       </ul>
-      <ul class="col-span-10 md:col-span-2">
+      <ul class = "col-span-10 md:col-span-2 list-none pl-0">
         <span class="list__title">Contact</span>
-        <li><a href="mailto:info@luhistory.com">info@luhistory.com</a></li>
+        <li>
+          <a
+            class = "no-underline"
+            href = "mailto:info@luhistory.com"
+          >
+            info@luhistory.com
+          </a>
+        </li>
       </ul>
       <div
         class="col-span-10 text-gray-400 md:col-start-7 md:col-span-4 md:text-right"
