@@ -46,7 +46,7 @@ const profileData = await sanityClient.fetch(`*[_type == 'profile' ]{
 const {overview, blocks, cvLink} = profileData[0];
 ---
 
-<Layout>
+<Layout title = "About Lu Peng">
   <PageTitle title = "About" description = ""/>
   <main
     class = "px-4 flex flex-col gap-4 py-8 md:grid md:grid-cols-12 md:gap-8 md:py-16 lg:max-w-8xl lg:mx-auto 8xl:px-0"
