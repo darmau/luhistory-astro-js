@@ -92,13 +92,15 @@ const {title, cover, overview, publishDate, blocks} = Astro.props;
   <PageTitle title={title} />
   <div class = "p-4 flex flex-col gap-8 8xl:p-0 lg:max-w-8xl lg:mx-auto lg:grid lg:grid-cols-12 mb-24">
     <main class = "col-start-4 col-end-12 md:grid md:grid-cols-8 md:gap-8">
-      <Image
-        class = "mb-8 md:mb-0 md:col-span-8"
-        src = {cover}
-        alt = {title}
-        width = "640"
-        height = "427"
-      />
+      {cover &&
+        <Image
+          class = "mb-8 md:mb-0 md:col-span-8"
+          src = {cover}
+          alt = {title}
+          width = "640"
+          height = "427"
+        />
+      }
       <TextBlock overview={overview} />
       {blocks && <PageBlock blocks={blocks} />}
     </main>
