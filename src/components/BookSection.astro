@@ -5,7 +5,7 @@ const booksData = await sanityClient.fetch(`
   *[_type == 'book'&& defined(slug) && defined(publishDate)] | order(publishDate desc){
     title,
     "slug": slug.current,
-    "publishDate": edition.publishDate,
+    "publishDate": publishDate,
     "cover": cover.asset->{url}
 }[0..3]
 `)
@@ -17,12 +17,12 @@ const booksData = await sanityClient.fetch(`
 >
   <hgroup class = "flex justify-between items-baseline text-neutral-900 mb-8 md:mb-20">
     <h2 class = "font-bold text-3xl md:text-5xl font-serif">Publications</h2>
-    <div class = "flex items-center gap-2">
+    <p class = "flex items-center gap-2">
       <a
         href = "/book/category" class = "text-lg md:text-2xl font-thin font-serif"
         data-astro-prefetch
       >View more&nbsp;&nbsp;→</a>
-    </div>
+    </p>
   </hgroup>
   <ul class = "grid grid-cols-1 gap-8 md:grid-cols-2">
     {booksData.map((book) => (
