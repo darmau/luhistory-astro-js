@@ -6,7 +6,6 @@ function getYear(date) {
 }
 
 const { books } = Astro.props;
-const slicedBooks = books.slice(0, 4);
 ---
 
 <div class = "col-start-1 md:col-span-12 lg:col-span-6 my-4 lg:my-16">
@@ -15,18 +14,22 @@ const slicedBooks = books.slice(0, 4);
     <p class="font-sans text-base text-neutral-900 opacity-50">{books.length} books</p>
   </hgroup>
   <ul
-    class = "ababsolute left-0 w-fit flex flex-col gap-6 lg:grid lg:grid-rows-2 lg:justify-items-start lg:grid-flow-col lg:gap-8 overflow-scroll pl-0"
+    class = "flex flex-col gap-6 8xl:grid 8xl:grid-cols-2 8xl:justify-items-start 8xl:gap-8 overflow-visible pl-0 pt-4"
   >
-    {slicedBooks.map((book) => (
-      <li class = "8xl:w-[480px] list-none">
-        <a class = "no-underline flex gap-4 sm:gap-6" href = {`/book/detail/${book.slug}`}>
+    {books.map((book) => (
+      <li class = "list-none">
+        <a class = "no-underline flex gap-4 h-full" href = {`/book/detail/${book.slug}`}>
           {book.cover && (
-            <div class="aspect-square bg-gray-50 flex justify-center items-center">
-              <Image class="object-contain h-3/4 w-3/4" src={book.cover} alt={book.title} width="160" height="160" />
-            </div>
+            <Image
+              src = {book.cover}
+              alt = {book.title}
+              class = "object-cover aspect-square self-start"
+              height = "128"
+              width = "128"
+            />
           )}
           <div class="flex-1">
-            <h3 class = "my-0 font-serif font-bold text-2xl md:text-3xl text-neutral-900 mb-2">{book.title}</h3>
+            <h3 class = "my-0 font-serif font-bold text-2xl text-neutral-900 mb-2 leading-tight">{book.title}</h3>
             <small class="font-sans text-base text-neutral-900 opacity-50">{getYear(book.publishDate)}</small>
           </div>
         </a>
@@ -34,12 +37,3 @@ const slicedBooks = books.slice(0, 4);
     ))}
   </ul>
 </div>
-
-<style>
-  //内部元素从上到下，从左到右排列，总共两行。第二个在第一列第二行，第三个在第二列第一行
-  .books-grid {
-    display: grid;
-    grid-template-rows: repeat(2, 1fr);
-    gap: 1rem;
-  }
-</style>
