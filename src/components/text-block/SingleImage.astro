@@ -9,16 +9,16 @@ const { url, caption, size } = Astro.props;
       class = "w-full"
       src={url}
       alt={caption || '图片'}
-      width="800"
-      height="600"
+      width = "1600"
+      height = "1200"
     />
   :
     <Image
       class = "w-1/2 mx-auto"
       src={url}
       alt={caption || '图片'}
-      width="800"
-      height="600"
+      width = "1600"
+      height = "1200"
     />}
   {caption &&
     <figcaption class = "text-center text-sm text-gray-500 mt-2">{caption}</figcaption>}

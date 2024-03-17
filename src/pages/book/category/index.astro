@@ -52,8 +52,8 @@ const books = await sanityClient.fetch(`*[_type == 'book' && defined(slug) && de
                   src={book.cover}
                   alt={book.title}
                   class = "object-cover h-full"
-                  height="128"
-                  width="128"
+                  height = "256"
+                  width = "256"
                 />
               )
               }
