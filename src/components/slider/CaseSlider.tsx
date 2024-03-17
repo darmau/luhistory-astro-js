@@ -51,7 +51,7 @@ export default ({cases}) => {
               >
                 {item.cover && (
                     <img
-                        src = {`${item.cover}?h=480`}
+                        src = {`${item.cover}?h=960`}
                         alt = {item.title}
                         className = "bg-gray-50 object-cover h-[240px] md:h-[352px] w-full mb-4 md:mb-6"
                     />

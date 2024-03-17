@@ -52,7 +52,7 @@ export default ({news}) => {
                 {item.cover && (
                     <>
                       <img
-                          src = {`${item.cover}?w=1088`}
+                          src = {`${item.cover}?w=1280`}
                           alt = {item.title}
                           className = "absolute inset-0 object-cover h-full w-full"
                       />
