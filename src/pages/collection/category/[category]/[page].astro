@@ -49,7 +49,7 @@ const params = Astro.params;
           ALL
         </a>
       </li>
-      {ArticleCategories.map((category) => {
+      <!-- {ArticleCategories.map((category) => {
         return (
           <li
             class = {`${category.slug === params.category ? 'text-neutral-900' : 'text-neutral-900 opacity-50'} uppercase text-sm tracking-wider hover:opacity-100`}
@@ -62,7 +62,7 @@ const params = Astro.params;
             </a>
           </li>
         );
-      })}
+      })} -->
     </ul>
     <div class = "col-span-12 lg:col-start-4 col-end-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
       <div class = "space-y-8 col-span-8">
