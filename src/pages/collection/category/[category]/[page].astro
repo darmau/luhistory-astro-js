@@ -4,7 +4,7 @@ import PageTitle from "../../../../components/PageTitle.astro";
 import Layout from "../../../../layouts/Layout.astro";
 import Category from "../../../../data/ArchiveCategory";
 export async function getStaticPaths({paginate}) {
-  const allCategory: string[] = Category.map((category) => category.slug);
+  const allCategory: string[] = Category.map((category: { name: string, slug: string }) => category.slug);
   const allArticles = await sanityClient.fetch(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
     publishDate,
@@ -12,7 +12,9 @@ export async function getStaticPaths({paginate}) {
     "slug": slug.current,
   }`);
   return allCategory.flatMap((category) => {
-    const filteredArticles = allArticles.filter((article) => article.category === category);
+    // 根据入参slug在Category查询对应的name
+    const categoryName = Category.find((item) => item.slug === category).name;
+    const filteredArticles = allArticles.filter((article) => article.category == categoryName);
     return paginate(filteredArticles, {
       params: {category},
       pageSize: 10,
@@ -49,7 +51,7 @@ const params = Astro.params;
           ALL
         </a>
       </li>
-      <!-- {ArticleCategories.map((category) => {
+      {ArticleCategories.map((category) => {
         return (
           <li
             class = {`${category.slug === params.category ? 'text-neutral-900' : 'text-neutral-900 opacity-50'} uppercase text-sm tracking-wider hover:opacity-100`}
@@ -62,7 +64,7 @@ const params = Astro.params;
             </a>
           </li>
         );
-      })} -->
+      })}
     </ul>
     <div class = "col-span-12 lg:col-start-4 col-end-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
       <div class = "space-y-8 col-span-8">
