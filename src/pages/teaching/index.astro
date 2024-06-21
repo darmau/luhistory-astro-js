@@ -41,14 +41,36 @@ const teachingData = await sanityClient.fetch(`*[_type == 'teaching']{
       "slug": slug.current
     },
     _type == 'exhibition' => {
-        "type": _type,
-        title,
-        "slug": slug.current
+      "type": _type,
+      title,
+      "slug": slug.current
     },
+  },
+  "assets": content.links[] {
+    title,
+    "type": "file",
+    "url": asset->url
   }
 }`);
 
-const {overview, experience, links} = teachingData[0];
+function mergeArrays(links, assets) {
+  // 确保两个数组长度相同
+  if (links.length !== assets.length) {
+    throw new Error("两个数组的长度不相同");
+  }
+
+  for (let i = 0; i < links.length; i++) {
+    if (!links[i]) {
+      // 替换links数组中相同次序的项
+      links[i] = assets[i];
+    }
+  }
+
+  return links;
+}
+
+const {overview, experience} = teachingData[0];
+const links = mergeArrays(teachingData[0].links, teachingData[0].assets);
 ---
 
 <Layout title = "Teaching">
@@ -60,6 +82,7 @@ const {overview, experience, links} = teachingData[0];
   <main
     class = "px-4 flex flex-col gap-4 py-8 md:grid md:grid-cols-12 md:gap-8 md:py-16 lg:max-w-8xl lg:mx-auto 8xl:px-0"
   >
+    <div>{JSON.stringify(links)}</div>
     <div class = "col-start-4 col-end-12 w-full">
       {experience &&
         <Timeline title="Experience" records={experience.records} />

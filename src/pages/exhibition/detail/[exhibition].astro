@@ -61,18 +61,18 @@ export async function getStaticPaths() {
           }
         },
         _type == 'relatedInternalLinks' => {
-        "category": _type,
-        "links": links[]->{
-          "type": _type,
-          title,
-          "slug": slug.current
-        },
-        "assets": links[] {
-          title,
-          "type": "file",
-          "url": asset->url
+          "category": _type,
+          "links": links[]->{
+            "type": _type,
+            title,
+            "slug": slug.current
+          },
+          "assets": links[] {
+            title,
+            "type": "file",
+            "url": asset->url
+            }
           }
-        }
       }
   }`);
   const paths = await slugs.map((exhibition) => {
