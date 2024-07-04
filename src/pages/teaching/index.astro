@@ -82,7 +82,6 @@ const links = mergeArrays(teachingData[0].links, teachingData[0].assets);
   <main
     class = "px-4 flex flex-col gap-4 py-8 md:grid md:grid-cols-12 md:gap-8 md:py-16 lg:max-w-8xl lg:mx-auto 8xl:px-0"
   >
-    <div>{JSON.stringify(links)}</div>
     <div class = "col-start-4 col-end-12 w-full">
       {experience &&
         <Timeline title="Experience" records={experience.records} />
