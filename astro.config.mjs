@@ -20,7 +20,13 @@ export default defineConfig({
     sitemap()],
   image: {
     domains: ["cdn.sanity.io"],
-    remotePatterns: [{ protocol: "https"}]
+    remotePatterns: [{protocol: "https"}],
+    service: {
+      entrypoint: 'astro/assets/services/sharp',
+      config: {
+        limitInputPixels: false,
+      },
+    },
   },
   prefetch: true
 });
