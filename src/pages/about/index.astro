@@ -38,7 +38,25 @@ const profileData = await sanityClient.fetch(`*[_type == 'profile' ]{
     },
     _type == 'content' => {
       "category": 'content',
-      ...
+      title,
+      "content": content[] {
+        _type == 'imageBlock' => {
+          _type,
+          type,
+          "url": image.asset->url,
+          "caption": image.caption
+        },
+        _type == 'gallery' => {
+          _type,
+          type,
+          title,
+          "pictures": images[]{
+            "url": asset->url,
+            caption
+          }
+        },
+        ...
+      }
     },
   }
 }`);
