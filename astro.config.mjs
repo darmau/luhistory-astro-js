@@ -1,5 +1,5 @@
 import {defineConfig} from 'astro/config';
-import {sanityIntegration} from "@sanity/astro";
+import sanity from "@sanity/astro";
 import react from "@astrojs/react";
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from "@tailwindcss/vite";
@@ -11,10 +11,10 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   integrations: [
-    sanityIntegration({
+    sanity({
       projectId: 'aemgaomh',
       dataset: 'production',
-      apiVersion: '2022-03-07',
+      apiVersion: '2025-10-16',
       useCdn: false
     }),
     react(),
