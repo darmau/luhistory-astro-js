@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import defaultTheme from 'tailwindcss/defaultTheme'
 
-const defaultTheme = require('tailwindcss/defaultTheme')
 export default {
 	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
 	theme: {
@@ -26,10 +26,10 @@ export default {
 			},
 			maxWidth: {
 				'8xl': '1312px',
-      },
-      screens: {
-        '8xl': '1312px',
-			}
+			},
+			screens: {
+				'8xl': '1312px',
+			},
 		},
 	},
 	plugins: [],

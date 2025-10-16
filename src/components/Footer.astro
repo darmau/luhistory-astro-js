@@ -1,5 +1,12 @@
 ---
 const currentYear = new Date().getFullYear().toString();
+const headingClass =
+  "text-gray-400 tracking-widest uppercase text-sm mb-2 inline-block";
+const listClass =
+  "col-span-10 md:col-span-2 list-none pl-0 space-y-2 mb-6";
+const linkClass =
+  "no-underline font-serif text-lg text-gray-700 hover:underline hover:text-gray-900 inline-block";
+const itemClass = "my-1";
 ---
 
 <footer
@@ -7,45 +14,42 @@ const currentYear = new Date().getFullYear().toString();
 >
   <section class="col-span-4 py-10 border-t md:col-span-10 md:col-start-2">
     <div class="grid md:grid-cols-10 md:gap-8">
-      <ul class = "col-span-10 md:col-span-2 list-none pl-0 space-y-2">
-        <span class="list__title">Navigation</span>
-        <li><a class = "no-underline font-serif text-lg" href = "/about">About</a></li>
-        <li><a class = "no-underline font-serif text-lg" href = "/exhibition">Exhibitions</a></li>
-        <li><a class = "no-underline font-serif text-lg" href = "/book/category">Publications</a></li>
-        <li><a class = "no-underline font-serif text-lg" href = "/teaching">Teaching</a></li>
-        <li><a class = "no-underline font-serif text-lg" href = "/collection/all/1">Collection</a></li>
-        <li><a class = "no-underline font-serif text-lg" href = "/on-artists">On Artists</a></li>
+      <ul class = {listClass}>
+        <span class={headingClass}>Navigation</span>
+        <li class={itemClass}><a class = {linkClass} href = "/about">About</a></li>
+        <li class={itemClass}><a class = {linkClass} href = "/exhibition">Exhibitions</a></li>
+        <li class={itemClass}><a class = {linkClass} href = "/book/category">Publications</a></li>
+        <li class={itemClass}><a class = {linkClass} href = "/teaching">Teaching</a></li>
+        <li class={itemClass}><a class = {linkClass} href = "/collection/all/1">Collection</a></li>
+        <li class={itemClass}><a class = {linkClass} href = "/on-artists">On Artists</a></li>
       </ul>
-      <ul class = "col-span-10 md:col-span-2 list-none pl-0 space-y-2">
-        <span class="list__title">Social</span>
-        <li>
+      <ul class = {listClass}>
+        <span class={headingClass}>Social</span>
+        <li class={itemClass}>
           <a
-            class = "no-underline font-serif text-lg"
+            class = {linkClass}
             href = "https://weibo.com/u/1087499432" rel = "noopener noreferrer" target = "_blank"
-            >Weibo</a
-          >
+          >Weibo</a>
         </li>
-        <li>
+        <li class={itemClass}>
           <a
-            class = "no-underline font-serif text-lg"
+            class = {linkClass}
             href = "https://www.xiaohongshu.com/user/profile/614f52d2000000001f03f1e4" rel = "noopener noreferrer"
             target = "_blank"
-          >Xiaohongshu</a
-          >
+          >Xiaohongshu</a>
         </li>
-        <li>
+        <li class={itemClass}>
           <a
-            class = "no-underline font-serif text-lg"
+            class = {linkClass}
             href = "https://www.instagram.com/lvpeng60" rel = "noopener noreferrer" target = "_blank"
-          >Instagram</a
-          >
+          >Instagram</a>
         </li>
       </ul>
-      <ul class = "col-span-10 md:col-span-2 list-none pl-0">
-        <span class="list__title">Contact</span>
-        <li>
+      <ul class = {listClass}>
+        <span class={headingClass}>Contact</span>
+        <li class={itemClass}>
           <a
-            class = "no-underline font-serif text-lg"
+            class = {linkClass}
             href = "mailto:info@luhistory.com"
           >
             info@luhistory.com
@@ -61,17 +65,3 @@ const currentYear = new Date().getFullYear().toString();
     </div>
   </section>
 </footer>
-<style>
-  footer .list__title {
-    @apply text-gray-400 tracking-widest uppercase text-sm mb-2 inline-block;
-  }
-  footer ul {
-    @apply mb-6;
-  }
-  footer li {
-    @apply my-1;
-  }
-  footer li a {
-    @apply text-gray-700 hover:underline hover:text-gray-900;
-  }
-</style>
