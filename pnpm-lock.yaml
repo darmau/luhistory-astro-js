@@ -57,6 +57,9 @@ importers:
         specifier: ^3.17.0
         version: 3.21.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     devDependencies:
+      '@astrojs/partytown':
+        specifier: ^2.1.4
+        version: 2.1.4
       '@tailwindcss/typography':
         specifier: ^0.5.10
         version: 0.5.16(tailwindcss@3.4.17)
@@ -100,6 +103,9 @@ packages:
 
   '@astrojs/markdown-remark@5.3.0':
     resolution: {integrity: sha512-r0Ikqr0e6ozPb5bvhup1qdWnSPUvQu6tub4ZLYaKyG50BXZ0ej6FhGz3GpChKpH7kglRFPObJd/bDyf2VM9pkg==}
+
+  '@astrojs/partytown@2.1.4':
+    resolution: {integrity: sha512-loUrAu0cGYFDC6dHVRiomdsBJ41VjDYXPA+B3Br51V5hENFgDSOLju86OIj1TvBACcsB22UQV7BlppODDG5gig==}
 
   '@astrojs/prism@3.1.0':
     resolution: {integrity: sha512-Z9IYjuXSArkAUx3N6xj6+Bnvx8OdUSHA8YoOgyepp3+zJmtVYJIl/I18GozdJVW1p5u/CNpl3Km7/gwTJK85cw==}
@@ -1345,6 +1351,11 @@ packages:
   '@portabletext/types@2.0.13':
     resolution: {integrity: sha512-5xk5MSyQU9CrDho3Rsguj38jhijhD36Mk8S6mZo3huv6PM+t4M/5kJN2KFIxgvt4ONpvOEs1pVIZAV0cL0Vi+Q==}
     engines: {node: ^14.13.1 || >=16.0.0 || >=18.0.0}
+
+  '@qwik.dev/partytown@0.11.2':
+    resolution: {integrity: sha512-795y49CqBiKiwKAD+QBZlzlqEK275hVcazZ7wBPSfgC23L+vWuA7PJmMpgxojOucZHzYi5rAAQ+IP1I3BKVZxw==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
 
   '@rexxars/react-json-inspector@9.0.1':
     resolution: {integrity: sha512-4uZ4RnrVoOGOShIKKcPoF+qhwDCZJsPPqyoEoW/8HRdzNknN9Q2yhlbEgTX1lMZunF1fv7iHzAs+n1vgIgfg/g==}
@@ -2595,6 +2606,10 @@ packages:
   dot-prop@5.3.0:
     resolution: {integrity: sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q==}
     engines: {node: '>=8'}
+
+  dotenv@16.6.1:
+    resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
+    engines: {node: '>=12'}
 
   dset@3.1.4:
     resolution: {integrity: sha512-2QF/g9/zTaPDc3BjNcVTGoBbXBgYfMTTceLaYcFJ/W9kggFUkhxD/hMEeuLKbugyef9SqAx8cpgwlIP/jinUTA==}
@@ -5495,6 +5510,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@astrojs/partytown@2.1.4':
+    dependencies:
+      '@qwik.dev/partytown': 0.11.2
+      mrmime: 2.0.1
+
   '@astrojs/prism@3.1.0':
     dependencies:
       prismjs: 1.29.0
@@ -6818,6 +6838,10 @@ snapshots:
       '@portabletext/types': 2.0.13
 
   '@portabletext/types@2.0.13': {}
+
+  '@qwik.dev/partytown@0.11.2':
+    dependencies:
+      dotenv: 16.6.1
 
   '@rexxars/react-json-inspector@9.0.1(react@18.3.1)':
     dependencies:
@@ -8330,6 +8354,8 @@ snapshots:
   dot-prop@5.3.0:
     dependencies:
       is-obj: 2.0.0
+
+  dotenv@16.6.1: {}
 
   dset@3.1.4: {}
 

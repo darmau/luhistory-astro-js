@@ -2,7 +2,7 @@ import {defineConfig} from 'astro/config';
 import {sanityIntegration} from "@sanity/astro";
 import react from "@astrojs/react";
 import sitemap from '@astrojs/sitemap';
-
+import partytown from "@astrojs/partytown";
 import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
@@ -14,6 +14,9 @@ export default defineConfig({
       dataset: 'production',
       apiVersion: '2022-03-07',
       useCdn: false
+    }),
+    partytown({
+      config: { forward: ["dataLayer.push"] },
     }),
     react(),
     tailwind(),
