@@ -1,59 +1,57 @@
 ---
-import {ViewTransitions} from "astro:transitions";
+import { ViewTransitions } from "astro:transitions";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
-const {title, description} = Astro.props;
+const { title, description } = Astro.props;
+const isProduction = import.meta.env.MODE === "production";
+const gaMeasurementId = import.meta.env.PUBLIC_GOOGLE_ANALYTICS_ID;
 ---
-<html lang = "en" class = "scroll-smooth">
-<head>
-  <meta charset = "UTF-8">
-  <meta name = "viewport" content = "width=device-width, initial-scale=1">
-  <meta name = "generator" content = {Astro.generator}/>
-  <link rel = "icon" href = "/favicon.svg" type = "image/svg+xml"/>
-  <title>{title}</title>
-  <meta name = "description" content = {description}/>
-  <link rel = "preconnect" href = "https://fonts.googleapis.com">
-  <link rel = "preconnect" href = "https://fonts.gstatic.com" crossorigin>
-  <link href = "https://fonts.googleapis.com/css2?family=Cormorant:wght@400;600;700&display=swap" rel = "stylesheet">
-  <link rel = "sitemap" href = "/sitemap-index.xml"/>
-  <ViewTransitions/>
-  <script type = "text/partytown" src = "https://www.googletagmanager.com/gtag/js?id=G-F393GEHV22"></script>
-  <script type = "text/partytown">
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
-    gtag("config", "G-F393GEHV22");
-  </script>
-  <script is:inline>
-    // 在主线程中定义 gtag 函数，因为 Partytown 脚本在 Web Worker 中
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
 
-    // 监听 Astro View Transitions 的页面加载事件
-    document.addEventListener(
-      "astro:page-load",
-      () => {
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <ViewTransitions />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F393GEHV22"
+    ></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-F393GEHV22", { send_page_view: false });
+
+      const sendPageView = () => {
         gtag("event", "page_view", {
           page_title: document.title,
           page_location: window.location.href,
           page_path: window.location.pathname,
         });
-      },
-      {once: false},
-    );
-  </script>
-</head>
-<body>
-<div class = "min-h-screen flex flex-col relative">
-  <Navbar/>
-  <div class = "grow w-full mt-[52px] md:mt-[104px] overflow-hidden">
-    <slot/>
-  </div>
-  <Footer/>
-</div>
-</body>
+      };
+
+      sendPageView();
+      document.addEventListener("astro:page-load", sendPageView);
+    </script>
+  </head>
+  <body>
+    <div class="min-h-screen flex flex-col relative">
+      <Navbar />
+      <div class="grow w-full mt-[52px] md:mt-[104px] overflow-hidden">
+        <slot />
+      </div>
+      <Footer />
+    </div>
+  </body>
 </html>
