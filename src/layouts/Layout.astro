@@ -3,6 +3,9 @@ import { ViewTransitions } from "astro:transitions";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 const { title, description } = Astro.props;
+const isProduction = import.meta.env.MODE === "production";
+const gaMeasurementId = import.meta.env.PUBLIC_GOOGLE_ANALYTICS_ID;
+const shouldLoadAnalytics = isProduction && gaMeasurementId;
 ---
 
 <html lang="en" class="scroll-smooth">
@@ -21,37 +24,33 @@ const { title, description } = Astro.props;
     />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <ViewTransitions />
-    <script
-      type="text/partytown"
-      src="https://www.googletagmanager.com/gtag/js?id=G-F393GEHV22"></script>
-    <script type="text/partytown">
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "G-F393GEHV22");
-    </script>
-    <script is:inline>
-      // 在主线程中定义 gtag 函数，因为 Partytown 脚本在 Web Worker 中
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      
-      // 监听 Astro View Transitions 的页面加载事件
-      document.addEventListener(
-        "astro:page-load",
-        () => {
-          gtag("event", "page_view", {
-            page_title: document.title,
-            page_location: window.location.href,
-            page_path: window.location.pathname,
-          });
-        },
-        { once: false },
-      );
-    </script>
+    {
+      shouldLoadAnalytics && (
+        <>
+          <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-F393GEHV22"
+          />
+          <script is:inline>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag("js", new Date());
+            gtag("config", "G-F393GEHV22", { send_page_view: false });
+
+            const sendPageView = () => {
+              gtag("event", "page_view", {
+                page_title: document.title,
+                page_location: window.location.href,
+                page_path: window.location.pathname,
+              });
+            };
+
+            sendPageView();
+            document.addEventListener("astro:page-load", sendPageView);
+          </script>
+        </>
+      )
+    }
   </head>
   <body>
     <div class="min-h-screen flex flex-col relative">
