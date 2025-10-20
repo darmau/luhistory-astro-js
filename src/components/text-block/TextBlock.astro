@@ -6,7 +6,7 @@ import { PortableText } from "astro-portabletext";
 const { overview, title } = Astro.props;
 ---
 
-<div class = "mt-8 md:col-span-8 md:grid md:grid-cols-8 md:gap-4">
+<div class = "text-block-container mt-8 md:col-span-8 md:grid md:grid-cols-8 md:gap-4">
   {title && (
     <h2 class = "col-span-8 font-serif font-bold text-4xl md:text-6xl text-neutral-900 mb-8 md:mb-16">{title}</h2>
   )}
@@ -26,7 +26,7 @@ const { overview, title } = Astro.props;
 </div>
 
 <style is:global>
-  h2 {
+  .text-block-container h2 {
     font-family: 'Cormorant', serif;
     font-weight: 700;
     font-size: 40px;
@@ -36,7 +36,7 @@ const { overview, title } = Astro.props;
     margin-bottom: 16px;
   }
 
-  h3 {
+  .text-block-container h3 {
     font-family: 'Cormorant', serif;
     font-weight: 700;
     font-size: 32px;
@@ -46,7 +46,7 @@ const { overview, title } = Astro.props;
     margin-bottom: 16px;
   }
 
-  h4 {
+  .text-block-container h4 {
     font-family: 'Cormorant', serif;
     font-weight: 700;
     font-size: 24px;
@@ -56,7 +56,7 @@ const { overview, title } = Astro.props;
     margin-bottom: 16px;
   }
 
-  p {
+  .text-block-container p {
     font-family: 'Cormorant', serif;
     font-weight: 400;
     font-size: 20px;
@@ -66,7 +66,7 @@ const { overview, title } = Astro.props;
     margin-bottom: 8px;
   }
 
-  blockquote {
+  .text-block-container blockquote {
     font-family: 'Cormorant', serif;
     font-weight: 400;
     font-size: 16px;
@@ -78,7 +78,7 @@ const { overview, title } = Astro.props;
     padding-left: 16px;
   }
 
-  code {
+  .text-block-container code {
     font-family: monospace;
     font-weight: 400;
     font-size: 16px;
@@ -86,7 +86,7 @@ const { overview, title } = Astro.props;
     padding: 2px 4px;
   }
 
-  a {
+  .text-block-container a {
     color: #171717;
     text-decoration: underline;
     text-decoration-thickness: 2px;
@@ -94,13 +94,13 @@ const { overview, title } = Astro.props;
     text-decoration-color: #a3a3a3;
   }
 
-  a:hover {
+  .text-block-container a:hover {
     text-decoration-color: #171717;
     text-decoration-thickness: 3px;
     transition: all 0.3s ease-in-out;
   }
 
-  ul {
+  .text-block-container ul {
     margin-top: 0;
     margin-bottom: 16px;
     padding-left: 24px;
@@ -112,7 +112,7 @@ const { overview, title } = Astro.props;
     color: #171717;
   }
 
-  ol {
+  .text-block-container ol {
     margin-top: 16px;
     margin-bottom: 16px;
     padding-left: 24px;
