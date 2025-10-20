@@ -129,7 +129,7 @@ const { link } = Astro.props;
 </div>
 <!--导航-->
 <nav
-  class="fixed flex gap-8 justify-between items-center py-2 px-4 xl:px-0 max-w-8xl w-full mx-auto xl:grid xl:grid-cols-12 xl:py-8 z-10 top-0 left-1/2 -translate-x-1/2 bg-white"
+  class="fixed flex gap-8 justify-between items-center py-2 px-4 xl:px-0 max-w-8xl w-full mx-auto xl:grid xl:grid-cols-12 xl:py-8 z-10 top-0 left-1/2 -translate-x-1/2"
 >
   <div
     class="col-start-1 h-4 w-14 md:w-28 md:h-8 flex justify-center items-center"
@@ -179,13 +179,19 @@ const { link } = Astro.props;
 </nav>
 
 <script>
+  declare global {
+    interface Window {
+      __luhistoryNavSearchOutsideHandler?: (event: MouseEvent) => void;
+    }
+  }
+
   function init() {
     const navFullscreen = document.getElementById("nav-fullscreen");
     const closeButton = document.getElementById("close-button");
     const menuButton = document.querySelector(".menu-button");
     const searchToggle = document.getElementById("nav-search-toggle");
     const searchForm = document.getElementById("nav-search-form");
-    const searchInput = document.getElementById("nav-search-input");
+    const searchInput = document.getElementById("nav-search-input") as HTMLInputElement | null;
     const searchContainer = document.querySelector(".nav-search-container");
 
     if (closeButton) {
