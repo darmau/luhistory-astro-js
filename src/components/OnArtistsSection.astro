@@ -33,7 +33,7 @@ const casesData = await sanityClient.fetch<CaseSummary[]>(`
   <div class = "w-full">
     <div class = "overflow-visible">
       {casesData && (
-          <CaseSlider client:only="react" cases={casesData} />
+          <CaseSlider client:visible cases={casesData} />
       )}
     </div>
   </div>

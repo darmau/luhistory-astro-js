@@ -20,7 +20,7 @@ const latestArchives = await sanityClient.fetch(`*[_type == 'article' && isTop =
     <h2 class = "font-bold text-3xl md:text-5xl font-serif">Highlights</h2>
   </hgroup>
   <div class = "overflow-visible">
-    <LatestNewsSlider client:only = "react" news = {latestArchives}/>
+    <LatestNewsSlider client:visible news = {latestArchives}/>
   </div>
 </div>
     )}

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Keyboard, Mousewheel } from "swiper/modules";
 import "swiper/css";
+import SanityPicture from "../media/SanityPicture";
 import type { ExhibitionSliderProps } from "@/types";
 
 export default function ExhibitionSlider({ exhibitions }: ExhibitionSliderProps) {
@@ -45,10 +46,14 @@ export default function ExhibitionSlider({ exhibitions }: ExhibitionSliderProps)
         <SwiperSlide key={item.slug}>
           <a href={`/exhibition/detail/${item.slug}`}>
             {item.cover && (
-              <img
-                src={`${item.cover.url}?h=960`}
+              <SanityPicture
+                src={item.cover.url}
                 alt={item.cover.caption || item.title}
-                className="bg-gray-50 object-cover h-[240px] md:h-[352px] w-full mb-4 md:mb-6"
+                widths={[480, 720, 960, 1280]}
+                aspectRatio={3 / 2}
+                sizes="(min-width: 1024px) 45vw, 90vw"
+                className="block mb-4 md:mb-6"
+                imgClassName="bg-gray-50 object-cover h-[240px] md:h-[352px] w-full"
               />
             )}
             <h3

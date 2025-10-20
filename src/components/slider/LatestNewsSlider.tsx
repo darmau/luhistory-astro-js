@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Keyboard, Mousewheel } from "swiper/modules";
 import "swiper/css";
+import SanityPicture from "../media/SanityPicture";
 import type { LatestNewsSliderProps } from "@/types";
 
 export default function LatestNewsSlider({ news }: LatestNewsSliderProps) {
@@ -48,10 +49,14 @@ export default function LatestNewsSlider({ news }: LatestNewsSliderProps) {
           >
             {item.cover && (
               <>
-                <img
-                  src={`${item.cover}?w=1280`}
+                <SanityPicture
+                  src={item.cover}
                   alt={item.title}
-                  className="absolute inset-0 object-cover h-full w-full"
+                  widths={[640, 960, 1280, 1600]}
+                  aspectRatio={16 / 9}
+                  sizes="(min-width: 1280px) 80vw, 100vw"
+                  className="absolute inset-0 h-full w-full"
+                  imgClassName="h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-neutral-700 to-transparent" />
               </>

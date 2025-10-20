@@ -1,6 +1,6 @@
 ---
 import {sanityClient} from "sanity:client";
-import {Image} from 'astro:assets';
+import {Picture, getImage} from 'astro:assets';
 
 type HomepageRecord = {
   slogan: string;
@@ -17,6 +17,16 @@ const homepage = homepageData[0];
 const headerString: string[] = homepage?.slogan?.split(', ').filter(Boolean) ?? [];
 const heroImageUrl = homepage?.image?.url ?? null;
 const heroImageAlt = homepage?.slogan ?? "Homepage hero image";
+const heroImageSizes = "(min-width: 1024px) 33vw, (min-width: 768px) 45vw, 80vw";
+const heroImagePreload = heroImageUrl
+  ? await getImage({
+      src: heroImageUrl,
+      width: 720,
+      height: Math.round(720 / (3 / 4)),
+      format: "avif",
+      fit: "cover",
+    })
+  : null;
 ---
 <div
   class = "col-start-1 col-span-12 flex flex-col items-center p-4 gap-8 justify-between mb-8 sm:gap-0 sm:p-0 sm:col-start-2 sm:col-span-10 sm:flex-row lg:mb-40"
@@ -34,14 +44,33 @@ const heroImageAlt = homepage?.slogan ?? "Homepage hero image";
     })}
   </h1>
   {heroImageUrl && (
-    <Image
-      src = {`${heroImageUrl}?h=960`}
-      alt = {heroImageAlt}
-      class = "hero-img aspect-[3/4] w-1/2 object-cover brightness-95 md:z-0"
-      id = "hero-img"
-      width = "528"
-      height = "704"
-    />
+    <>
+      {heroImagePreload && (
+        <Fragment slot="head">
+          <link
+            rel="preload"
+            as="image"
+            href={heroImagePreload.src}
+            imagesrcset={heroImagePreload.srcSet?.attribute}
+            imagesizes={heroImageSizes}
+            type="image/avif"
+          />
+        </Fragment>
+      )}
+      <Picture
+        src={heroImageUrl}
+        alt={heroImageAlt}
+        formats={["avif", "webp"]}
+        widths={[360, 480, 640, 720]}
+        sizes={heroImageSizes}
+        class="hero-img aspect-[3/4] w-1/2 object-cover brightness-95 md:z-0"
+        pictureAttributes={{ class: "hero-picture flex-shrink-0" }}
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+        fit="cover"
+      />
+    </>
   )}
 </div>
 

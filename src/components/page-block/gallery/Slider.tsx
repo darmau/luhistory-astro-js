@@ -12,6 +12,7 @@ import Counter from "yet-another-react-lightbox/plugins/counter";
 import ArrowLeft from "../../react-icon/ArrowLeft.tsx";
 import ArrowRight from "../../react-icon/ArrowRight.tsx";
 import Close from "../../react-icon/Close.tsx";
+import SanityPicture from "../../media/SanityPicture";
 import type { GallerySliderProps } from "@/types";
 
 export default function GallerySlider({ images }: GallerySliderProps) {
@@ -68,10 +69,14 @@ export default function GallerySlider({ images }: GallerySliderProps) {
                 }}
                 aria-label={item.caption ?? "Open gallery image"}
               >
-                <img
-                  src={`${item.url}?h=640`}
+                <SanityPicture
+                  src={item.url}
                   alt={item.caption || "Gallery image"}
-                  className={`bg-gray-50 object-cover h-[480px] w-full ${
+                  widths={[480, 640, 960, 1280]}
+                  aspectRatio={4 / 3}
+                  sizes="(min-width: 1280px) 50vw, (min-width: 1024px) 66vw, 100vw"
+                  className="block"
+                  imgClassName={`bg-gray-50 object-cover h-[480px] w-full ${
                     !isActive ? "grayscale" : ""
                   }`}
                 />

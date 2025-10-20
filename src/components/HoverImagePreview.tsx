@@ -1,15 +1,30 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import type { HoverImagePreviewProps, ImageSize, CursorPosition } from '@/types';
+import SanityPicture from "./media/SanityPicture";
 
 const HoverImagePreview: React.FC<HoverImagePreviewProps> = ({ type, slug, title, location, imgUrl }) => {
   const [isHovering, setIsHovering] = useState<boolean>(false);
   const [imageSize, setImageSize] = useState<ImageSize>({ width: 0, height: 0 });
   const [cursorPos, setCursorPos] = useState<CursorPosition>({ x: 0, y: 0 });
 
+  const buildPreviewUrl = React.useCallback(
+    () => {
+      try {
+        const url = new URL(imgUrl);
+        url.searchParams.set("w", "800");
+        url.searchParams.set("auto", "format");
+        return url.toString();
+      } catch {
+        return imgUrl;
+      }
+    },
+    [imgUrl]
+  );
+
   useEffect(() => {
     // 获取图片尺寸
     const image = new Image();
-    image.src = imgUrl;
+    image.src = buildPreviewUrl();
     image.onload = () => {
       // 保持300px为最大尺寸
       if (image.width > image.height) {
@@ -24,7 +39,7 @@ const HoverImagePreview: React.FC<HoverImagePreviewProps> = ({ type, slug, title
         });
       }
     };
-  }, [imgUrl]);
+  }, [buildPreviewUrl]);
 
   const handleMouseMove = (event: React.MouseEvent<HTMLLIElement>) => {
     setCursorPos({
@@ -42,7 +57,10 @@ const HoverImagePreview: React.FC<HoverImagePreviewProps> = ({ type, slug, title
   };
 
   // 检查是否有足够空间显示图片
-  const shouldDisplayAbove = () => window.innerHeight - cursorPos.y < imageSize.height;
+  const shouldDisplayAbove = React.useCallback(
+    () => window.innerHeight - cursorPos.y < imageSize.height,
+    [cursorPos.y, imageSize.height]
+  );
 
   const imageStyle: React.CSSProperties = useMemo(() => ({
     position: 'fixed',
@@ -54,7 +72,7 @@ const HoverImagePreview: React.FC<HoverImagePreviewProps> = ({ type, slug, title
     display: isHovering ? 'block' : 'none',
     transition: 'opacity 0.3s ease-in-out',
     zIndex: 9999,
-  }), [cursorPos.x, cursorPos.y, imageSize.height, imageSize.width, isHovering]);
+  }), [cursorPos.x, cursorPos.y, imageSize.height, imageSize.width, isHovering, shouldDisplayAbove]);
 
   return (
       <li
@@ -72,7 +90,19 @@ const HoverImagePreview: React.FC<HoverImagePreviewProps> = ({ type, slug, title
         <p
             className = "md:text-end col-span-1 font-sans text-base font-normal text-neutral-900 opacity-50"
         >{location}</p>
-        {isHovering && <img src={imgUrl} alt={title} style={imageStyle} />}
+        {isHovering && (
+          <SanityPicture
+            src={imgUrl}
+            alt={title}
+            widths={[320, 480, 640]}
+            quality={70}
+            sizes="30vw"
+            style={imageStyle}
+            imgClassName="w-full h-full object-cover shadow-lg"
+            loading="eager"
+            decoding="async"
+          />
+        )}
       </li>
   );
 };

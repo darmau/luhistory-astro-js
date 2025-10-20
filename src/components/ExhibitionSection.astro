@@ -42,7 +42,7 @@ const exhibitionData = await sanityClient.fetch<Exhibition[]>(`
   <div class = "w-full">
     <div class = "overflow-visible">
       {exhibitionData && (
-          <ExhibitionSlider client:only="react" exhibitions={exhibitionData} />
+          <ExhibitionSlider client:visible exhibitions={exhibitionData} />
       )}
     </div>
   </div>

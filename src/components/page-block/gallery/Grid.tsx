@@ -8,6 +8,7 @@ import "yet-another-react-lightbox/plugins/counter.css";
 import ArrowLeft from "../../react-icon/ArrowLeft.tsx";
 import ArrowRight from "../../react-icon/ArrowRight.tsx";
 import Close from "../../react-icon/Close.tsx";
+import SanityPicture from "../../media/SanityPicture";
 import type { GalleryGridProps } from "@/types";
 
 export default function GalleryGrid({ title, images }: GalleryGridProps) {
@@ -42,12 +43,14 @@ export default function GalleryGrid({ title, images }: GalleryGridProps) {
             }}
             aria-label={image.caption ?? "Open gallery image"}
           >
-            <img
-              className="aspect-square object-cover w-full cursor-pointer group-focus-visible:ring-2 group-focus-visible:ring-neutral-900"
-              src={`${image.url}?h=480`}
+            <SanityPicture
+              src={image.url}
               alt={image.caption || "Gallery image"}
-              width="192"
-              height="192"
+              widths={[240, 360, 480, 640]}
+              aspectRatio={1}
+              sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+              className="block"
+              imgClassName="aspect-square object-cover w-full cursor-pointer group-focus-visible:ring-2 group-focus-visible:ring-neutral-900"
             />
           </button>
         ))}

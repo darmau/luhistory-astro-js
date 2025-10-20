@@ -51,7 +51,7 @@ const groupedExhibitions = Array.from(exhibitionByYear.entries()).map(([year, ex
               {
                 exhibitions.map((exhibition) => (
                   <HoverImagePreview
-                    client:only="react"
+                    client:visible
                     title={exhibition.title}
                     slug={exhibition.slug}
                     type="exhibition"
