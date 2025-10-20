@@ -5,8 +5,16 @@ import {Image} from "astro:assets";
 import PublicationCategory from "../../../data/PublicationCategory";
 import PageTitle from "../../../components/PageTitle.astro";
 
+type BookCategoryItem = {
+  title: string;
+  publishDate: string;
+  category: string;
+  slug: string;
+  cover?: string | null;
+};
+
 export async function getStaticPaths() {
-  const allBooks = await sanityClient.fetch(`*[_type == 'book' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
+  const allBooks = await sanityClient.fetch<BookCategoryItem[]>(`*[_type == 'book' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
     publishDate,
     category,
@@ -28,8 +36,11 @@ export async function getStaticPaths() {
   });
   return paths;
 }
-const {books, category} = Astro.props;
-const params = Astro.params;
+const { books } = Astro.props as {
+  books: BookCategoryItem[];
+};
+const params = Astro.params as { category: string };
+const publicationCategories = PublicationCategory as string[];
 ---
 
 <Layout title = {`${params.category} - Publications`}>
@@ -48,7 +59,7 @@ const params = Astro.params;
           ALL
         </a>
       </li>
-      {PublicationCategory.map((category) => {
+      {publicationCategories.map((category) => {
         return (
           <li
             class = {`${category === params.category ? 'text-neutral-900' : 'text-neutral-900 opacity-50'} text-sm tracking-wider hover:opacity-100`}

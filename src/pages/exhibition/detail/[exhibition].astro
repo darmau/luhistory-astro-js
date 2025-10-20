@@ -6,8 +6,10 @@ import PageBlock from "../../../components/PageBlock.astro";
 import PageTitle from "../../../components/PageTitle.astro";
 import TextBlock from "../../../components/text-block/TextBlock.astro";
 import NextExhibition from "../../../components/order/NextExhibition.astro";
+import type { ExhibitionDetail } from "@/types";
+
 export async function getStaticPaths() {
-  const slugs = await sanityClient.fetch(`*[_type == 'exhibition' && defined(slug) && defined(dateRange)] {
+  const slugs = await sanityClient.fetch<ExhibitionDetail[]>(`*[_type == 'exhibition' && defined(slug) && defined(dateRange)] {
     title,
     "slug": slug.current,
     "subtitle": subtitle,
@@ -75,7 +77,7 @@ export async function getStaticPaths() {
           }
       }
   }`);
-  const paths = await slugs.map((exhibition) => {
+  const paths = slugs.map((exhibition) => {
     return {
       params: {
         exhibition: exhibition.slug,
@@ -107,10 +109,10 @@ const {
   place,
   blocks,
   overview
-} = Astro.props
+} = Astro.props as ExhibitionDetail;
 
 // 将2023-12-09和2023-12-16转换成Dec 9 - 16, 2023
-function formatDate(start, end) {
+function formatDate(start: string, end: string) {
   const startDate = new Date(start);
   const endDate = new Date(end);
   const startMonth = startDate.toLocaleString("default", { month: "short" });

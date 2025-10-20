@@ -1,16 +1,18 @@
 ---
 import { PortableText } from "astro-portabletext";
-function ifPresent(endDate) {
-  if (endDate.present) {
+import type { TimelineEndDate, TimelineProps } from "@/types";
+
+function ifPresent(endDate: TimelineEndDate) {
+  if (endDate?.present) {
     return 'to present'
-  } else if (endDate.endDate) {
+  } else if (endDate?.endDate) {
     return ` - ${new Date(endDate.endDate).getFullYear()}`
   } else {
     return ''
   }
 }
 
-const {title, records} = Astro.props;
+const {title, records = []} = Astro.props as TimelineProps;
 ---
 
 <div class = "col-span-8 my-4 lg:my-16">

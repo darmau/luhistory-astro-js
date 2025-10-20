@@ -2,26 +2,35 @@
 import Layout from "../../layouts/Layout.astro";
 import {sanityClient} from "sanity:client";
 import PageTitle from "../../components/PageTitle.astro";
-const caseStudyRawData = await sanityClient.fetch(`
+type CaseStudy = {
+  title: string;
+  year: string;
+  slug: string;
+};
+
+const caseStudyRawData = await sanityClient.fetch<CaseStudy[]>(`
   *[_type == 'caseStudy' && defined(publishDate)]|order(publishDate desc){
     title,
     "year": publishDate,
     "slug": slug.current
 }`);
 
-// 遍历caseStudy，将caseStudy中的每个元素，分别push进两个数组。如：caseStudyYears = [2019,
-// 2020]，caseStudyByYears = [[{}, {}, {}], [{}, {}, {}]]
-const caseStudyYears = [];
-const caseStudyByYears = [];
+const caseStudyByYear = new Map<string, CaseStudy[]>();
+
 caseStudyRawData.forEach((caseStudy) => {
   const year = caseStudy.year.split("-")[0];
-  if (caseStudyYears.indexOf(year) === -1) {
-    caseStudyYears.push(year);
-    caseStudyByYears.push([caseStudy]);
+  const collection = caseStudyByYear.get(year);
+  if (collection) {
+    collection.push(caseStudy);
   } else {
-    caseStudyByYears[caseStudyYears.indexOf(year)].push(caseStudy);
+    caseStudyByYear.set(year, [caseStudy]);
   }
 });
+
+const groupedCaseStudies = Array.from(caseStudyByYear.entries()).map(([year, studies]) => ({
+  year,
+  studies,
+}));
 
 ---
 <Layout title = "On Artists">
@@ -29,12 +38,12 @@ caseStudyRawData.forEach((caseStudy) => {
   <main class="max-w-8xl mx-auto grid grid-cols-12 gap-8">
     <div class = "mb-40 col-start-1 col-span-12 space-y-12 p-4 sm:space-y-0 md:col-start-2 md:col-span-10 md:p-0">
       {
-        caseStudyYears.map((year) => (
+        groupedCaseStudies.map(({year, studies}) => (
           <div class = "sm:grid sm:grid-cols-10">
             <h2 class = "col-span-2 font-serif font-bold proportional-nums text-3xl tracking-wider sm:py-6">{year}</h2>
             <ul class="col-span-8 flex-1">
               {
-                caseStudyByYears[caseStudyYears.indexOf(year)].map((caseStudy) => (
+                studies.map((caseStudy) => (
                   <li
                     class = "items-center py-6 border-b border-neutral-900 border-opacity-20 sm:border-opacity-100 text-neutral-900"
                   >

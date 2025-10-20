@@ -1,8 +1,18 @@
 ---
 import {sanityClient} from "sanity:client";
 import ExhibitionSlider from "./slider/ExhibitionSlider.tsx"
-import {Image} from 'astro:assets';
-const exhibitionData = await sanityClient.fetch(`
+type Exhibition = {
+  title: string;
+  slug: string;
+  year: string;
+  city: string;
+  cover: {
+    url: string;
+    caption?: string | null;
+  } | null;
+};
+
+const exhibitionData = await sanityClient.fetch<Exhibition[]>(`
   *[_type == 'exhibition' && defined(dateRange) && defined(cover)] | order(dateRange.startDate desc){
     title,
     "slug": slug.current,
@@ -74,7 +84,7 @@ const exhibitionData = await sanityClient.fetch(`
       threshold: 0.1
     };
 
-    const observer = new IntersectionObserver((entries, observer) => {
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
@@ -85,6 +95,10 @@ const exhibitionData = await sanityClient.fetch(`
         }
       });
     }, options);
+
+    if (!container) {
+      return;
+    }
 
     observer.observe(container);
   }

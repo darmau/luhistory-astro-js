@@ -3,9 +3,21 @@ import {sanityClient} from "sanity:client";
 import PageTitle from "../../../../components/PageTitle.astro";
 import Layout from "../../../../layouts/Layout.astro";
 import Category from "../../../../data/ArchiveCategory";
-export async function getStaticPaths({paginate}) {
-  const allCategory: string[] = Category.map((category: { name: string, slug: string }) => category.slug);
-  const allArticles = await sanityClient.fetch(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
+import Pagination from "../../../../components/Pagination.astro";
+import type { Page, PaginateFunction } from "astro";
+import type { ArchiveCategory } from "../../../../types";
+
+type ArticleItem = {
+  title: string;
+  publishDate: string;
+  category: string;
+  slug: string;
+};
+
+export async function getStaticPaths({paginate}: { paginate: PaginateFunction }) {
+  const archiveCategories = Category as ArchiveCategory[];
+  const allCategory: string[] = archiveCategories.map((category) => category.slug);
+  const allArticles = await sanityClient.fetch<ArticleItem[]>(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
     publishDate,
     category,
@@ -13,8 +25,11 @@ export async function getStaticPaths({paginate}) {
   }`);
   return allCategory.flatMap((category) => {
     // 根据入参slug在Category查询对应的name
-    const categoryName = Category.find((item) => item.slug === category).name;
-    const filteredArticles = allArticles.filter((article) => article.category == categoryName);
+    const categoryEntry = archiveCategories.find((item) => item.slug === category);
+    if (!categoryEntry) {
+      return [];
+    }
+    const filteredArticles = allArticles.filter((article) => article.category === categoryEntry.name);
     return paginate(filteredArticles, {
       params: {category},
       pageSize: 10,
@@ -22,14 +37,10 @@ export async function getStaticPaths({paginate}) {
   })
 }
 
-// 转换成大写
-function toUppercase(str) {
-  return str.replace(/-/g, ' ').toUpperCase();
-}
-
-const ArticleCategories = Category;
-const {category, page} = Astro.props;
-const params = Astro.params;
+const archiveCategories = Category as ArchiveCategory[];
+const ArticleCategories = archiveCategories;
+const { page } = Astro.props as { page: Page<ArticleItem> };
+const params = Astro.params as { category: string };
 ---
 
 <Layout title = {`${params.category.replace(/-/g, ' ')} - Collections`}>
@@ -83,23 +94,5 @@ const params = Astro.params;
       </div>
     </div>
   </main>
-  <!--如果没有前一页也没有后一页，不显示该模块-->
-  {page.url.prev || page.url.next ? (
-    <div class = "max-w-[1088px] mx-auto grid grid-cols-10 py-40 border-t border-neutral-900 border-opacity-20">
-      <div class = "col-start-2 col-span-8 lg:col-start-3 lg:col-span-6 flex justify-between items-center">
-        <a
-          class = `${page.url.prev ? '' : 'opacity-0'}`
-          href = {page.url.prev}
-        >
-          ←&nbsp;Previous
-        </a>
-        <a
-          class = `${page.url.next ? '' : 'opacity-0'}`
-          href = {page.url.next}
-        >
-          Next&nbsp;→
-        </a>
-      </div>
-    </div>
-  ) : ''}
+  <Pagination page = {page} paddingClass = "py-40" />
 </Layout>

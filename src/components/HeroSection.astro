@@ -2,13 +2,21 @@
 import {sanityClient} from "sanity:client";
 import {Image} from 'astro:assets';
 
-const homepageData = await sanityClient.fetch(`
+type HomepageRecord = {
+  slogan: string;
+  image?: { url?: string | null } | null;
+};
+
+const homepageData = await sanityClient.fetch<HomepageRecord[]>(`
   *[_type == 'homepage']{
     slogan,
     "image": cover.asset->{url}
   }`)
 
-const headerString = homepageData[0].slogan.split(', ');
+const homepage = homepageData[0];
+const headerString: string[] = homepage?.slogan?.split(', ').filter(Boolean) ?? [];
+const heroImageUrl = homepage?.image?.url ?? null;
+const heroImageAlt = homepage?.slogan ?? "Homepage hero image";
 ---
 <div
   class = "col-start-1 col-span-12 flex flex-col items-center p-4 gap-8 justify-between mb-8 sm:gap-0 sm:p-0 sm:col-start-2 sm:col-span-10 sm:flex-row lg:mb-40"
@@ -25,14 +33,16 @@ const headerString = homepageData[0].slogan.split(', ');
       )
     })}
   </h1>
-  <Image
-    src = {`${homepageData[0].image.url}?h=960`}
-    alt = {homepageData[0].slogan}
-    class = "hero-img aspect-[3/4] w-1/2 object-cover brightness-95 md:z-0"
-    id = "hero-img"
-    width = "528"
-    height = "704"
-  />
+  {heroImageUrl && (
+    <Image
+      src = {`${heroImageUrl}?h=960`}
+      alt = {heroImageAlt}
+      class = "hero-img aspect-[3/4] w-1/2 object-cover brightness-95 md:z-0"
+      id = "hero-img"
+      width = "528"
+      height = "704"
+    />
+  )}
 </div>
 
 <style>

@@ -1,11 +1,17 @@
 ---
 import {sanityClient} from "sanity:client";
-const teachingData = await sanityClient.fetch(`
+
+type TeachingSummary = {
+  overview?: string | null;
+};
+
+const teachingData = await sanityClient.fetch<TeachingSummary[]>(`
   *[_type == "teaching"]{
   "overview": overview[0].children[0].text
 }
 `)
 
+const teachingOverview = teachingData[0]?.overview ?? "";
 ---
 
 <div
@@ -19,9 +25,9 @@ const teachingData = await sanityClient.fetch(`
     </div>
   </hgroup>
   <p
-    title = {teachingData[0].overview}
+    title = {teachingOverview}
     class = "font-serif font-bold line-clamp-2 text-2xl md:text-3xl text-neutral-900 mb-8"
-  >{teachingData[0].overview}</p>
+  >{teachingOverview}</p>
 </div>
 
 <style>
@@ -48,7 +54,7 @@ const teachingData = await sanityClient.fetch(`
       threshold: 0.1
     };
 
-    const observer = new IntersectionObserver((entries, observer) => {
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
@@ -59,6 +65,10 @@ const teachingData = await sanityClient.fetch(`
         }
       });
     }, options);
+
+    if (!container) {
+      return;
+    }
 
     observer.observe(container);
   }

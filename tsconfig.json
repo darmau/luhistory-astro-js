@@ -1,6 +1,22 @@
 {
-  "extends": "astro/tsconfigs/base",
+  "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "jsx": "react"
-  }
+    "jsx": "react",
+    "strict": true,
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/types": ["./src/types/index.ts"],
+      "@/types/*": ["./src/types/*"]
+    }
+  },
+  "include": ["src/**/*", "**/*.astro"],
+  "exclude": ["node_modules", "dist", ".astro"]
 }

@@ -1,7 +1,16 @@
 ---
-const {title, subtitle, bgWhite = true, remoteImg, localImg = '/images/cover.jpg'} = Astro.props;
+import type { PageTitleProps } from "@/types";
+
+const {
+  title,
+  subtitle,
+  bgWhite = true,
+  remoteImg,
+  localImg = '/images/cover.jpg',
+} = Astro.props as PageTitleProps;
+
 // 根据title的长度，返回一个4-9之间的数字
-function getTextSize(size) {
+function getTextSize(size: number) {
   if (size < 16) {
     return 'text-6xl md:text-9xl';
   } else if (size < 32) {

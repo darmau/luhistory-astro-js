@@ -1,14 +1,11 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
-// Import Swiper React components
-import {Swiper, SwiperSlide} from 'swiper/react';
+import { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Keyboard, Mousewheel } from "swiper/modules";
+import "swiper/css";
+import type { LatestNewsSliderProps } from "@/types";
 
-import {Keyboard, Mousewheel} from 'swiper/modules';
-
-// Import Swiper styles
-import 'swiper/css';
-
-export default ({news}) => {
+export default function LatestNewsSlider({ news }: LatestNewsSliderProps) {
   const [spaceBetween, setSpaceBetween] = useState(32);
 
   useEffect(() => {
@@ -33,43 +30,49 @@ export default ({news}) => {
   }, []);
 
   return (
-      <Swiper
-          spaceBetween = {spaceBetween}
-          slidesPerView = {'auto'}
-          centeredSlides = {true}
-          mousewheel = {true}
-          modules = {[Keyboard, Mousewheel]}
-          keyboard = {{
-            enabled: true,
-          }}
-      >
-        {news.map((item, index) => (
-            <SwiperSlide>
-              <a
-                  href = {`/collection/detail/${item.slug}`}
-                 className = "relative bg-gray-50 h-[240px] sm:h-[360px] md:h-[544px] flex flex-col justify-end p-4 md:p-10"
-              >
-                {item.cover && (
-                    <>
-                      <img
-                          src = {`${item.cover}?w=1280`}
-                          alt = {item.title}
-                          className = "absolute inset-0 object-cover h-full w-full"
-                      />
-                      <div
-                          className = "absolute inset-0 bg-gradient-to-t from-neutral-700 to-transparent"
-                      ></div>
-                    </>
-                )}
-                <h3 className = {`${item.cover ? 'text-white' : 'text-neutral-900'} relative font-serif font-bold text-2xl md:text-6xl`}>
-                  {item.title}
-                </h3>
-                <p className = {`${item.cover ? 'text-white' : 'text-neutral-900'} relative font-serif font-semibold text-base md:text-2xl`}>
-                  {item.subtitle}
-                </p>
-              </a>
-            </SwiperSlide>
-        ))}
-      </Swiper>
+    <Swiper
+      spaceBetween={spaceBetween}
+      slidesPerView="auto"
+      centeredSlides
+      mousewheel
+      modules={[Keyboard, Mousewheel]}
+      keyboard={{
+        enabled: true,
+      }}
+    >
+      {news.map((item) => (
+        <SwiperSlide key={item.slug}>
+          <a
+            href={`/collection/detail/${item.slug}`}
+            className="relative bg-gray-50 h-[240px] sm:h-[360px] md:h-[544px] flex flex-col justify-end p-4 md:p-10"
+          >
+            {item.cover && (
+              <>
+                <img
+                  src={`${item.cover}?w=1280`}
+                  alt={item.title}
+                  className="absolute inset-0 object-cover h-full w-full"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-neutral-700 to-transparent" />
+              </>
+            )}
+            <h3
+              className={`${
+                item.cover ? "text-white" : "text-neutral-900"
+              } relative font-serif font-bold text-2xl md:text-6xl`}
+            >
+              {item.title}
+            </h3>
+            <p
+              className={`${
+                item.cover ? "text-white" : "text-neutral-900"
+              } relative font-serif font-semibold text-base md:text-2xl`}
+            >
+              {item.subtitle}
+            </p>
+          </a>
+        </SwiperSlide>
+      ))}
+    </Swiper>
   );
-};
+}

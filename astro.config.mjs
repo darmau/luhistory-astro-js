@@ -1,21 +1,20 @@
 import {defineConfig} from 'astro/config';
-import {sanityIntegration} from "@sanity/astro";
+import sanity from "@sanity/astro";
 import react from "@astrojs/react";
 import sitemap from '@astrojs/sitemap';
-import tailwind from "@astrojs/tailwind";
+import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://luhistory.com",
   integrations: [
-    sanityIntegration({
+      sanity({
       projectId: 'aemgaomh',
       dataset: 'production',
       apiVersion: '2022-03-07',
       useCdn: false
     }),
     react(),
-    tailwind(),
     sitemap()],
   image: {
     domains: ["cdn.sanity.io"],
@@ -27,5 +26,8 @@ export default defineConfig({
       },
     },
   },
+    vite: {
+        plugins: [tailwindcss()],
+    },
   prefetch: true
 });

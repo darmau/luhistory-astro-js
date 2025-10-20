@@ -5,13 +5,23 @@ import {Image} from 'astro:assets'
 import PageTitle from "../../../components/PageTitle.astro";
 import PublicationCategory from "../../../data/PublicationCategory";
 
-const books = await sanityClient.fetch(`*[_type == 'book' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
+type BookListItem = {
+  title: string;
+  publishDate: string;
+  category: string;
+  slug: string;
+  cover?: string | null;
+};
+
+const books = await sanityClient.fetch<BookListItem[]>(`*[_type == 'book' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
     publishDate,
     category,
     "slug": slug.current,
     "cover": cover.asset->url
 }`);
+
+const publicationCategories = PublicationCategory as string[];
 ---
 
 <Layout title = "All Publications">
@@ -26,7 +36,7 @@ const books = await sanityClient.fetch(`*[_type == 'book' && defined(slug) && de
       <li class="text-sm text-neutral-900 tracking-wider">
         ALL
       </li>
-      {PublicationCategory.map((category) => {
+      {publicationCategories.map((category) => {
         return (
           <li class = "text-sm text-neutral-900 opacity-50 tracking-wider hover:opacity-100">
             <a

@@ -49,7 +49,7 @@ const latestArchives = await sanityClient.fetch(`*[_type == 'article' && isTop =
       threshold: 0.1
     };
 
-    const observer = new IntersectionObserver((entries, observer) => {
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
@@ -60,6 +60,10 @@ const latestArchives = await sanityClient.fetch(`*[_type == 'article' && isTop =
         }
       });
     }, options);
+
+    if (!container) {
+      return;
+    }
 
     observer.observe(container);
   }

@@ -2,13 +2,13 @@
 import Layout from "../../layouts/Layout.astro";
 import PageTitle from "../../components/PageTitle.astro";
 import {sanityClient} from "sanity:client";
-import PageBlock from "../../components/PageBlock.astro";
 import Timeline from "../../components/page-block/Timeline.astro";
 import RelatedInternalLinks
   from "../../components/page-block/RelatedInternalLinks.astro";
 import TextBlock from "../../components/text-block/TextBlock.astro";
+import type { TeachingEntry, TeachingLink, TeachingLinkEntry, TeachingAsset } from "@/types";
 
-const teachingData = await sanityClient.fetch(`*[_type == 'teaching']{
+const teachingData = await sanityClient.fetch<TeachingEntry[]>(`*[_type == 'teaching']{
   "experience": {
     "type": 'timeline',
     "records": experience[]
@@ -53,24 +53,32 @@ const teachingData = await sanityClient.fetch(`*[_type == 'teaching']{
   }
 }`);
 
-function mergeArrays(links, assets) {
+function mergeArrays(
+  links: TeachingLinkEntry[],
+  assets: TeachingAsset[],
+): (TeachingLink | TeachingAsset)[] {
   // 确保两个数组长度相同
   if (links.length !== assets.length) {
     throw new Error("两个数组的长度不相同");
   }
 
-  for (let i = 0; i < links.length; i++) {
-    if (!links[i]) {
-      // 替换links数组中相同次序的项
-      links[i] = assets[i];
+  return links.map((link, index) => {
+    if (link) {
+      return link;
     }
-  }
 
-  return links;
+    const asset = assets[index];
+    if (!asset) {
+      throw new Error("缺少与链接对应的附件资源");
+    }
+    return asset;
+  });
 }
 
-const {overview, experience} = teachingData[0];
-const links = mergeArrays(teachingData[0].links, teachingData[0].assets);
+const teachingEntry = teachingData[0];
+const overview = teachingEntry?.overview;
+const experience = teachingEntry?.experience;
+const links = teachingEntry ? mergeArrays(teachingEntry.links, teachingEntry.assets) : [];
 ---
 
 <Layout title = "Teaching">

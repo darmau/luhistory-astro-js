@@ -1,5 +1,11 @@
 ---
-function generageCategory(category) {
+type RelatedArticle = {
+  title: string;
+  slug: string;
+  category?: string | null;
+};
+
+function generageCategory(category: string | null | undefined) {
   // 将historical-data转换成Historical Data
   if (!category) return ''
   return category
@@ -7,7 +13,7 @@ function generageCategory(category) {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ')
 }
-const { articles } = Astro.props
+const { articles = [] } = Astro.props as { articles?: RelatedArticle[] }
 ---
 
 <div class = "col-start-1 col-span-8 my-4 lg:my-16">

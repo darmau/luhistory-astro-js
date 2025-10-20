@@ -8,7 +8,15 @@ import PageBlock from "../../../components/PageBlock.astro";
 import NextCase from "../../../components/order/NextCase.astro";
 
 export async function getStaticPaths() {
-  const slugs = await sanityClient.fetch(`*[_type == 'caseStudy' && defined(slug)] {
+  type CaseStudyPathItem = {
+    slug: string;
+    title: string;
+    cover?: string | null;
+    overview: unknown;
+    blocks: unknown;
+  };
+
+  const slugs = await sanityClient.fetch<CaseStudyPathItem[]>(`*[_type == 'caseStudy' && defined(slug)] {
     "slug": slug.current,
     title,
     publishDate,
@@ -68,7 +76,7 @@ export async function getStaticPaths() {
         }
       }
   }`);
-  const paths = await slugs.map((caseStudy) => {
+  const paths = slugs.map((caseStudy) => {
     return {
       params: {
         caseStudy: caseStudy.slug,
@@ -77,7 +85,6 @@ export async function getStaticPaths() {
         title: caseStudy.title,
         cover: caseStudy.cover,
         overview: caseStudy.overview,
-        publishDate: caseStudy.publishDate,
         blocks: caseStudy.blocks,
       }
     };
@@ -85,7 +92,7 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const {title, cover, overview, publishDate, blocks} = Astro.props;
+const {title, cover, overview, blocks} = Astro.props;
 ---
 
 <Layout title = {title}>

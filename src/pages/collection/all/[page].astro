@@ -2,8 +2,12 @@
 import {sanityClient} from "sanity:client";
 import Layout from "../../../layouts/Layout.astro";
 import PageTitle from "../../../components/PageTitle.astro";
+import Pagination from "../../../components/Pagination.astro";
 import Category from "../../../data/ArchiveCategory";
-export async function getStaticPaths({paginate}) {
+import type { Page, PaginateFunction } from 'astro';
+import type { ArchiveCategory } from "../../../types";
+
+export async function getStaticPaths({paginate}: { paginate: PaginateFunction }) {
   const allArticles = await sanityClient.fetch(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
     publishDate,
@@ -13,8 +17,15 @@ export async function getStaticPaths({paginate}) {
   return paginate(allArticles, { pageSize: 10 });
 }
 
-const ArticleCategories = Category;
-const { page } = Astro.props;
+const ArticleCategories = Category as ArchiveCategory[];
+const { page } = Astro.props as { 
+  page: Page<{
+    title: string;
+    publishDate: string;
+    category: string;
+    slug: string;
+  }>
+};
 ---
 
 <Layout title = "All Collections">
@@ -63,25 +74,5 @@ const { page } = Astro.props;
       </div>
     </div>
   </main>
-  <!--如果没有前一页也没有后一页，不显示该模块-->
-  {page.url.prev || page.url.next ? (
-    <div
-      class = "max-w-[1088px] mx-auto grid grid-cols-10 py-16 lg:py-40 border-t border-neutral-900 border-opacity-20"
-    >
-      <div class = "col-start-2 col-span-8 lg:col-start-3 lg:col-span-6 flex justify-between items-center">
-        <a
-          class = `${page.url.prev ? '' : 'opacity-0'}`
-          href = {page.url.prev}
-        >
-          ←&nbsp;Previous
-        </a>
-        <a
-          class = `${page.url.next ? '' : 'opacity-0'}`
-          href = {page.url.next}
-        >
-          Next&nbsp;→
-        </a>
-      </div>
-    </div>
-  ) : ''}
+  <Pagination page = {page} />
 </Layout>

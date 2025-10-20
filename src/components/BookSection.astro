@@ -1,7 +1,14 @@
 ---
 import {sanityClient} from "sanity:client";
 import {Image} from 'astro:assets'
-const booksData = await sanityClient.fetch(`
+type Book = {
+  title: string;
+  slug: string;
+  publishDate: string;
+  cover?: { url?: string | null } | null;
+};
+
+const booksData = await sanityClient.fetch<Book[]>(`
   *[_type == 'book'&& defined(slug) && defined(publishDate)] | order(publishDate desc){
     title,
     "slug": slug.current,
@@ -34,7 +41,7 @@ const booksData = await sanityClient.fetch(`
           <div
             class = "h-32 w-32 bg-neutral-100 flex items-center justify-center shrink-0"
           >
-            {book.cover && (
+            {book.cover?.url && (
               <Image
                 src = {book.cover.url}
                 alt = {book.title}
@@ -83,7 +90,7 @@ const booksData = await sanityClient.fetch(`
       threshold: 0.1
     };
 
-    const observer = new IntersectionObserver((entries, observer) => {
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
@@ -94,6 +101,10 @@ const booksData = await sanityClient.fetch(`
         }
       });
     }, options);
+
+    if (!container) {
+      return;
+    }
 
     observer.observe(container);
   }

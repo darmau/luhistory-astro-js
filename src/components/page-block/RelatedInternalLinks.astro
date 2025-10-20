@@ -1,5 +1,14 @@
 ---
-function generateLink(type, slug, url) {
+type LinkItem = {
+  type: string;
+  title: string;
+  slug?: string;
+  url?: string;
+} | null;
+
+type NonNullableLinkItem = Exclude<LinkItem, null>;
+
+function generateLink(type: string, slug?: string, url?: string) {
   switch (type) {
     case 'article':
       return `/collection/detail/${slug}`;
@@ -14,14 +23,22 @@ function generateLink(type, slug, url) {
   }
 }
 
-const {links, assets, title} = Astro.props;
+const {
+  links = [],
+  assets = [],
+  title,
+} = Astro.props as {
+  links?: LinkItem[];
+  assets?: LinkItem[];
+  title?: string;
+};
 
 // 将links和assets的非空元素合并成一个数组
-const mergedArray = links.reduce((result, link, index) => {
+const mergedArray = links.reduce<NonNullableLinkItem[]>((result, link, index) => {
   if (link !== null) {
     result.push(link);
-  } else if (assets[index] !== null) {
-    result.push(assets[index]);
+  } else if (assets[index] !== null && assets[index] !== undefined) {
+    result.push(assets[index] as NonNullableLinkItem);
   }
   return result;
 }, []);
