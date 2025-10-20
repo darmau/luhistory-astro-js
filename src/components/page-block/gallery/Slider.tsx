@@ -12,15 +12,7 @@ import Counter from "yet-another-react-lightbox/plugins/counter";
 import ArrowLeft from "../../react-icon/ArrowLeft.tsx";
 import ArrowRight from "../../react-icon/ArrowRight.tsx";
 import Close from "../../react-icon/Close.tsx";
-
-type GalleryImage = {
-  url: string;
-  caption?: string | null;
-};
-
-type GallerySliderProps = {
-  images: GalleryImage[];
-};
+import type { GallerySliderProps } from "@/types";
 
 export default function GallerySlider({ images }: GallerySliderProps) {
   const [open, setOpen] = React.useState(false);

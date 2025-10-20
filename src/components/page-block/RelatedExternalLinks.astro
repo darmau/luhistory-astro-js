@@ -1,9 +1,5 @@
 ---
-type ExternalLink = {
-  url: string;
-  title: string;
-  tag?: string | null;
-};
+import type { ExternalLink } from "@/types";
 
 const {links = []} = Astro.props as { links?: ExternalLink[] };
 ---

@@ -1,22 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
-
-type HoverImagePreviewProps = {
-  type: string;
-  slug: string;
-  title: string;
-  location: string;
-  imgUrl: string;
-};
-
-type ImageSize = {
-  width: number;
-  height: number;
-};
-
-type CursorPosition = {
-  x: number;
-  y: number;
-};
+import type { HoverImagePreviewProps, ImageSize, CursorPosition } from '@/types';
 
 const HoverImagePreview: React.FC<HoverImagePreviewProps> = ({ type, slug, title, location, imgUrl }) => {
   const [isHovering, setIsHovering] = useState<boolean>(false);

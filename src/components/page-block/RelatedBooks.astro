@@ -1,12 +1,6 @@
 ---
 import {Image} from 'astro:assets'
-
-type RelatedBook = {
-  title: string;
-  slug: string;
-  publishDate: string;
-  cover?: string | null;
-};
+import type { RelatedBook } from "@/types";
 
 function getYear(date: string) {
   return new Date(date).getFullYear()

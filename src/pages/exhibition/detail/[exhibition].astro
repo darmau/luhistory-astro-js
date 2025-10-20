@@ -6,20 +6,7 @@ import PageBlock from "../../../components/PageBlock.astro";
 import PageTitle from "../../../components/PageTitle.astro";
 import TextBlock from "../../../components/text-block/TextBlock.astro";
 import NextExhibition from "../../../components/order/NextExhibition.astro";
-
-type ExhibitionDetail = {
-  title: string;
-  slug: string;
-  subtitle?: string | null;
-  start: string;
-  end: string;
-  cover?: string | null;
-  curator?: string | null;
-  city?: string | null;
-  place?: string | null;
-  overview: unknown;
-  blocks?: Array<Record<string, unknown>>;
-};
+import type { ExhibitionDetail } from "@/types";
 
 export async function getStaticPaths() {
   const slugs = await sanityClient.fetch<ExhibitionDetail[]>(`*[_type == 'exhibition' && defined(slug) && defined(dateRange)] {

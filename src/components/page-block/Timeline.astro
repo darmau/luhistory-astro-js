@@ -1,17 +1,6 @@
 ---
 import { PortableText } from "astro-portabletext";
-import type { PortableTextBlock } from "@portabletext/types";
-
-type TimelineEndDate = {
-  present?: boolean;
-  endDate?: string;
-} | null;
-
-type TimelineRecord = {
-  startDate: string;
-  endDate: TimelineEndDate;
-  details: PortableTextBlock | PortableTextBlock[];
-};
+import type { TimelineEndDate, TimelineProps } from "@/types";
 
 function ifPresent(endDate: TimelineEndDate) {
   if (endDate?.present) {
@@ -23,10 +12,7 @@ function ifPresent(endDate: TimelineEndDate) {
   }
 }
 
-const {title, records = []} = Astro.props as {
-  title?: string;
-  records?: TimelineRecord[];
-};
+const {title, records = []} = Astro.props as TimelineProps;
 ---
 
 <div class = "col-span-8 my-4 lg:my-16">

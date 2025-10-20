@@ -3,21 +3,7 @@ import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Keyboard, Mousewheel } from "swiper/modules";
 import "swiper/css";
-
-type ExhibitionItem = {
-  title: string;
-  slug: string;
-  year: string;
-  city: string;
-  cover?: {
-    url: string;
-    caption?: string | null;
-  } | null;
-};
-
-type ExhibitionSliderProps = {
-  exhibitions: ExhibitionItem[];
-};
+import type { ExhibitionSliderProps } from "@/types";
 
 export default function ExhibitionSlider({ exhibitions }: ExhibitionSliderProps) {
   const [spaceBetween, setSpaceBetween] = useState(32);

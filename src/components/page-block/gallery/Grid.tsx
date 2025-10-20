@@ -8,16 +8,7 @@ import "yet-another-react-lightbox/plugins/counter.css";
 import ArrowLeft from "../../react-icon/ArrowLeft.tsx";
 import ArrowRight from "../../react-icon/ArrowRight.tsx";
 import Close from "../../react-icon/Close.tsx";
-
-type GalleryImage = {
-  url: string;
-  caption?: string | null;
-};
-
-type GalleryGridProps = {
-  title: string;
-  images: GalleryImage[];
-};
+import type { GalleryGridProps } from "@/types";
 
 export default function GalleryGrid({ title, images }: GalleryGridProps) {
   const [open, setOpen] = React.useState(false);

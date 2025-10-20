@@ -3,17 +3,7 @@ import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Keyboard, Mousewheel } from "swiper/modules";
 import "swiper/css";
-
-type LatestNewsItem = {
-  title: string;
-  subtitle?: string | null;
-  slug: string;
-  cover?: string | null;
-};
-
-type LatestNewsSliderProps = {
-  news: LatestNewsItem[];
-};
+import type { LatestNewsSliderProps } from "@/types";
 
 export default function LatestNewsSlider({ news }: LatestNewsSliderProps) {
   const [spaceBetween, setSpaceBetween] = useState(32);

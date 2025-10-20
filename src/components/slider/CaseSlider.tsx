@@ -3,16 +3,7 @@ import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Keyboard, Mousewheel } from "swiper/modules";
 import "swiper/css";
-
-type CaseItem = {
-  title: string;
-  slug: string;
-  cover?: string | null;
-};
-
-type CaseSliderProps = {
-  cases: CaseItem[];
-};
+import type { CaseSliderProps } from "@/types";
 
 export default function CaseSlider({ cases }: CaseSliderProps) {
   const [spaceBetween, setSpaceBetween] = useState(32);

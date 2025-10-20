@@ -6,32 +6,7 @@ import Timeline from "../../components/page-block/Timeline.astro";
 import RelatedInternalLinks
   from "../../components/page-block/RelatedInternalLinks.astro";
 import TextBlock from "../../components/text-block/TextBlock.astro";
-
-type TimelineRecord = Record<string, unknown>;
-
-type TeachingLink = {
-  type: string;
-  title: string;
-  slug: string;
-};
-
-type TeachingLinkEntry = TeachingLink | null;
-
-type TeachingAsset = {
-  title: string;
-  type: "file";
-  url: string;
-};
-
-type TeachingEntry = {
-  experience?: {
-    type: "timeline";
-    records: TimelineRecord[];
-  };
-  overview?: unknown[];
-  links: TeachingLinkEntry[];
-  assets: TeachingAsset[];
-};
+import type { TeachingEntry, TeachingLink, TeachingLinkEntry, TeachingAsset } from "@/types";
 
 const teachingData = await sanityClient.fetch<TeachingEntry[]>(`*[_type == 'teaching']{
   "experience": {

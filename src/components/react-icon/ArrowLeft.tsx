@@ -1,6 +1,5 @@
 import * as React from "react";
-
-type IconProps = React.SVGProps<SVGSVGElement>;
+import type { IconProps } from "@/types";
 
 const ArrowLeft = ({ width = 48, height = 48, ...props }: IconProps) => (
   <svg

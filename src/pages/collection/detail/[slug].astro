@@ -4,14 +4,7 @@ import Layout from "../../../layouts/Layout.astro";
 import PageTitle from "../../../components/PageTitle.astro";
 import TextBlock from "../../../components/text-block/TextBlock.astro";
 import NextArchive from "../../../components/order/NextArchive.astro";
-
-type ArticleDetail = {
-  title: string;
-  publishDate: string;
-  author?: string | null;
-  slug: string;
-  body: unknown;
-};
+import type { ArticleDetail } from "@/types";
 
 export async function getStaticPaths() {
   const data = await sanityClient.fetch<ArticleDetail[]>(`*[_type == 'article' && defined(slug) && defined(publishDate)] {
