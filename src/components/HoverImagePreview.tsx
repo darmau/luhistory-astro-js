@@ -49,7 +49,7 @@ const HoverImagePreview = ({ type, slug, title, location, imgUrl }) => {
   };
 
   const imageStyle = {
-    position: 'fixed',
+    position: 'fixed' as const,
     left: `${cursorPos.x + 16}px`,
     top: shouldDisplayAbove() ? `${cursorPos.y - imageSize.height}px` : `${cursorPos.y}px`,
     width: `${imageSize.width}px`,

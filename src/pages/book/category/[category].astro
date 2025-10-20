@@ -28,7 +28,16 @@ export async function getStaticPaths() {
   });
   return paths;
 }
-const {books, category} = Astro.props;
+const {books, category} = Astro.props as {
+  books: Array<{
+    title: string;
+    slug: string;
+    category: string;
+    publishDate: string;
+    cover?: string;
+  }>;
+  category: string;
+};
 const params = Astro.params;
 ---
 
