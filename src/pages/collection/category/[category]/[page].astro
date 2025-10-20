@@ -5,6 +5,7 @@ import Layout from "../../../../layouts/Layout.astro";
 import Category from "../../../../data/ArchiveCategory";
 import Pagination from "../../../../components/Pagination.astro";
 import type { Page, PaginateFunction } from "astro";
+import type { ArchiveCategory } from "../../../../types";
 
 type ArticleItem = {
   title: string;
@@ -13,10 +14,9 @@ type ArticleItem = {
   slug: string;
 };
 
-const categories = Category as Array<{ name: string; slug: string }>;
-
 export async function getStaticPaths({paginate}: { paginate: PaginateFunction }) {
-  const allCategory: string[] = categories.map((category) => category.slug);
+  const archiveCategories = Category as ArchiveCategory[];
+  const allCategory: string[] = archiveCategories.map((category) => category.slug);
   const allArticles = await sanityClient.fetch<ArticleItem[]>(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
     publishDate,
@@ -25,7 +25,7 @@ export async function getStaticPaths({paginate}: { paginate: PaginateFunction })
   }`);
   return allCategory.flatMap((category) => {
     // 根据入参slug在Category查询对应的name
-    const categoryEntry = categories.find((item) => item.slug === category);
+    const categoryEntry = archiveCategories.find((item) => item.slug === category);
     if (!categoryEntry) {
       return [];
     }
@@ -37,7 +37,8 @@ export async function getStaticPaths({paginate}: { paginate: PaginateFunction })
   })
 }
 
-const ArticleCategories = categories;
+const archiveCategories = Category as ArchiveCategory[];
+const ArticleCategories = archiveCategories;
 const { page } = Astro.props as { page: Page<ArticleItem> };
 const params = Astro.params as { category: string };
 ---

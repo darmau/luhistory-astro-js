@@ -68,3 +68,6 @@ export type {
   LinkItem,
   NonNullableLinkItem,
 } from "./links";
+
+// Category types
+export type { ArchiveCategory } from "./category";
