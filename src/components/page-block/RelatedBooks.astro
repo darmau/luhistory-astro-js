@@ -1,11 +1,18 @@
 ---
 import {Image} from 'astro:assets'
 
-function getYear(date) {
+type RelatedBook = {
+  title: string;
+  slug: string;
+  publishDate: string;
+  cover?: string | null;
+};
+
+function getYear(date: string) {
   return new Date(date).getFullYear()
 }
 
-const { books } = Astro.props;
+const { books = [] } = Astro.props as { books?: RelatedBook[] };
 ---
 
 <div class = "col-start-1 md:col-span-12 lg:col-span-6 my-4 lg:my-16">

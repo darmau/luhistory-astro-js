@@ -271,13 +271,18 @@ import searchIcon from "../assets/icons/search.svg";
         );
       }
 
-      const outsideClickHandler = (event) => {
+      const outsideClickHandler = (event: MouseEvent) => {
         const isHidden = searchForm.classList.contains("hidden");
         if (isHidden) {
           return;
         }
 
-        if (searchContainer && !searchContainer.contains(event.target)) {
+        const target = event.target;
+        if (
+          searchContainer &&
+          target instanceof Node &&
+          !searchContainer.contains(target)
+        ) {
           collapseSearchForm();
         }
       };

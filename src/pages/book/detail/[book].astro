@@ -6,8 +6,23 @@ import PageTitle from "../../../components/PageTitle.astro";
 import TextBlock from "../../../components/text-block/TextBlock.astro";
 import PageBlock from "../../../components/PageBlock.astro";
 
+type BookPathItem = {
+  slug: string;
+  title: string;
+  subtitle?: string | null;
+  overview: unknown;
+  category?: string | null;
+  publishDate: string;
+  publisher?: string | null;
+  purchaseLink?: string | null;
+  heroImage?: string | null;
+  cover?: string | null;
+  people?: Array<{name: string; title: string}>;
+  blocks?: Array<Record<string, unknown>>;
+};
+
 export async function getStaticPaths() {
-  const slugs = await sanityClient.fetch(`*[_type == 'book' && defined(slug) && defined(publishDate)] {
+  const slugs = await sanityClient.fetch<BookPathItem[]>(`*[_type == 'book' && defined(slug) && defined(publishDate)] {
     "slug": slug.current,
     title,
     subtitle,
@@ -80,7 +95,6 @@ const {
   title: string;
   subtitle?: string;
   cover: string;
-  category: string;
   publishDate: string;
   publisher?: string;
   people?: Array<{name: string; title: string}>;

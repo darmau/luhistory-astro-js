@@ -4,9 +4,9 @@ import Layout from "../../../layouts/Layout.astro";
 import PageTitle from "../../../components/PageTitle.astro";
 import Pagination from "../../../components/Pagination.astro";
 import Category from "../../../data/ArchiveCategory";
-import type { Page } from 'astro';
+import type { Page, PaginateFunction } from 'astro';
 
-export async function getStaticPaths({paginate}) {
+export async function getStaticPaths({paginate}: { paginate: PaginateFunction }) {
   const allArticles = await sanityClient.fetch(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
     publishDate,
@@ -16,7 +16,7 @@ export async function getStaticPaths({paginate}) {
   return paginate(allArticles, { pageSize: 10 });
 }
 
-const ArticleCategories = Category;
+const ArticleCategories = Category as Array<{ name: string; slug: string }>;
 const { page } = Astro.props as { 
   page: Page<{
     title: string;

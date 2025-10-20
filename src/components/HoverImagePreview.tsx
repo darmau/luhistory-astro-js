@@ -1,9 +1,27 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 
-const HoverImagePreview = ({ type, slug, title, location, imgUrl }) => {
-  const [isHovering, setIsHovering] = useState(false);
-  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+type HoverImagePreviewProps = {
+  type: string;
+  slug: string;
+  title: string;
+  location: string;
+  imgUrl: string;
+};
+
+type ImageSize = {
+  width: number;
+  height: number;
+};
+
+type CursorPosition = {
+  x: number;
+  y: number;
+};
+
+const HoverImagePreview: React.FC<HoverImagePreviewProps> = ({ type, slug, title, location, imgUrl }) => {
+  const [isHovering, setIsHovering] = useState<boolean>(false);
+  const [imageSize, setImageSize] = useState<ImageSize>({ width: 0, height: 0 });
+  const [cursorPos, setCursorPos] = useState<CursorPosition>({ x: 0, y: 0 });
 
   useEffect(() => {
     // 获取图片尺寸
@@ -25,7 +43,7 @@ const HoverImagePreview = ({ type, slug, title, location, imgUrl }) => {
     };
   }, [imgUrl]);
 
-  const handleMouseMove = (event) => {
+  const handleMouseMove = (event: React.MouseEvent<HTMLLIElement>) => {
     setCursorPos({
       x: event.clientX,
       y: event.clientY,
@@ -41,24 +59,19 @@ const HoverImagePreview = ({ type, slug, title, location, imgUrl }) => {
   };
 
   // 检查是否有足够空间显示图片
-  const shouldDisplayAbove = () => {
-    if (window.innerHeight - cursorPos.y < imageSize.height) {
-      return true; // 鼠标下方空间不足，显示在上方
-    }
-    return false; // 默认显示在下方
-  };
+  const shouldDisplayAbove = () => window.innerHeight - cursorPos.y < imageSize.height;
 
-  const imageStyle = {
-    position: 'fixed' as const,
+  const imageStyle: React.CSSProperties = useMemo(() => ({
+    position: 'fixed',
     left: `${cursorPos.x + 16}px`,
     top: shouldDisplayAbove() ? `${cursorPos.y - imageSize.height}px` : `${cursorPos.y}px`,
     width: `${imageSize.width}px`,
     height: `${imageSize.height}px`,
-    pointerEvents: 'none' as const, // 使用 'none' 字面量类型
+    pointerEvents: 'none',
     display: isHovering ? 'block' : 'none',
     transition: 'opacity 0.3s ease-in-out',
     zIndex: 9999,
-  };
+  }), [cursorPos.x, cursorPos.y, imageSize.height, imageSize.width, isHovering]);
 
   return (
       <li

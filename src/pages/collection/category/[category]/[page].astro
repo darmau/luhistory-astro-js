@@ -4,9 +4,20 @@ import PageTitle from "../../../../components/PageTitle.astro";
 import Layout from "../../../../layouts/Layout.astro";
 import Category from "../../../../data/ArchiveCategory";
 import Pagination from "../../../../components/Pagination.astro";
-export async function getStaticPaths({paginate}) {
-  const allCategory: string[] = Category.map((category: { name: string, slug: string }) => category.slug);
-  const allArticles = await sanityClient.fetch(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
+import type { Page, PaginateFunction } from "astro";
+
+type ArticleItem = {
+  title: string;
+  publishDate: string;
+  category: string;
+  slug: string;
+};
+
+const categories = Category as Array<{ name: string; slug: string }>;
+
+export async function getStaticPaths({paginate}: { paginate: PaginateFunction }) {
+  const allCategory: string[] = categories.map((category) => category.slug);
+  const allArticles = await sanityClient.fetch<ArticleItem[]>(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
     publishDate,
     category,
@@ -14,8 +25,11 @@ export async function getStaticPaths({paginate}) {
   }`);
   return allCategory.flatMap((category) => {
     // 根据入参slug在Category查询对应的name
-    const categoryName = Category.find((item) => item.slug === category).name;
-    const filteredArticles = allArticles.filter((article) => article.category == categoryName);
+    const categoryEntry = categories.find((item) => item.slug === category);
+    if (!categoryEntry) {
+      return [];
+    }
+    const filteredArticles = allArticles.filter((article) => article.category === categoryEntry.name);
     return paginate(filteredArticles, {
       params: {category},
       pageSize: 10,
@@ -23,9 +37,9 @@ export async function getStaticPaths({paginate}) {
   })
 }
 
-const ArticleCategories = Category;
-const { page } = Astro.props;
-const params = Astro.params;
+const ArticleCategories = categories;
+const { page } = Astro.props as { page: Page<ArticleItem> };
+const params = Astro.params as { category: string };
 ---
 
 <Layout title = {`${params.category.replace(/-/g, ' ')} - Collections`}>

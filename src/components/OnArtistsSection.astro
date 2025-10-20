@@ -2,7 +2,13 @@
 import {sanityClient} from "sanity:client";
 import CaseSlider from "./slider/CaseSlider.tsx"
 
-const casesData = await sanityClient.fetch(`
+type CaseSummary = {
+  title: string;
+  slug: string;
+  cover?: string | null;
+};
+
+const casesData = await sanityClient.fetch<CaseSummary[]>(`
 *[_type == "caseStudy" && defined(slug)] | order(publishDate) {
     title,
     "slug": slug.current,
@@ -80,6 +86,10 @@ const casesData = await sanityClient.fetch(`
         }
       });
     }, options);
+
+    if (!container) {
+      return;
+    }
 
     observer.observe(container);
   }

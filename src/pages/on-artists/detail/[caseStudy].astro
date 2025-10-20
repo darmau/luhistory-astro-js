@@ -8,7 +8,15 @@ import PageBlock from "../../../components/PageBlock.astro";
 import NextCase from "../../../components/order/NextCase.astro";
 
 export async function getStaticPaths() {
-  const slugs = await sanityClient.fetch(`*[_type == 'caseStudy' && defined(slug)] {
+  type CaseStudyPathItem = {
+    slug: string;
+    title: string;
+    cover?: string | null;
+    overview: unknown;
+    blocks: unknown;
+  };
+
+  const slugs = await sanityClient.fetch<CaseStudyPathItem[]>(`*[_type == 'caseStudy' && defined(slug)] {
     "slug": slug.current,
     title,
     publishDate,

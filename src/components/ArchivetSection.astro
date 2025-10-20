@@ -1,6 +1,12 @@
 ---
 import {sanityClient} from "sanity:client";
-const articlesData = await sanityClient.fetch(`
+type Article = {
+  title: string;
+  slug: string;
+  category: string;
+};
+
+const articlesData = await sanityClient.fetch<Article[]>(`
   *[_type == 'article' && defined(slug) && defined(category)] | order(publishDate desc){
     title,
     "slug": slug.current,
@@ -77,6 +83,10 @@ const articlesData = await sanityClient.fetch(`
         }
       });
     }, options);
+
+    if (!container) {
+      return;
+    }
 
     observer.observe(container);
   }

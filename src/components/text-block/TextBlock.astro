@@ -2,8 +2,33 @@
 import SingleImage from "./SingleImage.astro";
 import Gallery from "../page-block/Gallery.astro";
 import { PortableText } from "astro-portabletext";
+import type { PortableTextBlock } from "@portabletext/types";
 
-const { overview, title } = Astro.props;
+type BaseBlock = {
+  _type?: string;
+  [key: string]: unknown;
+};
+
+type GalleryBlock = BaseBlock & {
+  _type: "gallery";
+  type: string;
+  title?: string;
+  pictures?: Array<{ url: string; caption?: string | null }>;
+};
+
+type ImageBlock = BaseBlock & {
+  _type: "imageBlock";
+  type: string;
+  url: string;
+  caption?: string | null;
+};
+
+type PortableBlock = GalleryBlock | ImageBlock | BaseBlock;
+
+const { overview = [], title } = Astro.props as {
+  overview?: PortableBlock[];
+  title?: string;
+};
 ---
 
 <div class = "text-block-container mt-8 md:col-span-8 md:grid md:grid-cols-8 md:gap-4">
@@ -16,9 +41,10 @@ const { overview, title } = Astro.props;
     } else if (block._type === 'imageBlock') {
       return <SingleImage url={block.url} size={block.type} caption={block.caption} />
     } else {
+      const portableBlock = block as PortableTextBlock | PortableTextBlock[];
       return (
         <div class="col-span-8">
-          <PortableText value={block} />
+          <PortableText value={portableBlock} />
         </div>
       )
     }

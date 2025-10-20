@@ -4,7 +4,15 @@ import {sanityClient} from "sanity:client";
 import PageTitle from "../../components/PageTitle.astro";
 import HoverImagePreview from "../../components/HoverImagePreview.tsx";
 
-const exhibitionRawData = await sanityClient.fetch(`
+type ExhibitionSummary = {
+  title: string;
+  year: string;
+  city: string;
+  slug: string;
+  cover: string;
+};
+
+const exhibitionRawData = await sanityClient.fetch<ExhibitionSummary[]>(`
   *[_type == 'exhibition' && defined(dateRange)]|order(dateRange.startDate desc){
     title,
     "year": dateRange.startDate,
@@ -13,19 +21,22 @@ const exhibitionRawData = await sanityClient.fetch(`
     "cover": cover.asset->url
 }`);
 
-// 遍历exhibitions，将exhibitions中的每个元素，分别push进两个数组。如：exhibitionYears = [2019,
-// 2020]，exhibitionByYears = [[{}, {}, {}], [{}, {}, {}]]
-const exhibitionYears = [];
-const exhibitionByYears = [];
+const exhibitionByYear = new Map<string, ExhibitionSummary[]>();
+
 exhibitionRawData.forEach((exhibition) => {
   const year = exhibition.year.split("-")[0];
-  if (exhibitionYears.indexOf(year) === -1) {
-    exhibitionYears.push(year);
-    exhibitionByYears.push([exhibition]);
+  const existing = exhibitionByYear.get(year);
+  if (existing) {
+    existing.push(exhibition);
   } else {
-    exhibitionByYears[exhibitionYears.indexOf(year)].push(exhibition);
+    exhibitionByYear.set(year, [exhibition]);
   }
 });
+
+const groupedExhibitions = Array.from(exhibitionByYear.entries()).map(([year, exhibitions]) => ({
+  year,
+  exhibitions,
+}));
 
 ---
 <Layout title = "Exhibitions">
@@ -33,12 +44,12 @@ exhibitionRawData.forEach((exhibition) => {
   <main class="max-w-8xl mx-auto grid grid-cols-12 gap-8">
     <div class = "mb-40 col-start-1 col-span-12 space-y-12 p-4 sm:space-y-0 md:col-start-2 md:col-span-10 md:p-0">
       {
-        exhibitionYears.map((year) => (
+        groupedExhibitions.map(({year, exhibitions}) => (
           <div class = "sm:grid sm:grid-cols-10">
             <h2 class = "col-span-2 font-serif font-bold proportional-nums text-3xl tracking-wider sm:py-6">{year}</h2>
             <ul class="col-span-8 flex-1">
               {
-                exhibitionByYears[exhibitionYears.indexOf(year)].map((exhibition) => (
+                exhibitions.map((exhibition) => (
                   <HoverImagePreview
                     client:only="react"
                     title={exhibition.title}
