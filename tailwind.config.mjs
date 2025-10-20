@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 
-const defaultTheme = require('tailwindcss/defaultTheme')
+import defaultTheme from 'tailwindcss/defaultTheme'
+import colors from 'tailwindcss/colors'
+
 export default {
 	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
 	theme: {
@@ -20,6 +22,9 @@ export default {
 			'9xl': '7.5rem',
 		},
 		extend: {
+            colors: {
+                gray: colors.zinc,
+            },
 			fontFamily: {
 				'serif': ['Cormorant', ...defaultTheme.fontFamily.serif],
 				'sans': ['Inter', ...defaultTheme.fontFamily.sans],

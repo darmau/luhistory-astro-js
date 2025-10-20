@@ -10,25 +10,25 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/react": "^3.0.10",
-    "@astrojs/sitemap": "^3.1.1",
-    "@astrojs/tailwind": "^5.1.0",
-    "@sanity/astro": "^2.2.1",
-    "@sanity/client": "^6.15.3",
-    "@types/react": "^18.2.64",
-    "@types/react-dom": "^18.2.21",
-    "astro": "^4.4.15",
-    "astro-portabletext": "^0.9.6",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "sanity": "^3.32.0",
-    "sharp": "^0.33.5",
-    "swiper": "^11.0.7",
-    "tailwindcss": "^3.4.1",
-    "yet-another-react-lightbox": "^3.17.0"
+    "@astrojs/react": "^4.4.0",
+    "@astrojs/sitemap": "^3.6.0",
+    "@sanity/astro": "^3.2.10",
+    "@sanity/client": "^7.12.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "astro": "^5.14.6",
+    "astro-portabletext": "^0.11.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "sanity": "^4.10.3",
+    "sharp": "^0.34.4",
+    "swiper": "^12.0.2",
+    "tailwindcss": "^4.1.14",
+    "yet-another-react-lightbox": "^3.25.0"
   },
   "devDependencies": {
-    "@astrojs/partytown": "^2.1.4",
-    "@tailwindcss/typography": "^0.5.10"
+    "@tailwindcss/postcss": "^4.1.14",
+    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/vite": "^4.1.14"
   }
 }
