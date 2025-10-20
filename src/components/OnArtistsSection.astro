@@ -1,6 +1,5 @@
 ---
 import {sanityClient} from "sanity:client";
-import {Image} from 'astro:assets';
 import CaseSlider from "./slider/CaseSlider.tsx"
 
 const casesData = await sanityClient.fetch(`
@@ -70,7 +69,7 @@ const casesData = await sanityClient.fetch(`
       threshold: 0.1
     };
 
-    const observer = new IntersectionObserver((entries, observer) => {
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');

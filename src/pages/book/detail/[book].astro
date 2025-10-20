@@ -43,7 +43,7 @@ export async function getStaticPaths() {
       }
     }
   }`);
-  const paths = await slugs.map((book) => {
+  const paths = slugs.map((book) => {
     return {
       params: {
         book: book.slug,
@@ -52,7 +52,6 @@ export async function getStaticPaths() {
         title: book.title,
         subtitle: book.subtitle,
         cover: book.cover,
-        category: book.category,
         publishDate: book.publishDate,
         publisher: book.publisher,
         people: book.people,
@@ -70,7 +69,6 @@ const {
   title,
   subtitle,
   cover,
-  category,
   publishDate,
   publisher,
   people,
@@ -86,17 +84,17 @@ const {
   publishDate: string;
   publisher?: string;
   people?: Array<{name: string; title: string}>;
-  overview: any;
+  overview: unknown;
   heroImage?: string;
   purchaseLink?: string;
-  blocks?: any[];
+  blocks?: Array<Record<string, unknown>>;
 }
 ---
 <Layout title = {title}>
   <PageTitle
     title = {title}
     subtitle = {subtitle}
-    bgWhite = {!Boolean(heroImage)}
+    bgWhite = {!heroImage}
     remoteUrl = {heroImage}
   />
   <div class = "p-4 mt-8 flex flex-col gap-8 8xl:p-0 lg:max-w-8xl lg:mx-auto lg:grid lg:grid-cols-12 mb-24">

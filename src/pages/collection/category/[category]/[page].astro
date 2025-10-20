@@ -23,13 +23,8 @@ export async function getStaticPaths({paginate}) {
   })
 }
 
-// 转换成大写
-function toUppercase(str) {
-  return str.replace(/-/g, ' ').toUpperCase();
-}
-
 const ArticleCategories = Category;
-const {category, page} = Astro.props;
+const { page } = Astro.props;
 const params = Astro.params;
 ---
 

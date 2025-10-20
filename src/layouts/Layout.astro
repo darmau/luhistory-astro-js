@@ -24,8 +24,8 @@ const { title, description } = Astro.props;
     ></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
+      function gtag(...args) {
+        dataLayer.push(...args);
       }
       gtag("js", new Date());
       gtag("config", "G-F393GEHV22", { send_page_view: false });
