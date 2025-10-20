@@ -3,6 +3,7 @@ import {sanityClient} from "sanity:client";
 import PageTitle from "../../../../components/PageTitle.astro";
 import Layout from "../../../../layouts/Layout.astro";
 import Category from "../../../../data/ArchiveCategory";
+import Pagination from "../../../../components/Pagination.astro";
 export async function getStaticPaths({paginate}) {
   const allCategory: string[] = Category.map((category: { name: string, slug: string }) => category.slug);
   const allArticles = await sanityClient.fetch(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
@@ -83,23 +84,5 @@ const params = Astro.params;
       </div>
     </div>
   </main>
-  <!--如果没有前一页也没有后一页，不显示该模块-->
-  {page.url.prev || page.url.next ? (
-    <div class = "max-w-[1088px] mx-auto grid grid-cols-10 py-40 border-t border-neutral-900 border-opacity-20">
-      <div class = "col-start-2 col-span-8 lg:col-start-3 lg:col-span-6 flex justify-between items-center">
-        <a
-          class = `${page.url.prev ? '' : 'opacity-0'}`
-          href = {page.url.prev}
-        >
-          ←&nbsp;Previous
-        </a>
-        <a
-          class = `${page.url.next ? '' : 'opacity-0'}`
-          href = {page.url.next}
-        >
-          Next&nbsp;→
-        </a>
-      </div>
-    </div>
-  ) : ''}
+  <Pagination page = {page} paddingClass = "py-40" />
 </Layout>

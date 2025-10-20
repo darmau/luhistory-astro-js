@@ -1,0 +1,103 @@
+---
+import type { Page } from 'astro';
+
+interface Props {
+  page: Page<unknown>;
+  anchor?: string;
+  paddingClass?: string;
+}
+
+const {
+  page,
+  anchor,
+  paddingClass = 'py-16 lg:py-40',
+} = Astro.props as Props;
+
+const totalPages = page.lastPage ?? 0;
+const currentPage = page.currentPage ?? 1;
+const hasPrev = Boolean(page.url.prev);
+const hasNext = Boolean(page.url.next);
+const shouldRender = totalPages > 1 || hasPrev || hasNext;
+
+const anchorFragment = anchor
+  ? anchor.startsWith('#')
+    ? anchor
+    : `#${anchor}`
+  : '';
+
+const currentPathname = page.url.current ?? Astro.url?.pathname ?? '/';
+const trailingSlash = currentPathname.endsWith('/');
+const pathWithoutTrailingSlash = trailingSlash ? currentPathname.slice(0, -1) : currentPathname;
+const basePath = pathWithoutTrailingSlash.replace(/\/\d+$/, '');
+const normalizedBasePath = basePath !== '/' && basePath.endsWith('/')
+  ? basePath.slice(0, -1)
+  : basePath;
+
+const pageNumbers = new Set<number>();
+if (totalPages > 0) {
+  pageNumbers.add(1);
+  pageNumbers.add(totalPages);
+  for (let i = currentPage - 2; i <= currentPage + 2; i++) {
+    if (i >= 1 && i <= totalPages) {
+      pageNumbers.add(i);
+    }
+  }
+}
+
+const numbers = Array.from(pageNumbers).sort((a, b) => a - b);
+const segments: Array<number | 'ellipsis'> = [];
+for (let index = 0; index < numbers.length; index++) {
+  const value = numbers[index];
+  if (index > 0 && value - numbers[index - 1] > 1) {
+    segments.push('ellipsis');
+  }
+  segments.push(value);
+}
+
+const buildLink = (pageNumber: number) => {
+  const base = normalizedBasePath.endsWith('/')
+    ? normalizedBasePath.slice(0, -1)
+    : normalizedBasePath;
+  const prefix = base === '' ? '' : base === '/' ? '' : base;
+  let path = `${prefix}/${pageNumber}`;
+  if (!path.startsWith('/')) {
+    path = `/${path.replace(/^\/+/, '')}`;
+  }
+  const withSlash = trailingSlash ? `${path}/` : path;
+  return `${withSlash}${anchorFragment}`;
+};
+---
+{shouldRender ? (
+  <div class={`max-w-[1088px] mx-auto grid grid-cols-10 border-t border-neutral-900 border-opacity-20 ${paddingClass}`}>
+    <div class="col-start-2 col-span-8 lg:col-start-3 lg:col-span-8 flex flex-wrap items-center justify-between gap-4 md:gap-6">
+      <a
+        class={`transition-opacity ${hasPrev ? '' : 'pointer-events-none opacity-0'}`}
+        href={hasPrev ? `${page.url.prev}${anchorFragment}` : undefined}
+      >
+        ←&nbsp;Previous
+      </a>
+      <nav class="hidden md:flex flex-1 flex-wrap items-center justify-center gap-2 text-xs tracking-wider uppercase max-w-full md:flex-none md:flex-nowrap">
+        {segments.map((segment) => (
+          segment === 'ellipsis' ? (
+            <span class="px-3 py-1 text-neutral-400 select-none">
+              ...
+            </span>
+          ) : (
+            <a
+              class={`px-3 py-1 border border-transparent transition-colors ${segment === currentPage ? 'border-neutral-900 text-neutral-900' : 'text-neutral-500 hover:text-neutral-900'}`}
+              href={buildLink(segment)}
+            >
+              {segment}
+            </a>
+          )
+        ))}
+      </nav>
+      <a
+        class={`transition-opacity ${hasNext ? '' : 'pointer-events-none opacity-0'}`}
+        href={hasNext ? `${page.url.next}${anchorFragment}` : undefined}
+      >
+        Next&nbsp;→
+      </a>
+    </div>
+  </div>
+) : ''}
