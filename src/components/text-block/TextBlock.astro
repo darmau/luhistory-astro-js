@@ -1,18 +1,82 @@
 ---
 import SingleImage from "./SingleImage.astro";
 import Gallery from "../page-block/Gallery.astro";
+import FootnoteContent from "./FootnoteContent.astro";
+import SubscriptMark from "./SubscriptMark.astro";
 import { PortableText } from "astro-portabletext";
 import type { PortableTextBlock } from "@portabletext/types";
 import type { TextBlockProps } from "@/types";
 
 const { overview = [], title } = Astro.props as TextBlockProps;
+
+// 收集所有注释
+const footnotes: Array<{ note: string; id: string; index: number }> = [];
+let footnoteIndex = 1;
+
+// 处理PortableText中的注释
+const processPortableText = (blocks: any[]) => {
+  return blocks.map((block) => {
+    if (block._type === 'block' && block.markDefs) {
+      // 处理markDefs中的注释
+      block.markDefs.forEach((markDef: any) => {
+        if (markDef._type === 'subscript' && markDef.note) {
+          const id = markDef._key;
+          footnotes.push({
+            note: markDef.note,
+            id: id,
+            index: footnoteIndex++
+          });
+        }
+      });
+    }
+    return block;
+  });
+};
+
+// 处理所有块中的注释
+const processedOverview = overview && overview.length > 0 ? overview.map((block: any) => {
+  if (block._type === 'block' && block.body) {
+    return {
+      ...block,
+      body: processPortableText(block.body)
+    };
+  }
+  return block;
+}) : [];
+
+// 如果没有body，直接处理overview中的注释
+if (overview && overview.length > 0) {
+  overview.forEach((block: any) => {
+    if (block._type === 'block' && block.markDefs) {
+      block.markDefs.forEach((markDef: any) => {
+        if (markDef._type === 'subscript' && markDef.note) {
+          const id = markDef._key;
+          footnotes.push({
+            note: markDef.note,
+            id: id,
+            index: footnoteIndex++
+          });
+        }
+      });
+    }
+  });
+}
+
+// 建立全局注释映射与索引（供自定义 mark 组件读取）
+if (typeof globalThis !== 'undefined') {
+  const map: Record<string, { index: number; note: string }> = {};
+  for (const f of footnotes) {
+    map[f.id] = { index: f.index, note: f.note };
+  }
+  (globalThis as any).__footnoteMap = map;
+}
 ---
 
 <div class = "text-block-container mt-8 md:col-span-8 md:grid md:grid-cols-8 md:gap-4">
   {title && (
     <h2 class = "col-span-8 font-serif font-bold text-4xl md:text-6xl text-neutral-900 mb-8 md:mb-16">{title}</h2>
   )}
-  { overview && overview.map((block) => {
+  { processedOverview && processedOverview.length > 0 && processedOverview.map((block) => {
     if (block._type === 'gallery') {
       return <Gallery gallery={block.type} title={block.title} images={block.pictures} />
     } else if (block._type === 'imageBlock') {
@@ -21,11 +85,36 @@ const { overview = [], title } = Astro.props as TextBlockProps;
       const portableBlock = block as PortableTextBlock | PortableTextBlock[];
       return (
         <div class="col-span-8">
-          <PortableText value={portableBlock} />
+          <PortableText 
+            value={portableBlock}
+            components={{
+              mark: {
+                // use custom renderer for subscript marks
+                subscript: SubscriptMark as any,
+              }
+            }}
+          />
         </div>
       )
     }
   })}
+  
+  <!-- 注释内容区域 -->
+  {footnotes.length > 0 && (
+    <div class="col-span-8 footnotes-section">
+      <hr class="footnotes-divider" />
+      <h3 class="footnotes-title">注释</h3>
+      <div class="footnotes-list">
+        {footnotes.map((footnote) => (
+          <FootnoteContent 
+            note={footnote.note} 
+            index={footnote.index} 
+            id={footnote.id} 
+          />
+        ))}
+      </div>
+    </div>
+  )}
 </div>
 
 <style is:global>
@@ -125,5 +214,32 @@ const { overview = [], title } = Astro.props as TextBlockProps;
     font-size: 20px;
     line-height: 36px;
     color: #171717;
+  }
+
+  /* 注释区域样式 */
+  .footnotes-section {
+    margin-top: 48px;
+    padding-top: 24px;
+  }
+
+  .footnotes-divider {
+    border: none;
+    border-top: 1px solid #666666;
+    margin-bottom: 24px;
+  }
+
+  .footnotes-title {
+    font-family: 'Cormorant', serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+    color: #171717;
+    margin-bottom: 8px;
+  }
+
+  .footnotes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 </style>
