@@ -1,0 +1,49 @@
+---
+export interface Props {
+  node: any;
+  children: any[];
+}
+
+const { node } = Astro.props;
+
+const markKey: string | undefined = node?.markKey || node?._key;
+const mapping = (globalThis as any)?.__footnoteMap as Record<string, { index: number; note: string }> | undefined;
+const index = markKey && mapping ? mapping[markKey]?.index : undefined;
+---
+
+<span class="subscript-mark">
+  <slot />
+  {typeof index === 'number' && (
+    <sup>
+      <a
+        href={`#footnote-${markKey}`}
+        class="footnote-link"
+        id={`footnote-ref-${markKey}`}
+      >
+        {index}
+      </a>
+    </sup>
+  )}
+</span>
+
+<style>
+  .subscript-mark {
+    position: relative;
+    display: inline;
+  }
+
+  .footnote-link {
+    color: #171717;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0 2px;
+    border-radius: 2px;
+    transition: all 0.2s ease;
+    margin-left: 0;
+  }
+
+  .footnote-link:hover {
+    background-color: #f5f5f5;
+    text-decoration: underline;
+  }
+</style>

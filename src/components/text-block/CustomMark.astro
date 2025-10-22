@@ -1,0 +1,77 @@
+---
+export interface Props {
+  markType: string;
+  children: any[];
+  node: any;
+}
+
+const { markType, children, node } = Astro.props;
+---
+
+{markType === 'subscript' && node.note ? (
+  <span class="subscript-mark">
+    {children}
+    <sup>
+      <a 
+        href={`#footnote-${node._key}`} 
+        class="footnote-link"
+        id={`footnote-ref-${node._key}`}
+      >
+        1
+      </a>
+    </sup>
+  </span>
+) : markType === 'subscript' ? (
+  <span class="subscript-text">{children}</span>
+) : (
+  <span class={`mark-${markType}`}>{children}</span>
+)}
+
+<style>
+  .subscript-mark {
+    position: relative;
+  }
+  
+  .footnote-link {
+    color: #171717;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 2px 4px;
+    border-radius: 2px;
+    transition: all 0.2s ease;
+    margin-left: 2px;
+  }
+  
+  .footnote-link:hover {
+    background-color: #f5f5f5;
+    text-decoration: underline;
+  }
+  
+  .subscript-text {
+    font-size: 0.8em;
+    vertical-align: sub;
+  }
+  
+  .mark-strong {
+    font-weight: bold;
+  }
+  
+  .mark-em {
+    font-style: italic;
+  }
+  
+  .mark-code {
+    font-family: monospace;
+    background-color: #f5f5f5;
+    padding: 2px 4px;
+    border-radius: 2px;
+  }
+  
+  .mark-underline {
+    text-decoration: underline;
+  }
+  
+  .mark-strike-through {
+    text-decoration: line-through;
+  }
+</style>

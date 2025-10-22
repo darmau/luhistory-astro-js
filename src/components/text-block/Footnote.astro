@@ -1,0 +1,35 @@
+---
+export interface Props {
+  note: string;
+  index: number;
+  id: string;
+}
+
+const { index, id } = Astro.props;
+---
+
+<sup>
+  <a 
+    href={`#footnote-${id}`} 
+    class="footnote-link"
+    id={`footnote-ref-${id}`}
+  >
+    {index}
+  </a>
+</sup>
+
+<style>
+  .footnote-link {
+    color: #171717;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 2px 4px;
+    border-radius: 2px;
+    transition: all 0.2s ease;
+  }
+  
+  .footnote-link:hover {
+    background-color: #f5f5f5;
+    text-decoration: underline;
+  }
+</style>
