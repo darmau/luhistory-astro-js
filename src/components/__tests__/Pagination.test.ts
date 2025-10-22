@@ -1,6 +1,6 @@
 import type { Page } from 'astro';
 import { describe, expect, it } from 'vitest';
-import { computePagination } from '../paginationModel';
+import { computePagination } from '../../functions/pagination';
 
 type PageOverrides = {
   currentPage?: number;
