@@ -81,6 +81,12 @@ if (typeof globalThis !== 'undefined') {
       return <Gallery gallery={block.type} title={block.title} images={block.pictures} />
     } else if (block._type === 'imageBlock') {
       return <SingleImage url={block.url} size={block.type} caption={block.caption} />
+    } else if (block._type === 'videoEmbed') {
+      return (
+        <div class="col-span-8 video-embed-container">
+          <div class="video-embed" set:html={block.embedCode} />
+        </div>
+      )
     } else {
       const portableBlock = block as PortableTextBlock | PortableTextBlock[];
       return (
@@ -241,5 +247,27 @@ if (typeof globalThis !== 'undefined') {
     display: flex;
     flex-direction: column;
     gap: 8px;
+  }
+
+  /* 视频嵌入样式 */
+  .video-embed-container {
+    margin: 24px 0;
+  }
+
+  .video-embed {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 宽高比 */
+    overflow: hidden;
+  }
+
+  .video-embed iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
   }
 </style>
