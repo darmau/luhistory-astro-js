@@ -5,6 +5,7 @@
 
 import type { Page } from "astro";
 import type { GalleryImage } from "./gallery";
+import type { PortableBlock } from "./blocks";
 
 // Slider component props
 export type CaseItem = {
@@ -89,6 +90,6 @@ export type GalleryProps = {
 
 // TextBlock component
 export type TextBlockProps = {
-  overview?: unknown[];
+  overview?: PortableBlock[];
   title?: string;
 };

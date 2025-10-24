@@ -14,7 +14,7 @@ const footnotes: Array<{ note: string; id: string; index: number }> = [];
 let footnoteIndex = 1;
 
 // 处理PortableText中的注释
-const processPortableText = (blocks: any[]) => {
+const processPortableText = (blocks: PortableTextBlock[]) => {
   return blocks.map((block) => {
     if (block._type === 'block' && block.markDefs) {
       // 处理markDefs中的注释
