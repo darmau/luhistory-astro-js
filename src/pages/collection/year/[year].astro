@@ -171,11 +171,11 @@ const hiddenYears = allYears.slice(8);
   </main>
 </Layout>
 
-<script>
+<script is:inline>
   document.addEventListener('DOMContentLoaded', function() {
     console.log('Year page script loaded');
-    const toggleButton = document.getElementById('toggle-years') as HTMLButtonElement;
-    const hiddenYears = document.querySelectorAll('.hidden-years') as NodeListOf<HTMLElement>;
+    const toggleButton = document.getElementById('toggle-years');
+    const hiddenYears = document.querySelectorAll('.hidden-years');
     
     console.log('Toggle button found:', !!toggleButton);
     console.log('Hidden years found:', hiddenYears.length);
@@ -188,12 +188,16 @@ const hiddenYears = allYears.slice(8);
       toggleButton.addEventListener('click', function() {
         console.log('Toggle button clicked, isExpanded:', isExpanded);
         if (isExpanded) {
-          hiddenYears.forEach(year => year.style.display = 'none');
+          hiddenYears.forEach(function(year) {
+            year.style.display = 'none';
+          });
           toggleButton.textContent = 'Show All Years';
           isExpanded = false;
           console.log('Years hidden');
         } else {
-          hiddenYears.forEach(year => year.style.display = 'block');
+          hiddenYears.forEach(function(year) {
+            year.style.display = 'block';
+          });
           toggleButton.textContent = 'Hide Years';
           isExpanded = true;
           console.log('Years shown');
