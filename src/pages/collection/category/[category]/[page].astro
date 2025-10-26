@@ -75,7 +75,7 @@ const params = Astro.params as { category: string };
         ArticleCategories.map((category) => {
           return (
             <li
-              class={`${category.slug === params.category ? "text-neutral-900" : "text-neutral-900 opacity-50"} uppercase text-sm tracking-wider hover:opacity-100`}
+              class={`${category.slug === params.category ? "text-neutral-900 font-bold" : "text-neutral-900 opacity-50"} uppercase text-sm tracking-wider hover:opacity-100`}
             >
               <a
                 href={`/collection/category/${category.slug}/1#main-content`}

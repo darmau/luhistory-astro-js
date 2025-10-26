@@ -1,0 +1,195 @@
+---
+import { sanityClient } from "sanity:client";
+import PageTitle from "@/components/PageTitle.astro";
+import Layout from "@/layouts/Layout.astro";
+
+type ArticleItem = {
+  title: string;
+  publishDate: string;
+  category: string;
+  slug: string;
+};
+
+export async function getStaticPaths() {
+  // 获取所有有发布日期的文章
+  const allArticles = await sanityClient.fetch<ArticleItem[]>(
+    `*[_type == 'article' && defined(category) && defined(slug) && defined(publishDate)] | order(publishDate desc) {
+      title,
+      publishDate,
+      category,
+      "slug": slug.current,
+    }`,
+  );
+
+  // 提取所有年份
+  const years = [
+    ...new Set(
+      allArticles.map((article) =>
+        new Date(article.publishDate).getFullYear().toString(),
+      ),
+    ),
+  ].sort((a, b) => parseInt(b) - parseInt(a));
+
+  return years.map((year) => ({
+    params: { year },
+    props: { year },
+  }));
+}
+
+const { year } = Astro.props as { year: string };
+
+// 根据年份查询文章
+const articles = await sanityClient.fetch<ArticleItem[]>(
+  `*[
+    _type == 'article' && 
+    defined(slug) && 
+    defined(category) &&
+    defined(publishDate) &&
+    publishDate >= "${year}-01-01" &&
+    publishDate <= "${year}-12-31"
+  ] | order(publishDate desc) {
+    title,
+    publishDate,
+    category,
+    "slug": slug.current,
+  }`,
+);
+
+// 获取所有可用年份及其文章数量用于导航
+const allYearsData = await sanityClient.fetch<{ publishDate: string }[]>(
+  `*[_type == 'article' && defined(publishDate)] { publishDate }`,
+);
+
+// 按年份分组并计算数量
+const yearCounts = allYearsData.reduce(
+  (acc, item) => {
+    const publishDate = item.publishDate;
+    if (publishDate) {
+      const year = new Date(publishDate).getFullYear().toString();
+      if (!isNaN(parseInt(year))) {
+        acc[year] = (acc[year] || 0) + 1;
+      }
+    }
+    return acc;
+  },
+  {} as Record<string, number>,
+);
+
+const allYears = Object.keys(yearCounts)
+  .sort((a, b) => parseInt(b) - parseInt(a))
+  .map((year) => ({ year, count: yearCounts[year] }));
+
+// 分离显示和隐藏的年份
+const recentYears = allYears.slice(0, 8);
+const hiddenYears = allYears.slice(8);
+---
+
+<Layout title={`${year} - Collections`}>
+  <PageTitle
+    title="Collection"
+    localImg="/images/archive-cover.jpg"
+    bgWhite="false"
+  />
+  <main
+    id="main-content"
+    class="max-w-8xl mx-auto px-4 flex flex-col gap-8 8xl:px-0 lg:grid lg:grid-cols-12 py-8 lg:py-16 mb-12 md:mb-24"
+  >
+    <div class="col-span-12 lg:col-span-2">
+      <ul class="flex gap-4 flex-wrap lg:flex-col">
+        <li
+          class="text-sm text-neutral-900 tracking-wider opacity-50 hover:opacity-100"
+        >
+          <a href={`/collection/all/1#main-content`} data-astro-prefetch>YEAR</a>
+        </li>
+        {
+          recentYears.map(({ year: yearOption, count }) => {
+            return (
+              <li
+                class={`${yearOption === year ? "text-neutral-900 font-bold" : "text-neutral-900 opacity-50"} uppercase text-sm tracking-wider hover:opacity-100`}
+              >
+                <a
+                  href={`/collection/year/${yearOption}#main-content`}
+                  data-astro-prefetch
+                >
+                  {yearOption} ({count})
+                </a>
+              </li>
+            );
+          })
+        }
+        {
+          hiddenYears.map(({ year: yearOption, count }) => {
+            return (
+              <li
+                class={`hidden-years ${yearOption === year ? "text-neutral-900 font-bold" : "text-neutral-900 opacity-50"} uppercase text-sm tracking-wider hover:opacity-100`}
+                style="display: none;"
+              >
+                <a
+                  href={`/collection/year/${yearOption}#main-content`}
+                  data-astro-prefetch
+                >
+                  {yearOption} ({count})
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+      {
+        hiddenYears.length > 0 && (
+          <button 
+            id="toggle-years" 
+            class="text-sm text-neutral-900 opacity-50 tracking-wider hover:opacity-100 mt-4 uppercase cursor-pointer"
+          >
+            Show All Years
+          </button>
+        )
+      }
+    </div>
+    <div
+      class="col-span-12 lg:col-start-4 col-end-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+    >
+      <div class="space-y-8 col-span-8">
+        {
+          articles.map((article) => {
+            return (
+              <article>
+                <a href={`/collection/detail/${article.slug}`}>
+                  <h2 class="font-serif font-bold text-2xl md:text-3xl text-neutral-900 mb-0 md:mb-2">
+                    {article.title}
+                  </h2>
+                  <small class="text-sm md:text-base text-neutral-900 opacity-50">
+                    {article.category}
+                  </small>
+                </a>
+              </article>
+            );
+          })
+        }
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggleButton = document.getElementById('toggle-years') as HTMLButtonElement;
+    const hiddenYears = document.querySelectorAll('.hidden-years') as NodeListOf<HTMLElement>;
+    
+    if (toggleButton && hiddenYears.length > 0) {
+      let isExpanded = false;
+      
+      toggleButton.addEventListener('click', function() {
+        if (isExpanded) {
+          hiddenYears.forEach(year => year.style.display = 'none');
+          toggleButton.textContent = 'Show All Years';
+          isExpanded = false;
+        } else {
+          hiddenYears.forEach(year => year.style.display = 'block');
+          toggleButton.textContent = 'Hide Years';
+          isExpanded = true;
+        }
+      });
+    }
+  });
+</script>
