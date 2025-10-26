@@ -8,7 +8,7 @@ import type { Page, PaginateFunction } from 'astro';
 import type { ArchiveCategory } from "../../../types";
 
 export async function getStaticPaths({paginate}: { paginate: PaginateFunction }) {
-  const allArticles = await sanityClient.fetch(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
+  const allArticles = await sanityClient.fetch(`*[_type == 'article' && isDisplay == true && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
     publishDate,
     category,
