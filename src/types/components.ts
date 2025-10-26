@@ -6,6 +6,7 @@
 import type { Page } from "astro";
 import type { GalleryImage } from "./gallery";
 import type { PortableBlock } from "./blocks";
+import type { PortableTextBlock } from "@portabletext/types";
 
 // Slider component props
 export type CaseItem = {
@@ -77,7 +78,7 @@ export type TimelineProps = {
       present?: boolean;
       endDate?: string;
     } | null;
-    details: unknown;
+    details: PortableTextBlock | PortableTextBlock[];
   }>;
 };
 

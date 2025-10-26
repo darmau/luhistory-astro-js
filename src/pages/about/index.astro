@@ -1,9 +1,9 @@
 ---
 import {sanityClient} from "sanity:client";
-import PageTitle from "../../components/PageTitle.astro";
-import Layout from "../../layouts/Layout.astro";
-import TextBlock from "../../components/text-block/TextBlock.astro";
-import PageBlock from "../../components/PageBlock.astro";
+import PageTitle from "@/components/PageTitle.astro";
+import Layout from "@/layouts/Layout.astro";
+import TextBlock from "@/components/text-block/TextBlock.astro";
+import PageBlock from "@/components/PageBlock.astro";
 const profileData = await sanityClient.fetch(`*[_type == 'profile' ]{
   "cvLink": cvLink.asset->url,
   "overview": overview[] {

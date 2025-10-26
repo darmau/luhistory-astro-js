@@ -1,14 +1,14 @@
 ---
 import {sanityClient} from "sanity:client";
-import Layout from "../../../layouts/Layout.astro";
-import PageTitle from "../../../components/PageTitle.astro";
-import Pagination from "../../../components/Pagination.astro";
-import Category from "../../../data/ArchiveCategory";
+import Layout from "@/layouts/Layout.astro";
+import PageTitle from "@/components/PageTitle.astro";
+import Pagination from "@/components/Pagination.astro";
+import Category from "@/data/ArchiveCategory";
 import type { Page, PaginateFunction } from 'astro';
-import type { ArchiveCategory } from "../../../types";
+import type { ArchiveCategory } from "@/types";
 
 export async function getStaticPaths({paginate}: { paginate: PaginateFunction }) {
-  const allArticles = await sanityClient.fetch(`*[_type == 'article' && isDisplay == true && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
+  const allArticles = await sanityClient.fetch(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
     publishDate,
     category,

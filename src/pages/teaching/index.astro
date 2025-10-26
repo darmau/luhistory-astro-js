@@ -1,11 +1,11 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import PageTitle from "../../components/PageTitle.astro";
+import Layout from "@/layouts/Layout.astro";
+import PageTitle from "@/components/PageTitle.astro";
 import {sanityClient} from "sanity:client";
-import Timeline from "../../components/page-block/Timeline.astro";
+import Timeline from "@/components/page-block/Timeline.astro";
 import RelatedInternalLinks
-  from "../../components/page-block/RelatedInternalLinks.astro";
-import TextBlock from "../../components/text-block/TextBlock.astro";
+  from "@/components/page-block/RelatedInternalLinks.astro";
+import TextBlock from "@/components/text-block/TextBlock.astro";
 import type { TeachingEntry, TeachingLink, TeachingLinkEntry, TeachingAsset } from "@/types";
 
 const teachingData = await sanityClient.fetch<TeachingEntry[]>(`*[_type == 'teaching']{

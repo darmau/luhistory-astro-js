@@ -1,11 +1,11 @@
 ---
 import {sanityClient} from "sanity:client";
-import Layout from "../../../layouts/Layout.astro";
+import Layout from "@/layouts/Layout.astro";
 import {Image} from 'astro:assets'
-import PageBlock from "../../../components/PageBlock.astro";
-import PageTitle from "../../../components/PageTitle.astro";
-import TextBlock from "../../../components/text-block/TextBlock.astro";
-import NextExhibition from "../../../components/order/NextExhibition.astro";
+import PageBlock from "@/components/PageBlock.astro";
+import PageTitle from "@/components/PageTitle.astro";
+import TextBlock from "@/components/text-block/TextBlock.astro";
+import NextExhibition from "@/components/order/NextExhibition.astro";
 import type { ExhibitionDetail } from "@/types";
 
 export async function getStaticPaths() {
