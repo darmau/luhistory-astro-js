@@ -16,7 +16,7 @@ This repository powers [LuHistory.com](https://luhistory.com), the official site
 | Layer | Details |
 | --- | --- |
 | Framework | [Astro 5](https://astro.build) with `@astrojs/react`, `@astrojs/sitemap`, and prefetching enabled |
-| CMS | [Sanity](https://www.sanity.io/) dataset `aemgaomh/production` via `@sanity/astro` |
+| CMS | [Sanity](https://www.sanity.io/) dataset via `@sanity/astro` |
 | Styling | Tailwind CSS v4 plugin + custom fonts loaded in `Layout.astro` |
 | UI | Astro components plus React islands (Swiper, Yet-Another-React-Lightbox, custom hover previews) |
 | Tooling | pnpm, TypeScript, ESLint, Vitest, Sharp image service |
@@ -38,24 +38,6 @@ This repository powers [LuHistory.com](https://luhistory.com), the official site
 ├── astro.config.mjs      # Astro + Sanity + Tailwind configuration
 └── package.json
 ```
-
-## Content & Data Flow
-
-1. Editors manage content in Sanity using document types that map to the TypeScript definitions under `src/types`.
-2. Each Astro page/component imports `sanityClient` (declared in `src/env.d.ts`) to run GROQ queries server-side.
-3. Responses are narrowed to the UI needs (e.g., `HomepageRecord`, `BookSummary`, `TeachingEntry`) before rendering.
-4. Interactive experiences that require state (sliders, lightboxes) are implemented as React components and loaded with `client:only="react"`.
-
-If you need to access private datasets or preview drafts locally, add a read token and related values to an `.env` file:
-
-```bash
-SANITY_API_TOKEN=your_read_token
-SANITY_PROJECT_ID=aemgaomh
-SANITY_DATASET=production
-SANITY_API_VERSION=2022-03-07
-```
-
-Then update `astro.config.mjs` to read from `import.meta.env` instead of the hard-coded values.
 
 ## Getting Started
 
