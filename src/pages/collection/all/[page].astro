@@ -21,7 +21,7 @@ const ArticleCategories = Category as ArchiveCategory[];
 
 // 获取所有可用年份及其文章数量
 const allYearsData = await sanityClient.fetch<{publishDate: string}[]>(
-  `*[_type == 'article' && defined(publishDate)] { publishDate }`
+  `*[_type == 'article' && defined(category) && defined(slug) && defined(publishDate)] { publishDate }`
 );
 
 // 按年份分组并计算数量
@@ -173,6 +173,8 @@ const { page } = Astro.props as {
           isExpanded = true;
         }
       });
+    } else {
+      console.error('Toggle button or hidden years not found');
     }
   });
 </script>
