@@ -71,3 +71,6 @@ export type {
 
 // Category types
 export type { ArchiveCategory } from "./category";
+
+// Article types
+export type { ArticleItem } from "./article";

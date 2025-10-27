@@ -1,17 +1,24 @@
 ---
-import {sanityClient} from "sanity:client";
+import { sanityClient } from "sanity:client";
 import Layout from "@/layouts/Layout.astro";
 import PageTitle from "@/components/PageTitle.astro";
 import Pagination from "@/components/Pagination.astro";
 import Category from "@/data/ArchiveCategory";
-import type { Page, PaginateFunction } from 'astro';
-import type { ArchiveCategory } from "@/types";
+import type { Page, PaginateFunction } from "astro";
+import type { ArchiveCategory, ArticleItem } from "@/types";
 
-export async function getStaticPaths({paginate}: { paginate: PaginateFunction }) {
-  const allArticles = await sanityClient.fetch(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
+export async function getStaticPaths({
+  paginate,
+}: {
+  paginate: PaginateFunction;
+}) {
+  const allArticles =
+    await sanityClient.fetch(`*[_type == 'article' && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
     publishDate,
     category,
+    isExternalLink,
+    externalUrl,
     "slug": slug.current,
   }`);
   return paginate(allArticles, { pageSize: 10 });
@@ -20,99 +27,97 @@ export async function getStaticPaths({paginate}: { paginate: PaginateFunction })
 const ArticleCategories = Category as ArchiveCategory[];
 
 // 获取所有可用年份及其文章数量
-const allYearsData = await sanityClient.fetch<{publishDate: string}[]>(
-  `*[_type == 'article' && defined(category) && defined(slug) && defined(publishDate)] { publishDate }`
+const allYearsData = await sanityClient.fetch<{ publishDate: string }[]>(
+  `*[_type == 'article' && defined(category) && defined(publishDate)] { publishDate }`,
 );
 
 // 按年份分组并计算数量
-const yearCounts = allYearsData.reduce((acc, item) => {
-  const publishDate = item.publishDate;
-  if (publishDate) {
-    const year = new Date(publishDate).getFullYear().toString();
-    if (!isNaN(parseInt(year))) {
-      acc[year] = (acc[year] || 0) + 1;
+const yearCounts = allYearsData.reduce(
+  (acc, item) => {
+    const publishDate = item.publishDate;
+    if (publishDate) {
+      const year = new Date(publishDate).getFullYear().toString();
+      if (!isNaN(parseInt(year))) {
+        acc[year] = (acc[year] || 0) + 1;
+      }
     }
-  }
-  return acc;
-}, {} as Record<string, number>);
+    return acc;
+  },
+  {} as Record<string, number>,
+);
 
 const allYears = Object.keys(yearCounts)
   .sort((a, b) => parseInt(b) - parseInt(a))
-  .map(year => ({ year, count: yearCounts[year] }));
+  .map((year) => ({ year, count: yearCounts[year] }));
 
 // 分离显示和隐藏的年份
 const recentYears = allYears.slice(0, 8);
 const hiddenYears = allYears.slice(8);
 
-const { page } = Astro.props as { 
-  page: Page<{
-    title: string;
-    publishDate: string;
-    category: string;
-    slug: string;
-  }>
+const { page } = Astro.props as {
+  page: Page<ArticleItem>;
 };
 ---
 
-<Layout title = "All Collections">
+<Layout title="All Collections">
   <PageTitle
-    title = "Collection"
-    localImg = "/images/archive-cover.jpg"
+    title="Collection"
+    localImg="/images/archive-cover.jpg"
     bgWhite="false"
   />
   <main
-    id = "main-content"
-    class = "max-w-8xl mx-auto px-4 flex flex-col gap-8 8xl:px-0 lg:grid lg:grid-cols-12 py-8 lg:py-16 mb-12 md:mb-24"
+    id="main-content"
+    class="max-w-8xl mx-auto px-4 flex flex-col gap-8 8xl:px-0 lg:grid lg:grid-cols-12 py-8 lg:py-16 mb-12 md:mb-24"
   >
     <div class="col-span-12 lg:col-span-2 space-y-8">
       <!-- 分类导航 -->
       <ul class="flex gap-4 flex-wrap lg:flex-col">
-        <li class="text-sm text-neutral-900 tracking-wider font-bold">
-          ALL
-        </li>
-        {ArticleCategories.map((category) => {
-          return (
-            <li
-              class = "text-sm text-neutral-900 uppercase opacity-50 tracking-wider hover:opacity-100"
-            >
-              <a
-                href = {`/collection/category/${category.slug}/1#main-content`}
-                data-astro-prefetch
-              >
-                {category.name}
-              </a>
-            </li>
-          );
-        })}
-      </ul>
-      
-      <!-- 年份导航 -->
-      <div>
-        <h3 class="text-sm text-neutral-900 tracking-wider mb-4 uppercase">YEAR</h3>
-        <ul class="flex gap-4 flex-wrap lg:flex-col">
-          {recentYears.map(({ year, count }) => {
+        <li class="text-sm text-neutral-900 tracking-wider font-bold">ALL</li>
+        {
+          ArticleCategories.map((category) => {
             return (
-              <li
-                class = "text-sm text-neutral-900 uppercase opacity-50 tracking-wider hover:opacity-100"
-              >
+              <li class="text-sm text-neutral-900 uppercase opacity-50 tracking-wider hover:opacity-100">
                 <a
-                  href = {`/collection/year/${year}#main-content`}
+                  href={`/collection/category/${category.slug}/1#main-content`}
                   data-astro-prefetch
                 >
-                  {year} ({count})
+                  {category.name}
                 </a>
               </li>
             );
-          })}
+          })
+        }
+      </ul>
+
+      <!-- 年份导航 -->
+      <div>
+        <h3 class="text-sm text-neutral-900 tracking-wider mb-4 uppercase">
+          YEAR
+        </h3>
+        <ul class="flex gap-4 flex-wrap lg:flex-col">
+          {
+            recentYears.map(({ year, count }) => {
+              return (
+                <li class="text-sm text-neutral-900 uppercase opacity-50 tracking-wider hover:opacity-100">
+                  <a
+                    href={`/collection/year/${year}#main-content`}
+                    data-astro-prefetch
+                  >
+                    {year} ({count})
+                  </a>
+                </li>
+              );
+            })
+          }
           {
             hiddenYears.map(({ year, count }) => {
               return (
                 <li
-                  class = "hidden-years text-sm text-neutral-900 uppercase opacity-50 tracking-wider hover:opacity-100"
+                  class="hidden-years text-sm text-neutral-900 uppercase opacity-50 tracking-wider hover:opacity-100"
                   style="display: none;"
                 >
                   <a
-                    href = {`/collection/year/${year}#main-content`}
+                    href={`/collection/year/${year}#main-content`}
                     data-astro-prefetch
                   >
                     {year} ({count})
@@ -124,8 +129,8 @@ const { page } = Astro.props as {
         </ul>
         {
           hiddenYears.length > 0 && (
-            <button 
-              id="toggle-years" 
+            <button
+              id="toggle-years"
               class="text-sm text-neutral-900 opacity-50 tracking-wider hover:opacity-100 mt-4 uppercase cursor-pointer"
             >
               Show All Years
@@ -134,62 +139,74 @@ const { page } = Astro.props as {
         }
       </div>
     </div>
-    <div class = "col-span-12 lg:col-start-4 col-end-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div
+      class="col-span-12 lg:col-start-4 col-end-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+    >
       <div class="space-y-8 col-span-8">
-        {page.data.map((article) => {
-          return (
-            <article>
-              <a href = {`/collection/detail/${article.slug}`}>
-                <h2
-                  class = "font-serif font-bold text-2xl md:text-3xl text-neutral-900 mb-0 md:mb-2"
-                >{article.title}</h2>
-                <small class = "text-sm md:text-base capitalize text-neutral-900 opacity-50">{article.category}</small>
-              </a>
-            </article>
-          );
-        })}
+         {
+           page.data.map((article) => {
+             const href = article.isExternalLink 
+               ? article.externalUrl 
+               : `/collection/detail/${article.slug}`;
+             const target = article.isExternalLink ? '_blank' : undefined;
+             const rel = article.isExternalLink ? 'noopener noreferrer' : undefined;
+             
+             return (
+               <article>
+                 <a href={href} target={target} rel={rel}>
+                   <h2 class="font-serif font-bold text-2xl md:text-3xl text-neutral-900 mb-0 md:mb-2">
+                     {article.title}
+                   </h2>
+                   <small class="text-sm md:text-base capitalize text-neutral-900 opacity-50">
+                     {article.category}
+                   </small>
+                 </a>
+               </article>
+             );
+           })
+         }
       </div>
     </div>
   </main>
-  <Pagination page = {page} />
+  <Pagination page={page} />
 </Layout>
 
 <script is:inline>
-  document.addEventListener('DOMContentLoaded', function() {
-    console.log('All page script loaded');
-    const toggleButton = document.getElementById('toggle-years');
-    const hiddenYears = document.querySelectorAll('.hidden-years');
-    
-    console.log('Toggle button found:', !!toggleButton);
-    console.log('Hidden years found:', hiddenYears.length);
-    console.log('Hidden years elements:', hiddenYears);
-    
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("All page script loaded");
+    const toggleButton = document.getElementById("toggle-years");
+    const hiddenYears = document.querySelectorAll(".hidden-years");
+
+    console.log("Toggle button found:", !!toggleButton);
+    console.log("Hidden years found:", hiddenYears.length);
+    console.log("Hidden years elements:", hiddenYears);
+
     if (toggleButton && hiddenYears.length > 0) {
-      console.log('Setting up toggle functionality');
+      console.log("Setting up toggle functionality");
       let isExpanded = false;
-      
-      toggleButton.addEventListener('click', function() {
-        console.log('Toggle button clicked, isExpanded:', isExpanded);
+
+      toggleButton.addEventListener("click", function () {
+        console.log("Toggle button clicked, isExpanded:", isExpanded);
         if (isExpanded) {
-          hiddenYears.forEach(function(year) {
-            year.style.display = 'none';
+          hiddenYears.forEach(function (year) {
+            year.style.display = "none";
           });
-          toggleButton.textContent = 'Show All Years';
+          toggleButton.textContent = "Show All Years";
           isExpanded = false;
-          console.log('Years hidden');
+          console.log("Years hidden");
         } else {
-          hiddenYears.forEach(function(year) {
-            year.style.display = 'block';
+          hiddenYears.forEach(function (year) {
+            year.style.display = "block";
           });
-          toggleButton.textContent = 'Hide Years';
+          toggleButton.textContent = "Hide Years";
           isExpanded = true;
-          console.log('Years shown');
+          console.log("Years shown");
         }
       });
     } else {
-      console.error('Toggle button or hidden years not found');
-      console.error('Toggle button:', toggleButton);
-      console.error('Hidden years count:', hiddenYears.length);
+      console.error("Toggle button or hidden years not found");
+      console.error("Toggle button:", toggleButton);
+      console.error("Hidden years count:", hiddenYears.length);
     }
   });
 </script>

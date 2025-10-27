@@ -5,14 +5,7 @@ import Layout from "@/layouts/Layout.astro";
 import Category from "@/data/ArchiveCategory";
 import Pagination from "@/components/Pagination.astro";
 import type { Page, PaginateFunction } from "astro";
-import type { ArchiveCategory } from "@/types";
-
-type ArticleItem = {
-  title: string;
-  publishDate: string;
-  category: string;
-  slug: string;
-};
+import type { ArchiveCategory, ArticleItem } from "@/types";
 
 export async function getStaticPaths({
   paginate,
@@ -25,9 +18,11 @@ export async function getStaticPaths({
   );
   const allArticles = await sanityClient.fetch<
     ArticleItem[]
-  >(`*[_type == 'article' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
+  >(`*[_type == 'article' && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
     publishDate,
+    isExternalLink,
+    externalUrl,
     category,
     "slug": slug.current,
   }`);
@@ -96,7 +91,7 @@ const params = Astro.params as { category: string };
           page.data.map((article) => {
             return (
               <article>
-                <a href={`/collection/detail/${article.slug}`}>
+                <a href={article.externalUrl ? article.externalUrl : `/collection/detail/${article.slug}`}>
                   <h2 class="font-serif font-bold text-2xl md:text-3xl text-neutral-900 mb-0 md:mb-2">
                     {article.title}
                   </h2>
