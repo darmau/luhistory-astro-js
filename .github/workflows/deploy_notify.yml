@@ -1,0 +1,76 @@
+on:
+  deployment_status:
+    types: [success, failure]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send deployment notification via Resend
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_TO: ${{ secrets.RESEND_TO }}
+          RESEND_FROM: ${{ secrets.RESEND_FROM }}
+          DEPLOY_STATE: ${{ github.event.deployment_status.state }}
+          DEPLOY_URL: ${{ github.event.deployment_status.environment_url }}
+          LOG_URL: ${{ github.event.deployment_status.log_url }}
+          TARGET_URL: ${{ github.event.deployment_status.target_url }}
+          DEPLOYMENT_ID: ${{ github.event.deployment.id }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${RESEND_API_KEY:-}" ]; then
+            echo "Missing RESEND_API_KEY secret" >&2
+            exit 1
+          fi
+
+          if [ -z "${RESEND_TO:-}" ]; then
+            echo "Missing RESEND_TO secret" >&2
+            exit 1
+          fi
+
+          if [ -z "${RESEND_FROM:-}" ]; then
+            echo "Missing RESEND_FROM secret" >&2
+            exit 1
+          fi
+
+          STATE="${DEPLOY_STATE:-unknown}"
+          SUBJECT=""
+          BODY_HTML=""
+
+          if [ "${STATE}" = "success" ]; then
+            SUBJECT="Cloudflare Pages 部署成功"
+            BODY_HTML="<p>${REPOSITORY} 的 Cloudflare Pages 部署成功。</p>"
+            if [ -n "${DEPLOY_URL:-}" ]; then
+              BODY_HTML="${BODY_HTML}<p>预览地址：<a href=\"${DEPLOY_URL}\">${DEPLOY_URL}</a></p>"
+            fi
+            if [ -n "${TARGET_URL:-}" ]; then
+              BODY_HTML="${BODY_HTML}<p>Target URL：<a href=\"${TARGET_URL}\">${TARGET_URL}</a></p>"
+            fi
+          else
+            SUBJECT="Cloudflare Pages 部署失败"
+            BODY_HTML="<p>${REPOSITORY} 的 Cloudflare Pages 部署失败（状态：${STATE}）。</p>"
+            if [ -n "${LOG_URL:-}" ]; then
+              BODY_HTML="${BODY_HTML}<p>日志链接：<a href=\"${LOG_URL}\">${LOG_URL}</a></p>"
+            fi
+            if [ -n "${TARGET_URL:-}" ]; then
+              BODY_HTML="${BODY_HTML}<p>Target URL：<a href=\"${TARGET_URL}\">${TARGET_URL}</a></p>"
+            fi
+          fi
+
+          if [ -n "${DEPLOYMENT_ID:-}" ]; then
+            BODY_HTML="${BODY_HTML}<p>部署 ID：${DEPLOYMENT_ID}</p>"
+          fi
+
+          jq -n \
+            --arg from "${RESEND_FROM}" \
+            --arg to "${RESEND_TO}" \
+            --arg subject "${SUBJECT}" \
+            --arg html "${BODY_HTML}" \
+            '{from:$from, to:[$to], subject:$subject, html:$html}' \
+          | curl -sS -X POST https://api.resend.com/emails \
+              -H "Authorization: Bearer ${RESEND_API_KEY}" \
+              -H "Content-Type: application/json" \
+              -H "Accept: application/json" \
+              --data-binary @-
