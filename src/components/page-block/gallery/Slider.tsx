@@ -46,6 +46,13 @@ export default function GallerySlider({ images }: GallerySliderProps) {
 
   return (
     <div>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          .swiper-slide {
+            width: auto !important;
+          }
+        `
+      }} />
       <Swiper
         spaceBetween={spaceBetween}
         slidesPerView="auto"
@@ -71,7 +78,7 @@ export default function GallerySlider({ images }: GallerySliderProps) {
                 <img
                   src={`${item.url}?h=640`}
                   alt={item.caption || "Gallery image"}
-                  className={`bg-gray-50 object-cover h-[480px] w-full ${
+                  className={`bg-gray-50 object-contain h-[480px] w-auto max-w-full ${
                     !isActive ? "grayscale" : ""
                   }`}
                 />
