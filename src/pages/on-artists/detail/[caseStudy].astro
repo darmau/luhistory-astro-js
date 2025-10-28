@@ -2,24 +2,29 @@
 import { sanityClient } from "sanity:client";
 import Layout from "@/layouts/Layout.astro";
 import PageTitle from "@/components/PageTitle.astro";
-import {Image} from 'astro:assets'
+import { Image } from "astro:assets";
 import TextBlock from "@/components/text-block/TextBlock.astro";
 import PageBlock from "@/components/PageBlock.astro";
 import NextCase from "@/components/order/NextCase.astro";
+import artistIcon from "@/assets/icons/artist.svg";
 
 export async function getStaticPaths() {
   type CaseStudyPathItem = {
     slug: string;
     title: string;
+    artist?: string | null;
     cover?: string | null;
     overview: unknown;
     blocks: unknown;
   };
 
-  const slugs = await sanityClient.fetch<CaseStudyPathItem[]>(`*[_type == 'caseStudy' && defined(slug)] {
+  const slugs = await sanityClient.fetch<
+    CaseStudyPathItem[]
+  >(`*[_type == 'caseStudy' && defined(slug)] {
     "slug": slug.current,
     title,
     publishDate,
+    artist,
     "cover": cover.image.asset->url,
     "overview": overview[] {
       _type == 'imageBlock' => {
@@ -83,38 +88,51 @@ export async function getStaticPaths() {
       },
       props: {
         title: caseStudy.title,
+        artist: caseStudy.artist,
         cover: caseStudy.cover,
         overview: caseStudy.overview,
         blocks: caseStudy.blocks,
-      }
+      },
     };
   });
   return paths;
 }
 
-const {title, cover, overview, blocks} = Astro.props;
+const { title, cover, overview, blocks, artist } = Astro.props;
 ---
 
-<Layout title = {title}>
+<Layout title={title}>
   <PageTitle title={title} />
-  <div class = "p-4 flex flex-col gap-8 8xl:p-0 lg:max-w-8xl lg:mx-auto lg:grid lg:grid-cols-12 mb-24">
-    <main class = "col-start-4 col-end-12 md:grid md:grid-cols-8 md:gap-8 lg:mt-8">
-      {cover &&
-        <Image
-          class = "mb-8 md:mb-0 md:col-span-8"
-          src = {cover}
-          alt = {title}
-          width = "1280"
-          height = "840"
-          format = "avif"
-          loading = "eager"
-        />
+  <main
+    class="px-4 flex flex-col gap-4 py-8 md:grid md:grid-cols-12 md:gap-8 md:py-16 lg:max-w-8xl lg:mx-auto 8xl:px-0"
+  >
+    {
+      artist && (
+        <div class="col-span-3 lg:col-span-4 flex items-start gap-4 my-3">
+          <Image src={artistIcon} alt="artist website" width="24" height="24" />
+          <a href={artist} target="_blank" class="text-neutral-900 opacity-50 hover:opacity-100">Artist Website</a>
+        </div>
+      )
+    }
+    <div class="col-start-4 col-end-12">
+      {
+        cover && (
+          <Image
+            class="mb-8 md:mb-0 md:col-span-8"
+            src={cover}
+            alt={title}
+            width="1280"
+            height="840"
+            format="avif"
+            loading="eager"
+          />
+        )
       }
       <TextBlock overview={overview} />
       {blocks && <PageBlock blocks={blocks} />}
-    </main>
-    <NextCase slug = {Astro.params.caseStudy}/>
-  </div>
+    </div>
+    <NextCase slug={Astro.params.caseStudy} />
+  </main>
 </Layout>
 
 <style is:global>
