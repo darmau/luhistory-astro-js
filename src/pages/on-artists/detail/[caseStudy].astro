@@ -106,6 +106,8 @@ const {title, cover, overview, blocks} = Astro.props;
           alt = {title}
           width = "1280"
           height = "840"
+          format = "avif"
+          loading = "eager"
         />
       }
       <TextBlock overview={overview} />

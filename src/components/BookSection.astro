@@ -1,6 +1,6 @@
 ---
-import {sanityClient} from "sanity:client";
-import {Image} from 'astro:assets'
+import { sanityClient } from "sanity:client";
+import { Image } from "astro:assets";
 type Book = {
   title: string;
   slug: string;
@@ -15,54 +15,58 @@ const booksData = await sanityClient.fetch<Book[]>(`
     "publishDate": publishDate,
     "cover": cover.asset->{url}
 }[0..3]
-`)
+`);
 ---
 
 <div
-  id = "books-container"
-  class = "col-start-1 col-span-12 mb-8 p-4 sm:p-0 sm:col-start-2 sm:col-span-10 lg:mb-40"
+  id="books-container"
+  class="col-start-1 col-span-12 mb-8 p-4 sm:p-0 sm:col-start-2 sm:col-span-10 lg:mb-40"
 >
-  <hgroup class = "flex justify-between items-baseline text-neutral-900 mb-8 md:mb-20">
-    <h2 class = "font-bold text-3xl md:text-5xl font-serif">Publications</h2>
-    <p class = "flex items-center gap-2">
+  <hgroup
+    class="flex justify-between items-baseline text-neutral-900 mb-8 md:mb-20"
+  >
+    <h2 class="font-bold text-3xl md:text-5xl font-serif">Publications</h2>
+    <p class="flex items-center gap-2">
       <a
-        href = "/book/category" class = "text-lg md:text-2xl font-thin font-serif"
-        data-astro-prefetch
-      >View more&nbsp;&nbsp;→</a>
+        href="/book/category"
+        class="text-lg md:text-2xl font-thin font-serif"
+        data-astro-prefetch>View more&nbsp;&nbsp;→</a
+      >
     </p>
   </hgroup>
-  <ul class = "grid grid-cols-1 gap-8 md:grid-cols-2">
-    {booksData.map((book) => (
-      <li>
-        <a
-          href = {`/book/detail/${book.slug}`} class = "flex gap-4"
-          data-astro-prefetch
-        >
-          <div
-            class = "h-32 w-32 bg-neutral-100 flex items-center justify-center shrink-0"
+  <ul class="grid grid-cols-1 gap-8 md:grid-cols-2">
+    {
+      booksData.map((book) => (
+        <li>
+          <a
+            href={`/book/detail/${book.slug}`}
+            class="flex gap-4"
+            data-astro-prefetch
           >
-            {book.cover?.url && (
-              <Image
-                src = {book.cover.url}
-                alt = {book.title}
-                class = "object-cover h-full"
-                height = "256"
-                width = "256"
-              />
-            )
-            }
-          </div>
-          <div class = "space-y-2">
-            <h3
-              class = "font-serif font-bold text-neutral-900 text-2xl md:text-3xl"
-            >{book.title}</h3>
-            <p
-              class = "text-neutral-900 opacity-50"
-            >{new Date(book.publishDate).getFullYear()}</p>
-          </div>
-        </a>
-      </li>
-    ))}
+            <div class="h-32 w-32 bg-neutral-100 flex items-center justify-center shrink-0">
+              {book.cover?.url && (
+                <Image
+                  src={book.cover.url}
+                  alt={book.title}
+                  class="object-cover h-full"
+                  height="360"
+                  width="360"
+                  format="avif"
+                />
+              )}
+            </div>
+            <div class="space-y-2">
+              <h3 class="font-serif font-bold text-neutral-900 text-2xl md:text-3xl">
+                {book.title}
+              </h3>
+              <p class="text-neutral-900 opacity-50">
+                {new Date(book.publishDate).getFullYear()}
+              </p>
+            </div>
+          </a>
+        </li>
+      ))
+    }
   </ul>
 </div>
 
@@ -83,21 +87,21 @@ const booksData = await sanityClient.fetch<Book[]>(`
 <script>
   // 选择container，在进入viewport的时候添加class
   function showContainer() {
-    const container = document.getElementById('books-container');
+    const container = document.getElementById("books-container");
     const options = {
       root: null,
-      rootMargin: '0px',
-      threshold: 0.1
+      rootMargin: "0px",
+      threshold: 0.1,
     };
 
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          entry.target.classList.remove('invisible');
+          entry.target.classList.add("visible");
+          entry.target.classList.remove("invisible");
         } else {
-          entry.target.classList.remove('visible');
-          entry.target.classList.add('invisible');
+          entry.target.classList.remove("visible");
+          entry.target.classList.add("invisible");
         }
       });
     }, options);
@@ -109,6 +113,6 @@ const booksData = await sanityClient.fetch<Book[]>(`
     observer.observe(container);
   }
 
-  document.addEventListener('DOMContentLoaded', showContainer);
-  document.addEventListener('astro:after-swap', showContainer);
+  document.addEventListener("DOMContentLoaded", showContainer);
+  document.addEventListener("astro:after-swap", showContainer);
 </script>

@@ -45,11 +45,15 @@ export default function ExhibitionSlider({ exhibitions }: ExhibitionSliderProps)
         <SwiperSlide key={item.slug}>
           <a href={`/exhibition/detail/${item.slug}`}>
             {item.cover && (
-              <img
-                src={`${item.cover.url}?h=960`}
-                alt={item.cover.caption || item.title}
-                className="bg-gray-50 object-cover h-[240px] md:h-[352px] w-full mb-4 md:mb-6"
-              />
+              <picture className="block">
+                <source srcSet={`${item.cover.url}?h=720&f=avif`} type="image/avif" />
+                <source srcSet={`${item.cover.url}?h=720&f=webp`} type="image/webp" />
+                <img
+                  src={`${item.cover.url}?h=720`}
+                  alt={item.cover.caption || item.title}
+                  className="bg-gray-50 object-cover h-[240px] md:h-[352px] w-full mb-4 md:mb-6"
+                />
+              </picture>
             )}
             <h3
               title={item.title}

@@ -1,38 +1,56 @@
 ---
-import {Image} from 'astro:assets'
+import { Image } from "astro:assets";
 import type { RelatedBook } from "@/types";
 
 function getYear(date: string) {
-  return new Date(date).getFullYear()
+  return new Date(date).getFullYear();
 }
 
 const { books = [] } = Astro.props as { books?: RelatedBook[] };
 ---
 
-<div class = "col-start-1 md:col-span-12 lg:col-span-6 my-4 lg:my-16">
+<div class="col-start-1 md:col-span-12 lg:col-span-6 my-4 lg:my-16">
   <hgroup class="flex justify-between items-baseline max-w-3xl">
-    <h2 class = "font-serif font-bold text-neutral-900 text-3xl md:text-5xl">Publications</h2>
-    <p class="font-sans text-base text-neutral-900 opacity-50">{books.length} books</p>
+    <h2 class="font-serif font-bold text-neutral-900 text-3xl md:text-5xl">
+      Publications
+    </h2>
+    <p class="font-sans text-base text-neutral-900 opacity-50">
+      {books.length} books
+    </p>
   </hgroup>
   <ul
-    class = "flex flex-col gap-6 8xl:grid 8xl:grid-cols-2 8xl:justify-items-start 8xl:gap-8 overflow-visible pl-0 pt-4"
+    class="flex flex-col gap-6 8xl:grid 8xl:grid-cols-2 8xl:justify-items-start 8xl:gap-8 overflow-visible pl-0 pt-4"
   >
-    {books.map((book) => (
-      <li class = "list-none">
-        <a class = "no-underline flex gap-4 h-full" href = {`/book/detail/${book.slug}`}>
-          {book.cover && (
-            <div class = "aspect-square 8xl:max-w-[120px] 8xl:max-h-[120px] bg-gray-50">
-              <Image
-                class = "object-cover h-full w-full" src = {book.cover} alt = {book.title} width = "320" height = "320"
-              />
+    {
+      books.map((book) => (
+        <li class="list-none">
+          <a
+            class="no-underline flex gap-4 h-full"
+            href={`/book/detail/${book.slug}`}
+          >
+            {book.cover && (
+              <div class="aspect-square 8xl:max-w-[120px] 8xl:max-h-[120px] bg-gray-50">
+                <Image
+                  class="object-cover h-full w-full"
+                  src={book.cover}
+                  alt={book.title}
+                  width="320"
+                  height="320"
+                  format="avif"
+                />
+              </div>
+            )}
+            <div class="flex-1">
+              <h3 class="my-0 font-serif font-bold text-2xl text-neutral-900 mb-2 leading-tight">
+                {book.title}
+              </h3>
+              <small class="font-sans text-base text-neutral-900 opacity-50">
+                {getYear(book.publishDate)}
+              </small>
             </div>
-          )}
-          <div class="flex-1">
-            <h3 class = "my-0 font-serif font-bold text-2xl text-neutral-900 mb-2 leading-tight">{book.title}</h3>
-            <small class="font-sans text-base text-neutral-900 opacity-50">{getYear(book.publishDate)}</small>
-          </div>
-        </a>
-      </li>
-    ))}
+          </a>
+        </li>
+      ))
+    }
   </ul>
 </div>
