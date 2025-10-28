@@ -46,6 +46,13 @@ export default function GallerySlider({ images }: GallerySliderProps) {
 
   return (
     <div>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          .swiper-slide {
+            width: auto !important;
+          }
+        `
+      }} />
       <Swiper
         spaceBetween={spaceBetween}
         slidesPerView="auto"
@@ -68,13 +75,17 @@ export default function GallerySlider({ images }: GallerySliderProps) {
                 }}
                 aria-label={item.caption ?? "Open gallery image"}
               >
-                <img
-                  src={`${item.url}?h=640`}
-                  alt={item.caption || "Gallery image"}
-                  className={`bg-gray-50 object-cover h-[480px] w-full ${
-                    !isActive ? "grayscale" : ""
-                  }`}
-                />
+                <picture>
+                  <source srcSet={`${item.url}?h=640&f=avif`} type="image/avif" />
+                  <source srcSet={`${item.url}?h=640&f=webp`} type="image/webp" />
+                  <img
+                    src={`${item.url}?h=640`}
+                    alt={item.caption || "Gallery image"}
+                    className={`bg-gray-50 object-contain h-[480px] w-auto max-w-full ${
+                      !isActive ? "grayscale" : ""
+                    }`}
+                  />
+                </picture>
               </button>
             )}
           </SwiperSlide>
