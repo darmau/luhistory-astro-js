@@ -7,7 +7,7 @@ const {links = []} = Astro.props as { links?: ExternalLink[] };
 <div class = "col-start-1 col-span-8 my-4 lg:my-16">
   <h2 class = "font-serif font-bold text-3xl md:text-5xl text-neutral-900 mb-4 lg:mb-16">
     Details</h2>
-  <div class = "flex flex-col gap-4 lg:gap-8">
+  <div class = "flex flex-col gap-4">
     {links.map((website) => (
       <a href = {website.url} target = "_blank" class="space-y-2 no-underline">
         <h3
