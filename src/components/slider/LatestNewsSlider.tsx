@@ -41,7 +41,8 @@ export default function LatestNewsSlider({ news }: LatestNewsSliderProps) {
       }}
     >
       {news.map((item) => {
-        const hasCoverImage = Boolean(item.coverImage ?? item.cover);
+        const coverImage = item.coverImage;
+        const hasCoverImage = Boolean(coverImage ?? item.cover);
 
         return (
           <SwiperSlide key={item.slug}>
@@ -49,20 +50,20 @@ export default function LatestNewsSlider({ news }: LatestNewsSliderProps) {
               href={`/collection/detail/${item.slug}`}
               className="relative bg-gray-50 h-[240px] sm:h-[360px] md:h-[544px] flex flex-col justify-end p-4 md:p-10"
             >
-              {item.coverImage ? (
+              {coverImage ? (
                 <>
                   <picture className="absolute inset-0">
-                    {item.coverImage.sources.map((source, index) => (
+                    {coverImage.sources.map((source, index) => (
                       <source
                         key={`${source.type}-${index}`}
                         type={source.type}
                         srcSet={source.srcSet}
-                        sizes={item.coverImage.img.sizes}
+                        sizes={coverImage.img.sizes}
                       />
                     ))}
                     <img
-                      {...item.coverImage.img}
-                      alt={item.coverImage.img.alt}
+                      {...coverImage.img}
+                      alt={coverImage.img.alt}
                       className="absolute inset-0 object-cover h-full w-full"
                     />
                   </picture>

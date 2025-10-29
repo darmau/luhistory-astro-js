@@ -31,26 +31,50 @@ export default function GalleryGrid({ title, images }: GalleryGridProps) {
       </hgroup>
 
       <div className="grid grid-cols-3 gap-4 lg:gap-8">
-        {images.slice(0, 6).map((image, imageIndex) => (
-          <button
-            type="button"
-            key={image.url}
-            className="group block focus:outline-none"
-            onClick={() => {
-              setIndex(imageIndex);
-              setOpen(true);
-            }}
-            aria-label={image.caption ?? "Open gallery image"}
-          >
-            <img
-              className="aspect-square object-cover w-full cursor-pointer group-focus-visible:ring-2 group-focus-visible:ring-neutral-900"
-              src={`${image.url}?h=480`}
-              alt={image.caption || "Gallery image"}
-              width="192"
-              height="192"
-            />
-          </button>
-        ))}
+        {images.slice(0, 6).map((image, imageIndex) => {
+          const imageSet = image.imageSet;
+
+          return (
+            <button
+              type="button"
+              key={image.url}
+              className="group block focus:outline-none"
+              onClick={() => {
+                setIndex(imageIndex);
+                setOpen(true);
+              }}
+              aria-label={image.caption ?? "Open gallery image"}
+            >
+              <div className="aspect-square w-full">
+              {imageSet ? (
+                <picture className="block h-full w-full">
+                  {imageSet.sources.map((source, index) => (
+                    <source
+                      key={`${source.type}-${index}`}
+                      type={source.type}
+                      srcSet={source.srcSet}
+                      sizes={imageSet.img.sizes}
+                    />
+                  ))}
+                  <img
+                    {...imageSet.img}
+                    alt={imageSet.img.alt}
+                    className="object-cover w-full h-full cursor-pointer group-focus-visible:ring-2 group-focus-visible:ring-neutral-900"
+                  />
+                </picture>
+              ) : (
+                <img
+                  className="object-cover w-full h-full cursor-pointer group-focus-visible:ring-2 group-focus-visible:ring-neutral-900"
+                  src={`${image.url}?h=480`}
+                  alt={image.caption || "Gallery image"}
+                  width="192"
+                  height="192"
+                />
+              )}
+              </div>
+            </button>
+          );
+        })}
       </div>
 
       <Lightbox

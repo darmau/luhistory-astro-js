@@ -71,12 +71,15 @@ export default function GallerySlider({ images }: GallerySliderProps) {
           enabled: true,
         }}
       >
-        {images.map((item, imageIndex) => (
-          <SwiperSlide key={item.url}>
-            {({ isActive }) => (
-              <button
-                type="button"
-                className="block focus:outline-none"
+        {images.map((item, imageIndex) => {
+          const imageSet = item.imageSet;
+
+          return (
+            <SwiperSlide key={item.url}>
+              {({ isActive }) => (
+                <button
+                  type="button"
+                  className="block focus:outline-none"
                 onClick={() => {
                   setIndex(imageIndex);
                   setOpen(true);
@@ -84,20 +87,43 @@ export default function GallerySlider({ images }: GallerySliderProps) {
                 aria-label={item.caption ?? "Open gallery image"}
               >
                 <picture>
-                  <source srcSet={`${item.url}?h=640&f=avif`} type="image/avif" />
-                  <source srcSet={`${item.url}?h=640&f=webp`} type="image/webp" />
-                  <img
-                    src={`${item.url}?h=640`}
-                    alt={item.caption || "Gallery image"}
-                    className={`bg-gray-50 object-contain h-[480px] w-auto max-w-full ${
-                      !isActive ? "grayscale" : ""
-                    }`}
-                  />
+                  {imageSet ? (
+                    <>
+                      {imageSet.sources.map((source, index) => (
+                        <source
+                          key={`${source.type}-${index}`}
+                          type={source.type}
+                          srcSet={source.srcSet}
+                          sizes={imageSet.img.sizes}
+                        />
+                      ))}
+                      <img
+                        {...imageSet.img}
+                        alt={imageSet.img.alt}
+                        className={`bg-gray-50 object-contain h-[480px] w-auto max-w-full ${
+                          !isActive ? "grayscale" : ""
+                        }`}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <source srcSet={`${item.url}?h=640&f=avif`} type="image/avif" />
+                      <source srcSet={`${item.url}?h=640&f=webp`} type="image/webp" />
+                      <img
+                        src={`${item.url}?h=640`}
+                        alt={item.caption || "Gallery image"}
+                        className={`bg-gray-50 object-contain h-[480px] w-auto max-w-full ${
+                          !isActive ? "grayscale" : ""
+                        }`}
+                      />
+                    </>
+                  )}
                 </picture>
               </button>
             )}
           </SwiperSlide>
-        ))}
+        );
+        })}
       </Swiper>
 
       <Lightbox

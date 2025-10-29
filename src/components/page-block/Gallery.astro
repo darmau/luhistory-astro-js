@@ -1,14 +1,46 @@
 ---
 import LazySlider from './gallery/LazySlider.tsx';
 import LazyGrid from './gallery/LazyGrid.tsx'
+import { buildRemoteImageSetOrNull } from "@/utils/remoteImage";
+import type { GalleryImage } from "@/types";
+
 const {gallery, title, images} = Astro.props;
+
+const sliderWidths = [640, 960, 1280, 1600];
+const sliderSizes = "(max-width: 1023px) 100vw, 60vw";
+const gridWidths = [320, 480, 640, 768];
+const gridSizes = "(max-width: 1023px) 45vw, 22vw";
+
+const targetWidths = gallery === 'slider' ? sliderWidths : gridWidths;
+const targetSizes = gallery === 'slider' ? sliderSizes : gridSizes;
+
+const processedImages: GalleryImage[] = await Promise.all(
+  ((images ?? []) as GalleryImage[]).map(async (image) => {
+    if (!image?.url) {
+      return { ...image, imageSet: null } satisfies GalleryImage;
+    }
+
+    const imageSet = await buildRemoteImageSetOrNull({
+      src: image.url,
+      alt: image.caption || "Gallery image",
+      widths: targetWidths,
+      sizes: targetSizes,
+    });
+
+    if (!imageSet) {
+      console.warn("Falling back to Sanity image for gallery item", { url: image.url });
+    }
+
+    return { ...image, imageSet } satisfies GalleryImage;
+  })
+);
 ---
 
 <div class = "col-start-1 col-span-8 lg:col-span-6 my-4 lg:my-16 w-full">
   {gallery === 'slider' ?
     <div class="overflow-visible">
-      <LazySlider images = {images} client:visible = "react"/>
+      <LazySlider images = {processedImages} client:visible/>
     </div>
       :
-    <LazyGrid title = {title} images = {images} client:visible = "react"/>}
+    <LazyGrid title = {title} images = {processedImages} client:visible/>}
 </div>

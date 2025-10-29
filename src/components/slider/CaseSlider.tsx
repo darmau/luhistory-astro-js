@@ -42,22 +42,24 @@ export default function CaseSlider({ cases }: CaseSliderProps) {
       }}
     >
       {cases.map((item) => {
+        const coverImage = item.coverImage;
+
         return (
           <SwiperSlide key={item.slug}>
             <a href={`/on-artists/detail/${item.slug}`}>
-              {item.coverImage ? (
+              {coverImage ? (
                 <picture className="block">
-                  {item.coverImage.sources.map((source, index) => (
+                  {coverImage.sources.map((source, index) => (
                     <source
                       key={`${source.type}-${index}`}
                       type={source.type}
                       srcSet={source.srcSet}
-                      sizes={item.coverImage.img.sizes}
+                      sizes={coverImage.img.sizes}
                     />
                   ))}
                   <img
-                    {...item.coverImage.img}
-                    alt={item.coverImage.img.alt}
+                    {...coverImage.img}
+                    alt={coverImage.img.alt}
                     className="bg-gray-50 object-cover h-[240px] md:h-[352px] w-full mb-4 md:mb-6"
                   />
                 </picture>
