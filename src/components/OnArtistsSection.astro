@@ -9,7 +9,7 @@ type CaseSummary = {
 };
 
 const casesData = await sanityClient.fetch<CaseSummary[]>(`
-*[_type == "caseStudy" && defined(slug)] | order(publishDate) {
+*[_type == "caseStudy" && defined(slug)] | order(publishDate desc)[0...5] {
     title,
     "slug": slug.current,
     "cover": cover.image.asset->url

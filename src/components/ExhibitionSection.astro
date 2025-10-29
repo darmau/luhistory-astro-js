@@ -1,6 +1,6 @@
 ---
-import {sanityClient} from "sanity:client";
-import ExhibitionSlider from "./slider/ExhibitionSlider.tsx"
+import { sanityClient } from "sanity:client";
+import ExhibitionSlider from "./slider/ExhibitionSlider.tsx";
 type Exhibition = {
   title: string;
   slug: string;
@@ -13,7 +13,7 @@ type Exhibition = {
 };
 
 const exhibitionData = await sanityClient.fetch<Exhibition[]>(`
-  *[_type == 'exhibition' && defined(dateRange) && defined(cover)] | order(dateRange.startDate desc){
+  *[_type == 'exhibition' && defined(dateRange) && defined(cover)] | order(dateRange.startDate desc)[0...5]{
     title,
     "slug": slug.current,
     "year": dateRange.startDate,
@@ -22,27 +22,31 @@ const exhibitionData = await sanityClient.fetch<Exhibition[]>(`
       "url": cover.asset->url,
       "caption": cover.caption
     }
-  }`)
+  }`);
 ---
+
 <div
-  class = "col-start-1 col-span-12 mb-8 p-4 sm:p-0 sm:col-start-2 sm:col-span-10 lg:mb-40"
+  class="col-start-1 col-span-12 mb-8 p-4 sm:p-0 sm:col-start-2 sm:col-span-10 lg:mb-40"
 >
   <hgroup
-    class = "flex justify-between items-baseline text-neutral-900 mb-8 md:mb-20"
+    class="flex justify-between items-baseline text-neutral-900 mb-8 md:mb-20"
   >
-    <h2 class = "font-bold text-3xl md:text-5xl font-serif">Exhibitions</h2>
-    <div class = "flex items-center gap-2">
+    <h2 class="font-bold text-3xl md:text-5xl font-serif">Exhibitions</h2>
+    <div class="flex items-center gap-2">
       <a
-        href = "/exhibition" class = "text-lg md:text-2xl font-thin font-serif"
-        data-astro-prefetch = "viewport"
-      >View more&nbsp;&nbsp;→</a>
+        href="/exhibition"
+        class="text-lg md:text-2xl font-thin font-serif"
+        data-astro-prefetch="viewport">View more&nbsp;&nbsp;→</a
+      >
     </div>
   </hgroup>
-  <div class = "w-full">
-    <div class = "overflow-visible">
-      {exhibitionData && (
+  <div class="w-full">
+    <div class="overflow-visible">
+      {
+        exhibitionData && (
           <ExhibitionSlider client:visible exhibitions={exhibitionData} />
-      )}
+        )
+      }
     </div>
   </div>
 </div>

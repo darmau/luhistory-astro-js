@@ -6,7 +6,7 @@ const latestArchives = await sanityClient.fetch(`*[_type == 'article' && isTop =
   subtitle,
   "slug": slug.current,
   "cover": cover.asset->url
-}[0...6]`);
+}[0...3]`);
 ---
 
 {latestArchives && (

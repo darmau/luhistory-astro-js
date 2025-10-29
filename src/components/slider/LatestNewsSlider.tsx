@@ -49,10 +49,10 @@ export default function LatestNewsSlider({ news }: LatestNewsSliderProps) {
             {item.cover && (
               <>
                 <picture className="absolute inset-0">
-                  <source srcSet={`${item.cover}?w=1280&f=avif`} type="image/avif" />
-                  <source srcSet={`${item.cover}?w=1280&f=webp`} type="image/webp" />
+                  <source srcSet={`${item.cover}?w=840&f=avif`} type="image/avif" />
+                  <source srcSet={`${item.cover}?w=840&f=webp`} type="image/webp" />
                   <img
-                    src={`${item.cover}?w=1280`}
+                    src={`${item.cover}?w=840`}
                     alt={item.title}
                     className="absolute inset-0 object-cover h-full w-full"
                   />
