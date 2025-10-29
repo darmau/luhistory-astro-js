@@ -12,22 +12,31 @@ import Counter from "yet-another-react-lightbox/plugins/counter";
 import ArrowLeft from "../../react-icon/ArrowLeft.tsx";
 import ArrowRight from "../../react-icon/ArrowRight.tsx";
 import Close from "../../react-icon/Close.tsx";
-import type { GallerySliderProps, RemoteImageSet } from "@/types";
+import type { GallerySliderProps } from "@/types";
 import type { SlideImage } from "yet-another-react-lightbox";
 
 type GallerySlide = SlideImage & {
-  imageSet?: RemoteImageSet | null;
   description?: string;
 };
 
-const parseDimension = (value?: number | string): number | undefined => {
-  if (typeof value === "number") return value;
-  if (typeof value === "string") {
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : undefined;
-  }
-  return undefined;
+const buildSanityImageUrl = (url: string, params: Record<string, string | number>) => {
+  const search = new URLSearchParams({ auto: "format" });
+  Object.entries(params).forEach(([key, value]) => {
+    search.set(key, String(value));
+  });
+  return `${url}?${search.toString()}`;
 };
+
+const buildSanityImageSrcSet = (url: string, params: Record<string, string | number>, baseWidth?: number) => [
+  {
+    src: buildSanityImageUrl(url, { ...params, dpr: 1 }),
+    width: baseWidth,
+  },
+  {
+    src: buildSanityImageUrl(url, { ...params, dpr: 2 }),
+    width: baseWidth !== undefined ? baseWidth * 2 : undefined,
+  },
+];
 
 export default function GallerySlider({ images }: GallerySliderProps) {
   const [open, setOpen] = React.useState(false);
@@ -35,21 +44,13 @@ export default function GallerySlider({ images }: GallerySliderProps) {
 
   const slides = useMemo<GallerySlide[]>(
     () =>
-      images.map((image) => {
-        const imageSet = image.imageSet;
-        const lightboxImg = imageSet?.lightbox?.img ?? imageSet?.img;
-        const slide: GallerySlide = {
-          type: "image",
-          src: lightboxImg?.src ?? image.url,
-          alt: lightboxImg?.alt ?? image.caption ?? "Gallery image",
-          width: parseDimension(lightboxImg?.width),
-          height: parseDimension(lightboxImg?.height),
-          imageSet,
-          description: image.caption ?? undefined,
-        };
-
-        return slide;
-      }),
+      images.map((image) => ({
+        type: "image",
+        src: buildSanityImageUrl(image.url, { w: 1600, fit: "max" }),
+        srcSet: buildSanityImageSrcSet(image.url, { w: 1600, fit: "max" }, 1600),
+        alt: image.caption ?? "Gallery image",
+        description: image.caption ?? undefined,
+      })),
     [images]
   );
 
@@ -101,59 +102,33 @@ export default function GallerySlider({ images }: GallerySliderProps) {
           enabled: true,
         }}
       >
-        {images.map((item, imageIndex) => {
-          const imageSet = item.imageSet;
-
-          return (
-            <SwiperSlide key={item.url}>
-              {({ isActive }) => (
-                <button
-                  type="button"
-                  className="block focus:outline-none"
-                  onClick={() => {
-                    setIndex(imageIndex);
-                    setOpen(true);
-                  }}
-                  aria-label={item.caption ?? "Open gallery image"}
-                >
-                  <picture>
-                    {imageSet ? (
-                      <>
-                        {imageSet.sources.map((source, index) => (
-                          <source
-                            key={`${source.type}-${index}`}
-                            type={source.type}
-                            srcSet={source.srcSet}
-                            sizes={imageSet.img.sizes}
-                          />
-                        ))}
-                        <img
-                          {...imageSet.img}
-                          alt={imageSet.img.alt}
-                          className={`bg-gray-50 object-contain h-[480px] w-auto max-w-full ${
-                            !isActive ? "grayscale" : ""
-                          }`}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <source srcSet={`${item.url}?h=640&f=avif`} type="image/avif" />
-                        <source srcSet={`${item.url}?h=640&f=webp`} type="image/webp" />
-                        <img
-                          src={`${item.url}?h=640`}
-                          alt={item.caption || "Gallery image"}
-                          className={`bg-gray-50 object-contain h-[480px] w-auto max-w-full ${
-                            !isActive ? "grayscale" : ""
-                          }`}
-                        />
-                      </>
-                    )}
-                  </picture>
-                </button>
-              )}
-            </SwiperSlide>
-          );
-        })}
+        {images.map((item, imageIndex) => (
+          <SwiperSlide key={item.url}>
+            {({ isActive }) => (
+              <button
+                type="button"
+                className="block focus:outline-none"
+                onClick={() => {
+                  setIndex(imageIndex);
+                  setOpen(true);
+                }}
+                aria-label={item.caption ?? "Open gallery image"}
+              >
+                <img
+                  src={buildSanityImageUrl(item.url, { h: 640, fit: "max" })}
+                  srcSet={[
+                    `${buildSanityImageUrl(item.url, { h: 640, fit: "max", dpr: 1 })} 1x`,
+                    `${buildSanityImageUrl(item.url, { h: 640, fit: "max", dpr: 2 })} 2x`,
+                  ].join(", ")}
+                  alt={item.caption || "Gallery image"}
+                  className={`bg-gray-50 object-contain h-[480px] w-auto max-w-full ${
+                    !isActive ? "grayscale" : ""
+                  }`}
+                />
+              </button>
+            )}
+          </SwiperSlide>
+        ))}
       </Swiper>
 
       <Lightbox
@@ -163,43 +138,6 @@ export default function GallerySlider({ images }: GallerySliderProps) {
         close={() => setOpen(false)}
         slides={slides}
         render={{
-          slide: ({ slide }) => {
-            const gallerySlide = slide as GallerySlide;
-            const imageSet = gallerySlide.imageSet;
-            if (!imageSet) {
-              return undefined;
-            }
-
-            const pictureSources = imageSet.lightbox?.sources ?? imageSet.sources;
-            const { alt: imageAlt, sizes: imageSizes, ...imgRest } = imageSet.lightbox?.img ?? imageSet.img;
-            const resolvedAlt = imageAlt ?? gallerySlide.alt ?? "Gallery image";
-            const resolvedSizes = imageSizes ?? "100vw";
-
-            return (
-              <div
-                className="yarl__slide_image"
-                style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}
-              >
-                <picture className="block max-h-full max-w-full">
-                  {pictureSources.map((source, sourceIndex) => (
-                    <source
-                      key={`${source.type}-${sourceIndex}`}
-                      type={source.type}
-                      srcSet={source.srcSet}
-                      sizes={resolvedSizes}
-                    />
-                  ))}
-                  <img
-                    {...imgRest}
-                    sizes={resolvedSizes}
-                    alt={resolvedAlt}
-                    className="yarl__slide_image"
-                    style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto" }}
-                  />
-                </picture>
-              </div>
-            );
-          },
           iconPrev: () => <ArrowLeft />,
           iconNext: () => <ArrowRight />,
           iconClose: () => <Close />,
