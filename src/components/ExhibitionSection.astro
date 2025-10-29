@@ -1,18 +1,10 @@
 ---
 import { sanityClient } from "sanity:client";
 import ExhibitionSlider from "./slider/ExhibitionSlider.tsx";
-type Exhibition = {
-  title: string;
-  slug: string;
-  year: string;
-  city: string;
-  cover: {
-    url: string;
-    caption?: string | null;
-  } | null;
-};
+import type { ExhibitionItem } from "@/types";
+import { buildRemoteImageSetOrNull } from "@/utils/remoteImage";
 
-const exhibitionData = await sanityClient.fetch<Exhibition[]>(`
+const exhibitionsRaw = await sanityClient.fetch<ExhibitionItem[]>(`
   *[_type == 'exhibition' && defined(dateRange) && defined(cover)] | order(dateRange.startDate desc)[0...5]{
     title,
     "slug": slug.current,
@@ -23,6 +15,30 @@ const exhibitionData = await sanityClient.fetch<Exhibition[]>(`
       "caption": cover.caption
     }
   }`);
+
+const exhibitionWidths = [320, 480, 720, 960];
+const exhibitionSizes = "(max-width: 1023px) 100vw, calc(50vw - 3rem)";
+
+const exhibitionData = await Promise.all(
+  exhibitionsRaw.map(async (item) => {
+    if (!item.cover?.url) {
+      return { ...item, coverImage: null } satisfies ExhibitionItem;
+    }
+
+    const coverImage = await buildRemoteImageSetOrNull({
+      src: item.cover.url,
+      alt: item.cover.caption || item.title,
+      widths: exhibitionWidths,
+      sizes: exhibitionSizes,
+    });
+
+    if (!coverImage) {
+      console.warn("Falling back to remote Sanity image", { slug: item.slug });
+    }
+
+    return { ...item, coverImage } satisfies ExhibitionItem;
+  })
+);
 ---
 
 <div

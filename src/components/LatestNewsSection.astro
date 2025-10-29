@@ -1,12 +1,42 @@
 ---
-import {sanityClient} from "sanity:client";
-import LatestNewsSlider from "./slider/LatestNewsSlider.tsx"
-const latestArchives = await sanityClient.fetch(`*[_type == 'article' && isTop == true && defined(slug)] | order(publishDate desc){
+import { sanityClient } from "sanity:client";
+import LatestNewsSlider from "./slider/LatestNewsSlider.tsx";
+import type { LatestNewsItem } from "@/types";
+import { buildRemoteImageSetOrNull } from "@/utils/remoteImage";
+
+const latestArchivesRaw = await sanityClient.fetch<LatestNewsItem[]>(`*[_type == 'article' && isTop == true && defined(slug)] | order(publishDate desc){
   title,
   subtitle,
   "slug": slug.current,
   "cover": cover.asset->url
 }[0...3]`);
+
+const responsiveWidths = [480, 720, 960];
+const responsiveSizes = "(max-width: 1023px) 100vw, 33vw";
+
+const latestArchives: LatestNewsItem[] = await Promise.all(
+  latestArchivesRaw.map(async (item) => {
+    if (!item.cover) {
+      return { ...item, coverImage: null } satisfies LatestNewsItem;
+    }
+
+    const coverImage = await buildRemoteImageSetOrNull({
+      src: item.cover,
+      alt: item.title,
+      widths: responsiveWidths,
+      sizes: responsiveSizes,
+    });
+
+    if (!coverImage) {
+      console.warn("Falling back to remote Sanity image", { slug: item.slug });
+    }
+
+    return {
+      ...item,
+      coverImage,
+    } satisfies LatestNewsItem;
+  })
+);
 ---
 
 {latestArchives && (

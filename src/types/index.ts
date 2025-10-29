@@ -33,6 +33,9 @@ export type {
 
 // Component prop types
 export type {
+  RemoteImageSource,
+  RemoteImageAttributes,
+  RemoteImageSet,
   CaseItem,
   CaseSliderProps,
   ExhibitionItem,

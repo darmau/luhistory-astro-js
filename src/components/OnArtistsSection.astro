@@ -1,19 +1,39 @@
 ---
-import {sanityClient} from "sanity:client";
-import CaseSlider from "./slider/CaseSlider.tsx"
+import { sanityClient } from "sanity:client";
+import CaseSlider from "./slider/CaseSlider.tsx";
+import type { CaseItem } from "@/types";
+import { buildRemoteImageSetOrNull } from "@/utils/remoteImage";
 
-type CaseSummary = {
-  title: string;
-  slug: string;
-  cover?: string | null;
-};
-
-const casesData = await sanityClient.fetch<CaseSummary[]>(`
-*[_type == "caseStudy" && defined(slug)] | order(publishDate desc)[0...5] {
+const casesRaw = await sanityClient.fetch<CaseItem[]>(`
+*[_type == "caseStudy" && defined(slug) && defined(cover)] | order(publishDate desc)[0...5] {
     title,
     "slug": slug.current,
     "cover": cover.image.asset->url
-    }`)
+    }`);
+
+const caseWidths = [320, 480, 720, 960];
+const caseSizes = "(max-width: 1023px) 100vw, calc(50vw - 3rem)";
+
+const casesData = await Promise.all(
+  casesRaw.map(async (item) => {
+    if (!item.cover) {
+      return { ...item, coverImage: null } satisfies CaseItem;
+    }
+
+    const coverImage = await buildRemoteImageSetOrNull({
+      src: item.cover,
+      alt: item.title,
+      widths: caseWidths,
+      sizes: caseSizes,
+    });
+
+    if (!coverImage) {
+      console.warn("Falling back to remote Sanity image", { slug: item.slug });
+    }
+
+    return { ...item, coverImage } satisfies CaseItem;
+  })
+);
 ---
 <div
   class = "col-start-1 col-span-12 mb-8 p-4 sm:p-0 sm:col-start-2 sm:col-span-10 lg:mb-40"

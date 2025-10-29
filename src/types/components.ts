@@ -9,10 +9,33 @@ import type { PortableBlock } from "./blocks";
 import type { PortableTextBlock } from "@portabletext/types";
 
 // Slider component props
+export type RemoteImageSource = {
+  type: string;
+  srcSet: string;
+};
+
+export type RemoteImageAttributes = {
+  src: string;
+  srcSet?: string;
+  sizes?: string;
+  width?: number;
+  height?: number;
+  alt?: string;
+  loading?: "lazy" | "eager";
+  decoding?: "sync" | "async" | "auto";
+  [attribute: string]: string | number | undefined;
+};
+
+export type RemoteImageSet = {
+  sources: RemoteImageSource[];
+  img: RemoteImageAttributes;
+};
+
 export type CaseItem = {
   title: string;
   slug: string;
   cover?: string | null;
+  coverImage?: RemoteImageSet | null;
 };
 
 export type CaseSliderProps = {
@@ -28,6 +51,7 @@ export type ExhibitionItem = {
     url: string;
     caption?: string | null;
   } | null;
+  coverImage?: RemoteImageSet | null;
 };
 
 export type ExhibitionSliderProps = {
@@ -39,6 +63,7 @@ export type LatestNewsItem = {
   subtitle?: string | null;
   slug: string;
   cover?: string | null;
+  coverImage?: RemoteImageSet | null;
 };
 
 export type LatestNewsSliderProps = {

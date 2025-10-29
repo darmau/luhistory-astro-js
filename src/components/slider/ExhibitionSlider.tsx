@@ -41,32 +41,52 @@ export default function ExhibitionSlider({ exhibitions }: ExhibitionSliderProps)
         enabled: true,
       }}
     >
-      {exhibitions.map((item) => (
-        <SwiperSlide key={item.slug}>
-          <a href={`/exhibition/detail/${item.slug}`}>
-            {item.cover && (
-              <picture className="block">
-                <source srcSet={`${item.cover.url}?h=720&f=avif`} type="image/avif" />
-                <source srcSet={`${item.cover.url}?h=720&f=webp`} type="image/webp" />
-                <img
-                  src={`${item.cover.url}?h=720`}
-                  alt={item.cover.caption || item.title}
-                  className="bg-gray-50 object-cover h-[240px] md:h-[352px] w-full mb-4 md:mb-6"
-                />
-              </picture>
-            )}
-            <h3
-              title={item.title}
-              className="font-serif font-bold text-neutral-900 text-2xl line-clamp-2 mb-2 md:mb-4 md:text-3xl"
-            >
-              {item.title}
-            </h3>
-            <p className="text-neutral-900 opacity-50">
-              {item.year.split("-")[0]} · {item.city}
-            </p>
-          </a>
-        </SwiperSlide>
-      ))}
+      {exhibitions.map((item) => {
+        const coverImage = item.coverImage;
+
+        return (
+          <SwiperSlide key={item.slug}>
+            <a href={`/exhibition/detail/${item.slug}`}>
+              {coverImage ? (
+                <picture className="block">
+                  {coverImage.sources.map((source, index) => (
+                    <source
+                      key={`${source.type}-${index}`}
+                      type={source.type}
+                      srcSet={source.srcSet}
+                      sizes={coverImage.img.sizes}
+                    />
+                  ))}
+                  <img
+                    {...coverImage.img}
+                    alt={coverImage.img.alt}
+                    className="bg-gray-50 object-cover h-[240px] md:h-[352px] w-full mb-4 md:mb-6"
+                  />
+                </picture>
+              ) : item.cover ? (
+                <picture className="block">
+                  <source srcSet={`${item.cover.url}?h=720&f=avif`} type="image/avif" />
+                  <source srcSet={`${item.cover.url}?h=720&f=webp`} type="image/webp" />
+                  <img
+                    src={`${item.cover.url}?h=720`}
+                    alt={item.cover.caption || item.title}
+                    className="bg-gray-50 object-cover h-[240px] md:h-[352px] w-full mb-4 md:mb-6"
+                  />
+                </picture>
+              ) : null}
+              <h3
+                title={item.title}
+                className="font-serif font-bold text-neutral-900 text-2xl line-clamp-2 mb-2 md:mb-4 md:text-3xl"
+              >
+                {item.title}
+              </h3>
+              <p className="text-neutral-900 opacity-50">
+                {item.year.split("-")[0]} · {item.city}
+              </p>
+            </a>
+          </SwiperSlide>
+        );
+      })}
     </Swiper>
   );
 }
