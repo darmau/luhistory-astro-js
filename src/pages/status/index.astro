@@ -1,0 +1,105 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageTitle from "@/components/PageTitle.astro";
+import { sanityClient } from "sanity:client";
+
+const commitSha =
+  import.meta.env.CF_PAGES_COMMIT_SHA ??
+  process.env.CF_PAGES_COMMIT_SHA ??
+  "未提供";
+const branch =
+  import.meta.env.CF_PAGES_BRANCH ??
+  process.env.CF_PAGES_BRANCH ??
+  "未提供";
+const deploymentUrl =
+  import.meta.env.CF_PAGES_URL ??
+  process.env.CF_PAGES_URL ??
+  "未提供";
+
+const buildTime = new Intl.DateTimeFormat("zh-CN", {
+  timeZone: "Asia/Shanghai",
+  dateStyle: "full",
+  timeStyle: "long",
+}).format(new Date());
+
+const datasetCounts = await sanityClient.fetch<{
+  articles: number;
+  exhibitions: number;
+  books: number;
+}>(`
+{
+  "articles": count(*[_type == "article" && defined(publishDate) && !(_id in path('drafts.**'))]),
+  "exhibitions": count(*[_type == "exhibition" && defined(dateRange.startDate) && !(_id in path('drafts.**'))]),
+  "books": count(*[_type == "book" && defined(publishDate) && !(_id in path('drafts.**'))])
+}
+`);
+
+const buildInfo = [
+  { label: "Commit SHA", value: commitSha },
+  { label: "Branch", value: branch },
+  { label: "Cloudflare Pages URL", value: deploymentUrl },
+  { label: "构建时间（UTC+8）", value: buildTime },
+];
+
+const contentSummary = [
+  { label: "文章", total: datasetCounts.articles },
+  { label: "展览", total: datasetCounts.exhibitions },
+  { label: "出版物", total: datasetCounts.books },
+];
+---
+
+<Layout title="Site Status" description="站点构建状态概览">
+  <PageTitle title="Status" subtitle="站点构建状态概览" />
+  <main class="px-4 pb-20 pt-12 md:pb-28 md:pt-16 lg:mx-auto lg:max-w-5xl 8xl:px-0">
+    <section class="grid gap-6 lg:grid-cols-2">
+      <article class="rounded-3xl border border-neutral-200 bg-white/80 p-6 shadow-sm backdrop-blur">
+        <header class="mb-4">
+          <h2 class="text-lg font-semibold uppercase tracking-wide text-neutral-500">
+            构建信息
+          </h2>
+          <p class="mt-1 text-2xl font-serif font-semibold text-neutral-900">
+            当前部署概览
+          </p>
+        </header>
+        <dl class="space-y-4">
+          {buildInfo.map((item) => (
+            <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+              <dt class="text-sm font-medium uppercase tracking-wide text-neutral-500">
+                {item.label}
+              </dt>
+              <dd class="break-words font-mono text-sm text-neutral-900 sm:text-right sm:text-base">
+                {item.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </article>
+
+      <article class="rounded-3xl border border-neutral-200 bg-white/80 p-6 shadow-sm backdrop-blur">
+        <header class="mb-4">
+          <h2 class="text-lg font-semibold uppercase tracking-wide text-neutral-500">
+            内容统计
+          </h2>
+          <p class="mt-1 text-2xl font-serif font-semibold text-neutral-900">
+            已发布条目数量
+          </p>
+        </header>
+        <ul class="grid gap-4 sm:grid-cols-3">
+          {contentSummary.map((item) => (
+            <li class="rounded-2xl bg-neutral-50 p-4 text-center">
+              <p class="text-sm font-medium uppercase tracking-wide text-neutral-500">
+                {item.label}
+              </p>
+              <p class="mt-2 text-3xl font-serif font-bold text-neutral-900">
+                {item.total}
+              </p>
+            </li>
+          ))}
+        </ul>
+        <p class="mt-6 text-sm text-neutral-500">
+          统计数据基于已发布内容，仅供内部参考。
+        </p>
+      </article>
+    </section>
+  </main>
+</Layout>
