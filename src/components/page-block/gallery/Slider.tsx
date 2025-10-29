@@ -12,14 +12,44 @@ import Counter from "yet-another-react-lightbox/plugins/counter";
 import ArrowLeft from "../../react-icon/ArrowLeft.tsx";
 import ArrowRight from "../../react-icon/ArrowRight.tsx";
 import Close from "../../react-icon/Close.tsx";
-import type { GallerySliderProps } from "@/types";
+import type { GallerySliderProps, RemoteImageSet } from "@/types";
+import type { SlideImage } from "yet-another-react-lightbox";
+
+type GallerySlide = SlideImage & {
+  imageSet?: RemoteImageSet | null;
+  description?: string;
+};
+
+const parseDimension = (value?: number | string): number | undefined => {
+  if (typeof value === "number") return value;
+  if (typeof value === "string") {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : undefined;
+  }
+  return undefined;
+};
 
 export default function GallerySlider({ images }: GallerySliderProps) {
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = React.useState(0);
 
-  const slides = useMemo(
-    () => images.map((image) => ({ src: image.url, description: image.caption })),
+  const slides = useMemo<GallerySlide[]>(
+    () =>
+      images.map((image) => {
+        const imageSet = image.imageSet;
+        const lightboxImg = imageSet?.lightbox?.img ?? imageSet?.img;
+        const slide: GallerySlide = {
+          type: "image",
+          src: lightboxImg?.src ?? image.url,
+          alt: lightboxImg?.alt ?? image.caption ?? "Gallery image",
+          width: parseDimension(lightboxImg?.width),
+          height: parseDimension(lightboxImg?.height),
+          imageSet,
+          description: image.caption ?? undefined,
+        };
+
+        return slide;
+      }),
     [images]
   );
 
@@ -80,49 +110,49 @@ export default function GallerySlider({ images }: GallerySliderProps) {
                 <button
                   type="button"
                   className="block focus:outline-none"
-                onClick={() => {
-                  setIndex(imageIndex);
-                  setOpen(true);
-                }}
-                aria-label={item.caption ?? "Open gallery image"}
-              >
-                <picture>
-                  {imageSet ? (
-                    <>
-                      {imageSet.sources.map((source, index) => (
-                        <source
-                          key={`${source.type}-${index}`}
-                          type={source.type}
-                          srcSet={source.srcSet}
-                          sizes={imageSet.img.sizes}
+                  onClick={() => {
+                    setIndex(imageIndex);
+                    setOpen(true);
+                  }}
+                  aria-label={item.caption ?? "Open gallery image"}
+                >
+                  <picture>
+                    {imageSet ? (
+                      <>
+                        {imageSet.sources.map((source, index) => (
+                          <source
+                            key={`${source.type}-${index}`}
+                            type={source.type}
+                            srcSet={source.srcSet}
+                            sizes={imageSet.img.sizes}
+                          />
+                        ))}
+                        <img
+                          {...imageSet.img}
+                          alt={imageSet.img.alt}
+                          className={`bg-gray-50 object-contain h-[480px] w-auto max-w-full ${
+                            !isActive ? "grayscale" : ""
+                          }`}
                         />
-                      ))}
-                      <img
-                        {...imageSet.img}
-                        alt={imageSet.img.alt}
-                        className={`bg-gray-50 object-contain h-[480px] w-auto max-w-full ${
-                          !isActive ? "grayscale" : ""
-                        }`}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <source srcSet={`${item.url}?h=640&f=avif`} type="image/avif" />
-                      <source srcSet={`${item.url}?h=640&f=webp`} type="image/webp" />
-                      <img
-                        src={`${item.url}?h=640`}
-                        alt={item.caption || "Gallery image"}
-                        className={`bg-gray-50 object-contain h-[480px] w-auto max-w-full ${
-                          !isActive ? "grayscale" : ""
-                        }`}
-                      />
-                    </>
-                  )}
-                </picture>
-              </button>
-            )}
-          </SwiperSlide>
-        );
+                      </>
+                    ) : (
+                      <>
+                        <source srcSet={`${item.url}?h=640&f=avif`} type="image/avif" />
+                        <source srcSet={`${item.url}?h=640&f=webp`} type="image/webp" />
+                        <img
+                          src={`${item.url}?h=640`}
+                          alt={item.caption || "Gallery image"}
+                          className={`bg-gray-50 object-contain h-[480px] w-auto max-w-full ${
+                            !isActive ? "grayscale" : ""
+                          }`}
+                        />
+                      </>
+                    )}
+                  </picture>
+                </button>
+              )}
+            </SwiperSlide>
+          );
         })}
       </Swiper>
 
@@ -132,6 +162,48 @@ export default function GallerySlider({ images }: GallerySliderProps) {
         index={index}
         close={() => setOpen(false)}
         slides={slides}
+        render={{
+          slide: ({ slide }) => {
+            const gallerySlide = slide as GallerySlide;
+            const imageSet = gallerySlide.imageSet;
+            if (!imageSet) {
+              return undefined;
+            }
+
+            const pictureSources = imageSet.lightbox?.sources ?? imageSet.sources;
+            const { alt: imageAlt, sizes: imageSizes, ...imgRest } = imageSet.lightbox?.img ?? imageSet.img;
+            const resolvedAlt = imageAlt ?? gallerySlide.alt ?? "Gallery image";
+            const resolvedSizes = imageSizes ?? "100vw";
+
+            return (
+              <div
+                className="yarl__slide_image"
+                style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}
+              >
+                <picture className="block max-h-full max-w-full">
+                  {pictureSources.map((source, sourceIndex) => (
+                    <source
+                      key={`${source.type}-${sourceIndex}`}
+                      type={source.type}
+                      srcSet={source.srcSet}
+                      sizes={resolvedSizes}
+                    />
+                  ))}
+                  <img
+                    {...imgRest}
+                    sizes={resolvedSizes}
+                    alt={resolvedAlt}
+                    className="yarl__slide_image"
+                    style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto" }}
+                  />
+                </picture>
+              </div>
+            );
+          },
+          iconPrev: () => <ArrowLeft />,
+          iconNext: () => <ArrowRight />,
+          iconClose: () => <Close />,
+        }}
         styles={{
           container: {
             background: "white",
@@ -143,11 +215,6 @@ export default function GallerySlider({ images }: GallerySliderProps) {
           },
           captionsDescriptionContainer: { background: "white" },
           captionsDescription: { color: "black", textAlign: "center" },
-        }}
-        render={{
-          iconPrev: () => <ArrowLeft />,
-          iconNext: () => <ArrowRight />,
-          iconClose: () => <Close />,
         }}
         counter={{ container: { style: { top: 0 } } }}
       />

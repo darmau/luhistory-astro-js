@@ -24,4 +24,8 @@ export type RemoteImageAttributes = {
 export type RemoteImageSet = {
   sources: RemoteImageSource[];
   img: RemoteImageAttributes;
+  lightbox?: {
+    sources: RemoteImageSource[];
+    img: RemoteImageAttributes;
+  };
 };

@@ -23,6 +23,15 @@ const defaultFormats: RemoteImageFormat[] = [
 
 const DEFAULT_FALLBACK_FORMAT = "jpeg";
 
+const parseDimension = (value?: number | string): number | undefined => {
+  if (typeof value === "number") return value;
+  if (typeof value === "string") {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : undefined;
+  }
+  return undefined;
+};
+
 export async function buildRemoteImageSet({
   src,
   alt,
@@ -32,7 +41,7 @@ export async function buildRemoteImageSet({
   fallbackFormat = DEFAULT_FALLBACK_FORMAT,
   inferSize = true,
 }: BuildRemoteImageOptions): Promise<RemoteImageSet> {
-  const optimizedSources = await Promise.all(
+  const optimizedImages = await Promise.all(
     formats.map(async ({ format, type }) => {
       const image = await getImage({ src, widths, format, inferSize });
       return {
@@ -50,17 +59,48 @@ export async function buildRemoteImageSet({
   });
 
   const fallbackSrcSet = fallback.srcSet.values.length > 0 ? fallback.srcSet.attribute : undefined;
-  const { class: _ignoredClass, ...fallbackAttributes } = fallback.attributes;
+  const {
+    class: _ignoredClass,
+    width: attrWidth,
+    height: attrHeight,
+    ...fallbackAttributes
+  } = fallback.attributes;
   void _ignoredClass;
 
+  const fallbackWidth = parseDimension(attrWidth);
+  const fallbackHeight = parseDimension(attrHeight);
+
+  const baseImageAttributes = {
+    ...fallbackAttributes,
+    ...(fallbackWidth !== undefined ? { width: fallbackWidth } : {}),
+    ...(fallbackHeight !== undefined ? { height: fallbackHeight } : {}),
+    src: fallback.src,
+    ...(fallbackSrcSet ? { srcSet: fallbackSrcSet } : {}),
+    alt,
+  } satisfies RemoteImageSet["img"];
+
+  const pictureSources = optimizedImages.map((image) => ({
+    type: image.type,
+    srcSet: image.srcSet,
+  }));
+
+  const sliderImg: RemoteImageSet["img"] = {
+    ...baseImageAttributes,
+    sizes,
+  };
+
+  const lightboxImg: RemoteImageSet["img"] = {
+    ...baseImageAttributes,
+    sizes: "100vw",
+    loading: "eager",
+  };
+
   return {
-    sources: optimizedSources,
-    img: {
-      ...fallbackAttributes,
-      src: fallback.src,
-      ...(fallbackSrcSet ? { srcSet: fallbackSrcSet } : {}),
-      sizes,
-      alt,
+    sources: pictureSources,
+    img: sliderImg,
+    lightbox: {
+      sources: pictureSources.map((source) => ({ ...source })),
+      img: lightboxImg,
     },
   } satisfies RemoteImageSet;
 }
