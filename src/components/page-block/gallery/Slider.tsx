@@ -37,10 +37,18 @@ export default function GallerySlider({ images }: GallerySliderProps) {
 
     handleResize(); // 获取初始值
 
-    window.addEventListener("resize", handleResize); // 添加窗口大小改变的监听器
+    // 添加防抖的 resize 监听器
+    let timeoutId: NodeJS.Timeout;
+    const debouncedHandleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(handleResize, 100);
+    };
+
+    window.addEventListener("resize", debouncedHandleResize);
 
     return () => {
-      window.removeEventListener("resize", handleResize); // 移除监听器
+      window.removeEventListener("resize", debouncedHandleResize);
+      clearTimeout(timeoutId);
     };
   }, []);
 
