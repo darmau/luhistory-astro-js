@@ -175,41 +175,26 @@ const hiddenYears = allYears.slice(8);
 </Layout>
 
 <script is:inline>
-  document.addEventListener('DOMContentLoaded', function() {
-    console.log('Year page script loaded');
-    const toggleButton = document.getElementById('toggle-years');
-    const hiddenYears = document.querySelectorAll('.hidden-years');
+  const toggleButton = document.getElementById('toggle-years');
+  const hiddenYears = document.querySelectorAll('.hidden-years');
+  
+  if (toggleButton && hiddenYears.length > 0) {
+    let isExpanded = false;
     
-    console.log('Toggle button found:', !!toggleButton);
-    console.log('Hidden years found:', hiddenYears.length);
-    console.log('Hidden years elements:', hiddenYears);
-    
-    if (toggleButton && hiddenYears.length > 0) {
-      console.log('Setting up toggle functionality');
-      let isExpanded = false;
-      
-      toggleButton.addEventListener('click', function() {
-        console.log('Toggle button clicked, isExpanded:', isExpanded);
-        if (isExpanded) {
-          hiddenYears.forEach(function(year) {
-            year.style.display = 'none';
-          });
-          toggleButton.textContent = 'Show All Years';
-          isExpanded = false;
-          console.log('Years hidden');
-        } else {
-          hiddenYears.forEach(function(year) {
-            year.style.display = 'block';
-          });
-          toggleButton.textContent = 'Hide Years';
-          isExpanded = true;
-          console.log('Years shown');
-        }
-      });
-    } else {
-      console.error('Toggle button or hidden years not found');
-      console.error('Toggle button:', toggleButton);
-      console.error('Hidden years count:', hiddenYears.length);
-    }
-  });
+    toggleButton.addEventListener('click', function() {
+      if (isExpanded) {
+        hiddenYears.forEach(function(year) {
+          year.style.display = 'none';
+        });
+        toggleButton.textContent = 'Show All Years';
+        isExpanded = false;
+      } else {
+        hiddenYears.forEach(function(year) {
+          year.style.display = 'block';
+        });
+        toggleButton.textContent = 'Hide Years';
+        isExpanded = true;
+      }
+    });
+  }
 </script>
