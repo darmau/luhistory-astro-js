@@ -76,7 +76,7 @@ export default function ExhibitionSlider({ exhibitions }: ExhibitionSliderProps)
               ) : null}
               <h3
                 title={item.title}
-                className="font-serif font-bold text-neutral-900 text-2xl line-clamp-2 mb-2 md:mb-4 md:text-3xl"
+                className="font-serif font-medium text-neutral-900 text-2xl/8 line-clamp-2 mb-2 md:text-3xl/11"
               >
                 {item.title}
               </h3>
