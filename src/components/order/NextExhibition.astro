@@ -19,10 +19,10 @@ const currentIndex = findNextAndLast(exhibitionList, slug);
       <a
         href={`/exhibition/detail/${exhibitionList[currentIndex + 1].slug}`}
         data-astro-prefetch="hover"
-        class="col-start-1 lg:col-start-3 col-span-12 lg:col-span-8 flex gap-8 justify-between items-center text-3xl lg:text-6xl font-serif font-bold no-underline hover:underline text-neutral-900"
+        class="col-start-1 lg:col-start-3 col-span-12 lg:col-span-8 flex gap-8 justify-between items-center text-3xl/12 lg:text-6xl/24 font-serif font-medium no-underline hover:underline text-neutral-900"
       >
         <span
-          class="line-clamp-2 pb-2 pl-1"
+          class="line-clamp-2"
           title={exhibitionList[currentIndex + 1].title}
         >
           {exhibitionList[currentIndex + 1].title}

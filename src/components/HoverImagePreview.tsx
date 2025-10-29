@@ -68,7 +68,7 @@ const HoverImagePreview: React.FC<HoverImagePreviewProps> = ({ type, slug, title
         <a
             title = {title}
             href={`/${type}/detail/${slug}`}
-            className = "col-span-4 font-serif font-bold proportional-nums text-2xl sm:text-3xl text-neutral-900 line-clamp-2 hover:underline"
+            className = "col-span-4 font-serif font-bold proportional-nums text-2xl/8 sm:text-3xl/12 text-neutral-900 line-clamp-2 hover:underline"
             data-astro-prefetch
         >{title}</a>
         <p

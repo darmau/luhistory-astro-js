@@ -46,7 +46,7 @@ const groupedExhibitions = Array.from(exhibitionByYear.entries()).map(([year, ex
       {
         groupedExhibitions.map(({year, exhibitions}) => (
           <div class = "sm:grid sm:grid-cols-10">
-            <h2 class = "col-span-2 font-serif font-bold proportional-nums text-3xl tracking-wider sm:py-6">{year}</h2>
+            <h2 class = "col-span-2 font-serif font-medium proportional-nums text-3xl tracking-wider sm:py-6">{year}</h2>
             <ul class="col-span-8 flex-1">
               {
                 exhibitions.map((exhibition) => (
