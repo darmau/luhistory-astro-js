@@ -23,6 +23,40 @@ const defaultFormats: RemoteImageFormat[] = [
 
 const DEFAULT_FALLBACK_FORMAT = "jpeg";
 
+type RetryOptions = {
+  attempts?: number;
+  baseDelay?: number;
+  multiplier?: number;
+};
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions = {}): Promise<T> {
+  const {
+    attempts = 3,
+    baseDelay = 200,
+    multiplier = 2,
+  } = options;
+
+  let lastError: unknown;
+
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error;
+      if (attempt === attempts) {
+        break;
+      }
+
+      const delay = baseDelay * multiplier ** (attempt - 1);
+      await sleep(delay);
+    }
+  }
+
+  throw lastError;
+}
+
 const parseDimension = (value?: number | string): number | undefined => {
   if (typeof value === "number") return value;
   if (typeof value === "string") {
@@ -43,7 +77,7 @@ export async function buildRemoteImageSet({
 }: BuildRemoteImageOptions): Promise<RemoteImageSet> {
   const optimizedImages = await Promise.all(
     formats.map(async ({ format, type }) => {
-      const image = await getImage({ src, widths, format, inferSize });
+      const image = await withRetry(() => getImage({ src, widths, format, inferSize }));
       return {
         type,
         srcSet: image.srcSet.attribute,
@@ -51,12 +85,14 @@ export async function buildRemoteImageSet({
     })
   );
 
-  const fallback = await getImage({
-    src,
-    widths,
-    format: fallbackFormat,
-    inferSize,
-  });
+  const fallback = await withRetry(() =>
+    getImage({
+      src,
+      widths,
+      format: fallbackFormat,
+      inferSize,
+    }),
+  );
 
   const fallbackSrcSet = fallback.srcSet.values.length > 0 ? fallback.srcSet.attribute : undefined;
   const {
@@ -108,7 +144,14 @@ export async function buildRemoteImageSet({
 export async function buildRemoteImageSetOrNull(options: BuildRemoteImageOptions): Promise<RemoteImageSet | null> {
   try {
     return await buildRemoteImageSet(options);
-  } catch {
+  } catch (error) {
+    console.error("Failed to transform remote image", {
+      src: options.src,
+      widths: options.widths,
+      sizes: options.sizes,
+      alt: options.alt,
+      error,
+    });
     return null;
   }
 }
