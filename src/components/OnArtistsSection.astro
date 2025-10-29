@@ -16,7 +16,6 @@ const casesData = await sanityClient.fetch<CaseSummary[]>(`
     }`)
 ---
 <div
-  id = "cases-container"
   class = "col-start-1 col-span-12 mb-8 p-4 sm:p-0 sm:col-start-2 sm:col-span-10 lg:mb-40"
 >
   <hgroup
@@ -33,7 +32,7 @@ const casesData = await sanityClient.fetch<CaseSummary[]>(`
   <div class = "w-full">
     <div class = "overflow-visible">
       {casesData && (
-          <CaseSlider client:only="react" cases={casesData} />
+          <CaseSlider client:visible cases={casesData} />
       )}
     </div>
   </div>
@@ -51,49 +50,4 @@ const casesData = await sanityClient.fetch<CaseSummary[]>(`
       height: 352px;
     }
   }
-
-  #cases-container {
-    transition: all 0.5s ease-in-out;
-  }
-
-  .invisible {
-    opacity: 0;
-  }
-
-  .visible {
-    opacity: 1;
-  }
 </style>
-
-<script>
-  // 选择container，在进入viewport的时候添加class
-  function showContainer() {
-    const container = document.getElementById('cases-container');
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          entry.target.classList.remove('invisible');
-        } else {
-          entry.target.classList.remove('visible');
-          entry.target.classList.add('invisible');
-        }
-      });
-    }, options);
-
-    if (!container) {
-      return;
-    }
-
-    observer.observe(container);
-  }
-
-  document.addEventListener('DOMContentLoaded', showContainer);
-  document.addEventListener('astro:after-swap', showContainer);
-</script>
