@@ -52,6 +52,7 @@ const booksData = await sanityClient.fetch<Book[]>(`
                   width="360"
                   format="avif"
                   loading="lazy"
+                  decoding="async"
                 />
               )}
             </div>

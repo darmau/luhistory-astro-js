@@ -62,7 +62,7 @@ const exhibitionData = await Promise.all(
     <div class="overflow-visible">
       {
         exhibitionData && (
-          <ExhibitionSlider client:visible exhibitions={exhibitionData} />
+          <ExhibitionSlider client:load exhibitions={exhibitionData} />
         )
       }
     </div>

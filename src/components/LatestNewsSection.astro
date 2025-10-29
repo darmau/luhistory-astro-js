@@ -48,7 +48,7 @@ const latestArchives: LatestNewsItem[] = await Promise.all(
         <h2 class="font-serif font-bold text-3xl md:text-5xl">Highlights</h2>
       </hgroup>
       <div class="overflow-visible">
-        <LatestNewsSlider client:visible news={latestArchives} />
+        <LatestNewsSlider client:load news={latestArchives} />
       </div>
     </div>
   )
