@@ -86,7 +86,7 @@ export default function LatestNewsSlider({ news }: LatestNewsSliderProps) {
               <h3
                 className={`${
                   hasCoverImage ? "text-white" : "text-neutral-900"
-                } relative font-serif font-bold text-2xl md:text-6xl`}
+                } relative font-serif font-medium text-2xl md:text-5xl`}
               >
                 {item.title}
               </h3>

@@ -24,7 +24,7 @@ const heroImageAlt = homepage?.slogan ?? "Homepage hero image";
   class="col-start-1 col-span-12 flex flex-col items-center p-4 gap-8 justify-between mb-8 sm:gap-0 sm:p-0 sm:col-start-2 sm:col-span-10 sm:flex-row lg:mb-40"
 >
   <h1
-    class="text-neutral-900 font-bold font-serif leading-tight text-5xl text-center sm:text-left md:z-10 md:text-8xl md:mr-[-50%] md:-ml-[2px]"
+    class="text-neutral-900 font-serif font-medium leading-tight text-5xl text-center sm:text-left md:z-10 md:text-8xl md:mr-[-50%] md:-ml-[2px]"
     id="hero-text"
   >
     {
@@ -45,11 +45,12 @@ const heroImageAlt = homepage?.slogan ?? "Homepage hero image";
         alt={heroImageAlt}
         class="hero-img aspect-[3/4] w-1/2 object-cover brightness-95 md:z-0"
         id="hero-img"
-        width="792"
-        height="1056"
+        width="640"
+        height="800"
         format="avif"
         loading="eager"
         fetchpriority="high"
+        decoding="async"
       />
     )
   }

@@ -4,7 +4,9 @@ import LatestNewsSlider from "./slider/LatestNewsSlider.tsx";
 import type { LatestNewsItem } from "@/types";
 import { buildRemoteImageSetOrNull } from "@/utils/remoteImage";
 
-const latestArchivesRaw = await sanityClient.fetch<LatestNewsItem[]>(`*[_type == 'article' && isTop == true && defined(slug)] | order(publishDate desc){
+const latestArchivesRaw = await sanityClient.fetch<
+  LatestNewsItem[]
+>(`*[_type == 'article' && isTop == true && defined(slug)] | order(publishDate desc){
   title,
   subtitle,
   "slug": slug.current,
@@ -35,21 +37,19 @@ const latestArchives: LatestNewsItem[] = await Promise.all(
       ...item,
       coverImage,
     } satisfies LatestNewsItem;
-  })
+  }),
 );
 ---
 
-{latestArchives && (
-<div
-  class = "col-start-1 col-span-12 mb-8 p-4 sm:p-0 sm:col-start-2 sm:col-span-10 lg:mb-40"
->
-  <hgroup
-    class = "flex justify-between items-baseline text-neutral-900 mb-8 md:mb-20"
-  >
-    <h2 class = "font-bold text-3xl md:text-5xl font-serif">Highlights</h2>
-  </hgroup>
-  <div class = "overflow-visible">
-    <LatestNewsSlider client:visible news = {latestArchives}/>
-  </div>
-</div>
-    )}
+{
+  latestArchives && (
+    <div class="col-start-1 col-span-12 mb-8 p-4 sm:p-0 sm:col-start-2 sm:col-span-10 lg:mb-40">
+      <hgroup class="flex justify-between items-baseline text-neutral-900 mb-8 md:mb-20">
+        <h2 class="font-serif font-bold text-3xl md:text-5xl">Highlights</h2>
+      </hgroup>
+      <div class="overflow-visible">
+        <LatestNewsSlider client:load news={latestArchives} />
+      </div>
+    </div>
+  )
+}

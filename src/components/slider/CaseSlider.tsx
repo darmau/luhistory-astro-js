@@ -60,7 +60,7 @@ export default function CaseSlider({ cases }: CaseSliderProps) {
                   <img
                     {...coverImage.img}
                     alt={coverImage.img.alt}
-                    className="bg-gray-50 object-cover h-[240px] md:h-[352px] w-full mb-4 md:mb-6"
+                    className="bg-gray-50 object-cover h-[240px] md:h-[352px] w-full mb-2"
                   />
                 </picture>
               ) : item.cover ? (
@@ -70,13 +70,13 @@ export default function CaseSlider({ cases }: CaseSliderProps) {
                   <img
                     src={`${item.cover}?h=720`}
                     alt={item.title}
-                    className="bg-gray-50 object-cover h-[240px] md:h-[352px] w-full mb-4 md:mb-6"
+                    className="bg-gray-50 object-cover h-[240px] md:h-[352px] w-full mb-2"
                   />
                 </picture>
               ) : null}
             <h3
               title={item.title}
-              className="font-serif font-bold text-neutral-900 text-2xl line-clamp-2 mb-2 md:mb-4 md:text-3xl"
+              className="font-serif font-medium text-neutral-900 text-2xl/8 line-clamp-2 mb-2 md:text-3xl/12"
             >
               {item.title}
             </h3>

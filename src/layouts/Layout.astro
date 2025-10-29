@@ -1,6 +1,7 @@
 ---
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
+import "@fontsource-variable/noto-serif-sc";
 import "../styles/tailwind.css";
 const { title, description } = Astro.props;
 ---
@@ -13,15 +14,93 @@ const { title, description } = Astro.props;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-            href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F393GEHV22"
-    ></script>
+    
+    <!-- 资源提示优化 -->
+    <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+    
+    <!-- 预加载关键资源 -->
+    <link rel="preload" href="/favicon.svg" as="image" type="image/svg+xml" />
+    
+    <!-- 关键 CSS 内联 -->
+    <style>
+      /* 字体显示优化 - 配合 fontsource */
+      @font-face {
+        font-family: 'Noto Serif SC Variable';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 200 900;
+      }
+      
+      /* 关键样式内联 */
+      body { margin: 0; font-family: var(--font-sans); }
+      .min-h-screen { min-height: 100vh; }
+      .flex { display: flex; }
+      .flex-col { flex-direction: column; }
+      .relative { position: relative; }
+      .fixed { position: fixed; }
+      .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+      .w-full { width: 100%; }
+      .h-full { height: 100%; }
+      .bg-neutral-900 { background-color: #171717; }
+      .text-white { color: #ffffff; }
+      .font-serif { font-family: var(--font-serif); }
+      .font-bold { font-weight: 700; }
+      .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+      .text-5xl { font-size: 3rem; line-height: 1; }
+      .no-underline { text-decoration: none; }
+      .hover\:opacity-80:hover { opacity: 0.8; }
+      .transition-opacity { transition-property: opacity; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+      .opacity-0 { opacity: 0; }
+      .pointer-events-none { pointer-events: none; }
+      .z-10 { z-index: 10; }
+      .z-100 { z-index: 100; }
+      .transform { transform: translateZ(0); }
+      .translate-y-0 { transform: translateY(0); }
+      .-translate-y-1 { transform: translateY(-0.25rem); }
+      .transition { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+      .ease-in-out { transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
+      .duration-300 { transition-duration: 300ms; }
+      .duration-1000 { transition-duration: 1000ms; }
+    </style>
+    
+    <!-- 延迟加载 Google Analytics -->
+    <script is:inline>
+      // 延迟加载 GA
+      function loadGA() {
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-F393GEHV22';
+        document.head.appendChild(script);
+        
+        window.dataLayer = window.dataLayer || [];
+        function gtag(...args) {
+          dataLayer.push(args);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-F393GEHV22", { send_page_view: false });
+
+        const sendPageView = () => {
+          gtag("event", "page_view", {
+            page_title: document.title,
+            page_location: window.location.href,
+            page_path: window.location.pathname,
+          });
+        };
+
+        sendPageView();
+        document.addEventListener("astro:page-load", sendPageView);
+      }
+      
+      // 页面加载完成后延迟 2 秒加载 GA
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          setTimeout(loadGA, 2000);
+        });
+      } else {
+        setTimeout(loadGA, 2000);
+      }
+    </script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(...args) {
