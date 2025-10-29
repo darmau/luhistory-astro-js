@@ -7,12 +7,13 @@ import type { Page } from "astro";
 import type { GalleryImage } from "./gallery";
 import type { PortableBlock } from "./blocks";
 import type { PortableTextBlock } from "@portabletext/types";
+import type { RemoteImageSet } from "./image";
 
-// Slider component props
 export type CaseItem = {
   title: string;
   slug: string;
   cover?: string | null;
+  coverImage?: RemoteImageSet | null;
 };
 
 export type CaseSliderProps = {
@@ -28,6 +29,7 @@ export type ExhibitionItem = {
     url: string;
     caption?: string | null;
   } | null;
+  coverImage?: RemoteImageSet | null;
 };
 
 export type ExhibitionSliderProps = {
@@ -39,6 +41,7 @@ export type LatestNewsItem = {
   subtitle?: string | null;
   slug: string;
   cover?: string | null;
+  coverImage?: RemoteImageSet | null;
 };
 
 export type LatestNewsSliderProps = {

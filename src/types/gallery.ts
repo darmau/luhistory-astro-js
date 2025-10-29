@@ -1,8 +1,3 @@
-/**
- * Gallery-related type definitions
- * Consolidated from multiple components to ensure consistency
- */
-
 export type GalleryImage = {
   url: string;
   caption?: string | null;

@@ -40,43 +40,67 @@ export default function LatestNewsSlider({ news }: LatestNewsSliderProps) {
         enabled: true,
       }}
     >
-      {news.map((item) => (
-        <SwiperSlide key={item.slug}>
-          <a
-            href={`/collection/detail/${item.slug}`}
-            className="relative bg-gray-50 h-[240px] sm:h-[360px] md:h-[544px] flex flex-col justify-end p-4 md:p-10"
-          >
-            {item.cover && (
-              <>
-                <picture className="absolute inset-0">
-                  <source srcSet={`${item.cover}?w=1280&f=avif`} type="image/avif" />
-                  <source srcSet={`${item.cover}?w=1280&f=webp`} type="image/webp" />
-                  <img
-                    src={`${item.cover}?w=1280`}
-                    alt={item.title}
-                    className="absolute inset-0 object-cover h-full w-full"
-                  />
-                </picture>
-                <div className="absolute inset-0 bg-gradient-to-t from-neutral-700 to-transparent" />
-              </>
-            )}
-            <h3
-              className={`${
-                item.cover ? "text-white" : "text-neutral-900"
-              } relative font-serif font-bold text-2xl md:text-6xl`}
+      {news.map((item) => {
+        const coverImage = item.coverImage;
+        const hasCoverImage = Boolean(coverImage ?? item.cover);
+
+        return (
+          <SwiperSlide key={item.slug}>
+            <a
+              href={`/collection/detail/${item.slug}`}
+              className="relative bg-gray-50 h-[240px] sm:h-[360px] md:h-[544px] flex flex-col justify-end p-4 md:p-10"
             >
-              {item.title}
-            </h3>
-            <p
-              className={`${
-                item.cover ? "text-white" : "text-neutral-900"
-              } relative font-serif font-semibold text-base md:text-2xl`}
-            >
-              {item.subtitle}
-            </p>
-          </a>
-        </SwiperSlide>
-      ))}
+              {coverImage ? (
+                <>
+                  <picture className="absolute inset-0">
+                    {coverImage.sources.map((source, index) => (
+                      <source
+                        key={`${source.type}-${index}`}
+                        type={source.type}
+                        srcSet={source.srcSet}
+                        sizes={coverImage.img.sizes}
+                      />
+                    ))}
+                    <img
+                      {...coverImage.img}
+                      alt={coverImage.img.alt}
+                      className="absolute inset-0 object-cover h-full w-full"
+                    />
+                  </picture>
+                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-700 to-transparent" />
+                </>
+              ) : item.cover ? (
+                <>
+                  <picture className="absolute inset-0">
+                    <source srcSet={`${item.cover}?w=840&f=avif`} type="image/avif" />
+                    <source srcSet={`${item.cover}?w=840&f=webp`} type="image/webp" />
+                    <img
+                      src={`${item.cover}?w=840`}
+                      alt={item.title}
+                      className="absolute inset-0 object-cover h-full w-full"
+                    />
+                  </picture>
+                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-700 to-transparent" />
+                </>
+              ) : null}
+              <h3
+                className={`${
+                  hasCoverImage ? "text-white" : "text-neutral-900"
+                } relative font-serif font-bold text-2xl md:text-6xl`}
+              >
+                {item.title}
+              </h3>
+              <p
+                className={`${
+                  hasCoverImage ? "text-white" : "text-neutral-900"
+                } relative font-serif font-semibold text-base md:text-2xl`}
+              >
+                {item.subtitle}
+              </p>
+            </a>
+          </SwiperSlide>
+        );
+      })}
     </Swiper>
   );
 }

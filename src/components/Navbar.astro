@@ -11,9 +11,10 @@ import searchIcon from "../assets/icons/search.svg";
 <!--该部分为全屏导航-->
 <div
   id="nav-fullscreen"
-  class="hidden bg-neutral-900 w-screen h-screen fixed inset-0"
+  class="bg-neutral-900 w-screen h-screen fixed inset-0"
 >
-  <hgroup class="w-full flex justify-between items-center p-8">
+  <!-- 顶部导航栏 - 绝对定位 -->
+  <hgroup class="absolute top-0 left-0 right-0 flex justify-between items-center p-8 z-10">
     <a href="/" data-astro-reload>
       <Image src={faviconWhite} alt="logo" class="cursor-pointer" />
     </a>
@@ -24,104 +25,111 @@ import searchIcon from "../assets/icons/search.svg";
       class="cursor-pointer"
     />
   </hgroup>
-  <div
-    class="grid grid-cols-1 gap-4 lg:gap-16 px-8 md:grid-cols-2 md:p-8 lg:grid-cols-5 lg:gap-3 lg:p-16"
-  >
-    <ul class="pl-0 col-span-1 lg:col-span-3 lg:mx-auto space-y-4 md:space-y-8">
-      <li class="w-fit list-none">
-        <a
-          class="text-white font-serif font-bold text-3xl md:text-5xl no-underline"
-          href="/about"
-          data-astro-prefetch="load">About</a
-        >
-      </li>
-      <li class="w-fit list-none">
-        <a
-          class="text-white font-serif font-bold text-3xl md:text-5xl no-underline"
-          href="/exhibition"
-          data-astro-prefetch="load">Exhibitions</a
-        >
-      </li>
-      <li class="w-fit list-none">
-        <a
-          class="text-white font-serif font-bold text-3xl md:text-5xl no-underline"
-          href="/book/category"
-          data-astro-prefetch="load">Publications</a
-        >
-      </li>
-      <li class="w-fit list-none">
-        <a
-          class="text-white font-serif font-bold text-3xl md:text-5xl no-underline"
-          href="/teaching"
-          data-astro-prefetch="load">Teaching</a
-        >
-      </li>
-      <li class="w-fit list-none">
-        <a
-          class="text-white font-serif font-bold text-3xl md:text-5xl no-underline"
-          href="/collection/all/1/"
-          data-astro-prefetch="load">Collection</a
-        >
-      </li>
-      <li class="w-fit list-none">
-        <a
-          class="text-white font-serif font-bold text-3xl md:text-5xl no-underline"
-          href="/on-artists"
-          data-astro-prefetch="load">On Artists</a
-        >
-      </li>
-    </ul>
-    <div class="col-span-1 space-y-12 lg:col-span-2">
-      <div class="space-y-4">
-        <h3
-          class="text-white font-normal font-sans text-sm uppercase opacity-50 tracking-widest"
-        >
-          Social
-        </h3>
-        <h4>
-          <a
-            href="https://weibo.com/u/1087499432"
-            rel="noopener noreferrer"
-            target="_blank"
-            class="no-underline text-white font-serif font-bold text-2xl md:text-4xl"
-          >
-            Weibo
-          </a>
-        </h4>
-        <h4>
-          <a
-            href="https://www.xiaohongshu.com/user/profile/614f52d2000000001f03f1e4"
-            rel="noopener noreferrer"
-            target="_blank"
-            class="no-underline text-white font-serif font-bold text-2xl md:text-4xl"
-          >
-            Xiaohongshu
-          </a>
-        </h4>
-        <h4>
-          <a
-            href="https://www.instagram.com/lvpeng60"
-            rel="noopener noreferrer"
-            target="_blank"
-            class="no-underline text-white font-serif font-bold text-2xl md:text-4xl"
-          >
-            Instagram
-          </a>
-        </h4>
-      </div>
-      <div class="space-y-4">
-        <h3
-          class="text-white font-normal font-sans text-sm uppercase opacity-50 tracking-widest"
-        >
-          Contact
-        </h3>
-        <h4 class="font-serif font-bold text-2xl md:text-4xl">
-          <a
-            class="text-white no-underline"
-            href="mailto:info@luhistory.com"
-            target="_blank">info@luhistory.com</a
-          >
-        </h4>
+  
+  <!-- 完全居中的内容区域 -->
+  <div class="w-full h-full flex items-center justify-center px-8">
+    <div class="w-full max-w-6xl">
+      <div class="grid grid-cols-1 gap-8 lg:gap-16 md:grid-cols-2 lg:grid-cols-5">
+        <!-- 主导航菜单 -->
+        <ul class="pl-0 col-span-1 lg:col-span-3 lg:mx-auto space-y-6 md:space-y-8">
+          <li class="w-fit list-none">
+            <a
+              class="text-white font-serif font-bold text-3xl md:text-5xl no-underline hover:opacity-80 transition-opacity"
+              href="/about"
+              data-astro-prefetch="load">About</a
+            >
+          </li>
+          <li class="w-fit list-none">
+            <a
+              class="text-white font-serif font-bold text-3xl md:text-5xl no-underline hover:opacity-80 transition-opacity"
+              href="/exhibition"
+              data-astro-prefetch="load">Exhibitions</a
+            >
+          </li>
+          <li class="w-fit list-none">
+            <a
+              class="text-white font-serif font-bold text-3xl md:text-5xl no-underline hover:opacity-80 transition-opacity"
+              href="/book/category"
+              data-astro-prefetch="load">Publications</a
+            >
+          </li>
+          <li class="w-fit list-none">
+            <a
+              class="text-white font-serif font-bold text-3xl md:text-5xl no-underline hover:opacity-80 transition-opacity"
+              href="/teaching"
+              data-astro-prefetch="load">Teaching</a
+            >
+          </li>
+          <li class="w-fit list-none">
+            <a
+              class="text-white font-serif font-bold text-3xl md:text-5xl no-underline hover:opacity-80 transition-opacity"
+              href="/collection/all/1/"
+              data-astro-prefetch="load">Collection</a
+            >
+          </li>
+          <li class="w-fit list-none">
+            <a
+              class="text-white font-serif font-bold text-3xl md:text-5xl no-underline hover:opacity-80 transition-opacity"
+              href="/on-artists"
+              data-astro-prefetch="load">On Artists</a
+            >
+          </li>
+        </ul>
+        
+        <!-- 侧边栏信息 -->
+        <div class="col-span-1 space-y-12 lg:col-span-2">
+          <div class="space-y-6">
+            <h3
+              class="text-white font-normal font-sans text-sm uppercase opacity-50 tracking-widest"
+            >
+              Social
+            </h3>
+            <h4>
+              <a
+                href="https://weibo.com/u/1087499432"
+                rel="noopener noreferrer"
+                target="_blank"
+                class="no-underline text-white font-serif font-bold text-2xl md:text-4xl hover:opacity-80 transition-opacity"
+              >
+                Weibo
+              </a>
+            </h4>
+            <h4>
+              <a
+                href="https://www.xiaohongshu.com/user/profile/614f52d2000000001f03f1e4"
+                rel="noopener noreferrer"
+                target="_blank"
+                class="no-underline text-white font-serif font-bold text-2xl md:text-4xl hover:opacity-80 transition-opacity"
+              >
+                Xiaohongshu
+              </a>
+            </h4>
+            <h4>
+              <a
+                href="https://www.instagram.com/lvpeng60"
+                rel="noopener noreferrer"
+                target="_blank"
+                class="no-underline text-white font-serif font-bold text-2xl md:text-4xl hover:opacity-80 transition-opacity"
+              >
+                Instagram
+              </a>
+            </h4>
+          </div>
+          <div class="space-y-6">
+            <h3
+              class="text-white font-normal font-sans text-sm uppercase opacity-50 tracking-widest"
+            >
+              Contact
+            </h3>
+            <h4 class="font-serif font-bold text-2xl md:text-4xl">
+              <a
+                class="text-white no-underline hover:opacity-80 transition-opacity"
+                href="mailto:info@luhistory.com"
+                target="_blank">info@luhistory.com</a
+              >
+            </h4>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -177,74 +185,79 @@ import searchIcon from "../assets/icons/search.svg";
   </div>
 </nav>
 
-<script>
-  declare global {
-    interface Window {
-      __luhistoryNavSearchOutsideHandler?: (event: MouseEvent) => void;
+<script is:inline>
+  function cleanup() {
+    // 清理旧的事件监听器
+    if (window.__luhistoryNavSearchOutsideHandler instanceof Function) {
+      document.removeEventListener("click", window.__luhistoryNavSearchOutsideHandler);
+      window.__luhistoryNavSearchOutsideHandler = undefined;
     }
   }
 
   function init() {
+    // 防止重复初始化
+    if (window.__luhistoryNavInitialized) {
+      return;
+    }
+
     const navFullscreen = document.getElementById("nav-fullscreen");
     const closeButton = document.getElementById("close-button");
     const menuButton = document.querySelector(".menu-button");
     const searchToggle = document.getElementById("nav-search-toggle");
     const searchForm = document.getElementById("nav-search-form");
-    const searchInput = document.getElementById("nav-search-input") as HTMLInputElement | null;
+    const searchInput = document.getElementById("nav-search-input");
     const searchContainer = document.querySelector(".nav-search-container");
 
     if (closeButton) {
-      closeButton.addEventListener("click", () => {
-        navFullscreen?.classList.remove("show-fullscreen-nav");
-        // 恢复滚动
+      closeButton.addEventListener("click", function() {
+        if (navFullscreen) {
+          navFullscreen.classList.remove("show-fullscreen-nav");
+        }
         document.body.style.overflow = "auto";
       });
     }
 
     if (menuButton) {
-      menuButton.addEventListener("click", () => {
-        navFullscreen?.classList.add("show-fullscreen-nav");
-        console.log("clicked!");
-        // 禁用滚动
+      menuButton.addEventListener("click", function() {
+        if (navFullscreen) {
+          navFullscreen.classList.add("show-fullscreen-nav");
+        }
         document.body.style.overflow = "hidden";
       });
     }
 
-    if (
-      searchToggle &&
-      searchForm &&
-      searchInput &&
-      !searchToggle.dataset.bound
-    ) {
-      const showSearchForm = () => {
+    if (searchToggle && searchForm && searchInput) {
+      const showSearchForm = function() {
         searchForm.classList.remove("hidden");
         searchForm.classList.add("flex");
         searchToggle.classList.add("hidden");
         searchToggle.setAttribute("aria-expanded", "true");
-        requestAnimationFrame(() => searchInput.focus());
+        requestAnimationFrame(function() {
+          searchInput.focus();
+        });
       };
 
-      const collapseSearchForm = () => {
+      const collapseSearchForm = function() {
         searchForm.classList.remove("flex");
         searchForm.classList.add("hidden");
         searchToggle.classList.remove("hidden");
         searchToggle.setAttribute("aria-expanded", "false");
       };
 
-      const performSearch = () => {
+      const performSearch = function() {
         const query = searchInput.value.trim();
         if (!query) {
           searchInput.focus();
           return;
         }
 
-        const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(`site:luhistory.com ${query}`)}`;
+        const searchUrl = "https://www.google.com/search?q=" + encodeURIComponent("site:luhistory.com " + query);
         window.open(searchUrl, "_blank", "noopener");
         searchInput.value = "";
         collapseSearchForm();
       };
 
-      searchToggle.addEventListener("click", () => {
+      searchToggle.addEventListener("click", function() {
         const formHidden = searchForm.classList.contains("hidden");
         if (formHidden) {
           showSearchForm();
@@ -253,29 +266,20 @@ import searchIcon from "../assets/icons/search.svg";
         }
       });
 
-      searchForm.addEventListener("submit", (event) => {
+      searchForm.addEventListener("submit", function(event) {
         event.preventDefault();
         performSearch();
       });
 
-      searchInput.addEventListener("keydown", (event) => {
+      searchInput.addEventListener("keydown", function(event) {
         if (event.key === "Escape") {
           collapseSearchForm();
         }
       });
 
-      if (window.__luhistoryNavSearchOutsideHandler instanceof Function) {
-        document.removeEventListener(
-          "click",
-          window.__luhistoryNavSearchOutsideHandler,
-        );
-      }
-
-      const outsideClickHandler = (event: MouseEvent) => {
+      const outsideClickHandler = function(event) {
         const isHidden = searchForm.classList.contains("hidden");
-        if (isHidden) {
-          return;
-        }
+        if (isHidden) return;
 
         const target = event.target;
         if (
@@ -289,22 +293,37 @@ import searchIcon from "../assets/icons/search.svg";
 
       document.addEventListener("click", outsideClickHandler);
       window.__luhistoryNavSearchOutsideHandler = outsideClickHandler;
-
-      searchToggle.dataset.bound = "true";
     }
+
+    window.__luhistoryNavInitialized = true;
   }
 
-  // 初始化
-  init();
+  // 页面加载完成后初始化
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 
-  // 监听 astro:after-swap 事件
-  document.addEventListener("astro:after-swap", init);
+  // 监听 astro:after-swap 事件，重新初始化
+  document.addEventListener("astro:after-swap", function() {
+    cleanup();
+    window.__luhistoryNavInitialized = false;
+    init();
+  });
 </script>
 
 <style>
-  .show-fullscreen-nav {
-    display: block;
-    transition: all 1s ease-in-out;
+  #nav-fullscreen {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition: opacity 0.3s ease-in-out, transform 1s ease-in-out;
     z-index: 100;
+  }
+  #nav-fullscreen.show-fullscreen-nav {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
   }
 </style>

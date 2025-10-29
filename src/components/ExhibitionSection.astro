@@ -1,19 +1,11 @@
 ---
-import {sanityClient} from "sanity:client";
-import ExhibitionSlider from "./slider/ExhibitionSlider.tsx"
-type Exhibition = {
-  title: string;
-  slug: string;
-  year: string;
-  city: string;
-  cover: {
-    url: string;
-    caption?: string | null;
-  } | null;
-};
+import { sanityClient } from "sanity:client";
+import ExhibitionSlider from "./slider/ExhibitionSlider.tsx";
+import type { ExhibitionItem } from "@/types";
+import { buildRemoteImageSetOrNull } from "@/utils/remoteImage";
 
-const exhibitionData = await sanityClient.fetch<Exhibition[]>(`
-  *[_type == 'exhibition' && defined(dateRange) && defined(cover)] | order(dateRange.startDate desc){
+const exhibitionsRaw = await sanityClient.fetch<ExhibitionItem[]>(`
+  *[_type == 'exhibition' && defined(dateRange) && defined(cover)] | order(dateRange.startDate desc)[0...5]{
     title,
     "slug": slug.current,
     "year": dateRange.startDate,
@@ -22,28 +14,55 @@ const exhibitionData = await sanityClient.fetch<Exhibition[]>(`
       "url": cover.asset->url,
       "caption": cover.caption
     }
-  }`)
+  }`);
+
+const exhibitionWidths = [320, 480, 720, 960];
+const exhibitionSizes = "(max-width: 1023px) 100vw, calc(50vw - 3rem)";
+
+const exhibitionData = await Promise.all(
+  exhibitionsRaw.map(async (item) => {
+    if (!item.cover?.url) {
+      return { ...item, coverImage: null } satisfies ExhibitionItem;
+    }
+
+    const coverImage = await buildRemoteImageSetOrNull({
+      src: item.cover.url,
+      alt: item.cover.caption || item.title,
+      widths: exhibitionWidths,
+      sizes: exhibitionSizes,
+    });
+
+    if (!coverImage) {
+      console.warn("Falling back to remote Sanity image", { slug: item.slug });
+    }
+
+    return { ...item, coverImage } satisfies ExhibitionItem;
+  })
+);
 ---
+
 <div
-  id = "exhibition-container"
-  class = "col-start-1 col-span-12 mb-8 p-4 sm:p-0 sm:col-start-2 sm:col-span-10 lg:mb-40"
+  class="col-start-1 col-span-12 mb-8 p-4 sm:p-0 sm:col-start-2 sm:col-span-10 lg:mb-40"
 >
   <hgroup
-    class = "flex justify-between items-baseline text-neutral-900 mb-8 md:mb-20"
+    class="flex justify-between items-baseline text-neutral-900 mb-8 md:mb-20"
   >
-    <h2 class = "font-bold text-3xl md:text-5xl font-serif">Exhibitions</h2>
-    <div class = "flex items-center gap-2">
+    <h2 class="font-bold text-3xl md:text-5xl font-serif">Exhibitions</h2>
+    <div class="flex items-center gap-2">
       <a
-        href = "/exhibition" class = "text-lg md:text-2xl font-thin font-serif"
-        data-astro-prefetch = "viewport"
-      >View more&nbsp;&nbsp;→</a>
+        href="/exhibition"
+        class="text-lg md:text-2xl font-thin font-serif"
+        data-astro-prefetch="viewport">View more&nbsp;&nbsp;→</a
+      >
     </div>
   </hgroup>
-  <div class = "w-full">
-    <div class = "overflow-visible">
-      {exhibitionData && (
-          <ExhibitionSlider client:only="react" exhibitions={exhibitionData} />
-      )}
+  <div class="w-full">
+    <div class="overflow-visible">
+      {
+        exhibitionData && (
+          <ExhibitionSlider client:visible exhibitions={exhibitionData} />
+        )
+      }
     </div>
   </div>
 </div>
@@ -60,49 +79,4 @@ const exhibitionData = await sanityClient.fetch<Exhibition[]>(`
       height: 352px;
     }
   }
-
-  #exhibition-container {
-    transition: opacity 0.5s ease-in-out;
-  }
-
-  .invisible {
-    opacity: 0;
-  }
-
-  .visible {
-    opacity: 1;
-  }
 </style>
-
-<script>
-  // 选择container，在进入viewport的时候添加class
-  function showContainer() {
-    const container = document.getElementById('exhibition-container');
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          entry.target.classList.remove('invisible');
-        } else {
-          entry.target.classList.remove('visible');
-          entry.target.classList.add('invisible');
-        }
-      });
-    }, options);
-
-    if (!container) {
-      return;
-    }
-
-    observer.observe(container);
-  }
-
-  document.addEventListener('DOMContentLoaded', showContainer);
-  document.addEventListener('astro:after-swap', showContainer);
-</script>

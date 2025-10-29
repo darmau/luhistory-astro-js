@@ -1,22 +1,41 @@
 ---
-import {sanityClient} from "sanity:client";
-import CaseSlider from "./slider/CaseSlider.tsx"
+import { sanityClient } from "sanity:client";
+import CaseSlider from "./slider/CaseSlider.tsx";
+import type { CaseItem } from "@/types";
+import { buildRemoteImageSetOrNull } from "@/utils/remoteImage";
 
-type CaseSummary = {
-  title: string;
-  slug: string;
-  cover?: string | null;
-};
-
-const casesData = await sanityClient.fetch<CaseSummary[]>(`
-*[_type == "caseStudy" && defined(slug)] | order(publishDate) {
+const casesRaw = await sanityClient.fetch<CaseItem[]>(`
+*[_type == "caseStudy" && defined(slug) && defined(cover)] | order(publishDate desc)[0...5] {
     title,
     "slug": slug.current,
     "cover": cover.image.asset->url
-    }`)
+    }`);
+
+const caseWidths = [320, 480, 720, 960];
+const caseSizes = "(max-width: 1023px) 100vw, calc(50vw - 3rem)";
+
+const casesData = await Promise.all(
+  casesRaw.map(async (item) => {
+    if (!item.cover) {
+      return { ...item, coverImage: null } satisfies CaseItem;
+    }
+
+    const coverImage = await buildRemoteImageSetOrNull({
+      src: item.cover,
+      alt: item.title,
+      widths: caseWidths,
+      sizes: caseSizes,
+    });
+
+    if (!coverImage) {
+      console.warn("Falling back to remote Sanity image", { slug: item.slug });
+    }
+
+    return { ...item, coverImage } satisfies CaseItem;
+  })
+);
 ---
 <div
-  id = "cases-container"
   class = "col-start-1 col-span-12 mb-8 p-4 sm:p-0 sm:col-start-2 sm:col-span-10 lg:mb-40"
 >
   <hgroup
@@ -33,7 +52,7 @@ const casesData = await sanityClient.fetch<CaseSummary[]>(`
   <div class = "w-full">
     <div class = "overflow-visible">
       {casesData && (
-          <CaseSlider client:only="react" cases={casesData} />
+          <CaseSlider client:visible cases={casesData} />
       )}
     </div>
   </div>
@@ -51,49 +70,4 @@ const casesData = await sanityClient.fetch<CaseSummary[]>(`
       height: 352px;
     }
   }
-
-  #cases-container {
-    transition: all 0.5s ease-in-out;
-  }
-
-  .invisible {
-    opacity: 0;
-  }
-
-  .visible {
-    opacity: 1;
-  }
 </style>
-
-<script>
-  // 选择container，在进入viewport的时候添加class
-  function showContainer() {
-    const container = document.getElementById('cases-container');
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          entry.target.classList.remove('invisible');
-        } else {
-          entry.target.classList.remove('visible');
-          entry.target.classList.add('invisible');
-        }
-      });
-    }, options);
-
-    if (!container) {
-      return;
-    }
-
-    observer.observe(container);
-  }
-
-  document.addEventListener('DOMContentLoaded', showContainer);
-  document.addEventListener('astro:after-swap', showContainer);
-</script>

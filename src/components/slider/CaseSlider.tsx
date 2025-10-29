@@ -41,29 +41,49 @@ export default function CaseSlider({ cases }: CaseSliderProps) {
         enabled: true,
       }}
     >
-      {cases.map((item) => (
-        <SwiperSlide key={item.slug}>
-          <a href={`/on-artists/detail/${item.slug}`}>
-            {item.cover && (
-              <picture className="block">
-                <source srcSet={`${item.cover}?h=720&f=avif`} type="image/avif" />
-                <source srcSet={`${item.cover}?h=720&f=webp`} type="image/webp" />
-                <img
-                  src={`${item.cover}?h=720`}
-                  alt={item.title}
-                  className="bg-gray-50 object-cover h-[240px] md:h-[352px] w-full mb-4 md:mb-6"
-                />
-              </picture>
-            )}
+      {cases.map((item) => {
+        const coverImage = item.coverImage;
+
+        return (
+          <SwiperSlide key={item.slug}>
+            <a href={`/on-artists/detail/${item.slug}`}>
+              {coverImage ? (
+                <picture className="block">
+                  {coverImage.sources.map((source, index) => (
+                    <source
+                      key={`${source.type}-${index}`}
+                      type={source.type}
+                      srcSet={source.srcSet}
+                      sizes={coverImage.img.sizes}
+                    />
+                  ))}
+                  <img
+                    {...coverImage.img}
+                    alt={coverImage.img.alt}
+                    className="bg-gray-50 object-cover h-[240px] md:h-[352px] w-full mb-4 md:mb-6"
+                  />
+                </picture>
+              ) : item.cover ? (
+                <picture className="block">
+                  <source srcSet={`${item.cover}?h=720&f=avif`} type="image/avif" />
+                  <source srcSet={`${item.cover}?h=720&f=webp`} type="image/webp" />
+                  <img
+                    src={`${item.cover}?h=720`}
+                    alt={item.title}
+                    className="bg-gray-50 object-cover h-[240px] md:h-[352px] w-full mb-4 md:mb-6"
+                  />
+                </picture>
+              ) : null}
             <h3
               title={item.title}
               className="font-serif font-bold text-neutral-900 text-2xl line-clamp-2 mb-2 md:mb-4 md:text-3xl"
             >
               {item.title}
             </h3>
-          </a>
-        </SwiperSlide>
-      ))}
+            </a>
+          </SwiperSlide>
+        );
+      })}
     </Swiper>
   );
 }

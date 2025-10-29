@@ -41,20 +41,22 @@ const HoverImagePreview: React.FC<HoverImagePreviewProps> = ({ type, slug, title
     setIsHovering(false);
   };
 
-  // 检查是否有足够空间显示图片
-  const shouldDisplayAbove = () => window.innerHeight - cursorPos.y < imageSize.height;
+  const imageStyle: React.CSSProperties = useMemo(() => {
+    const shouldDisplayAbove =
+      typeof window !== "undefined" && window.innerHeight - cursorPos.y < imageSize.height;
 
-  const imageStyle: React.CSSProperties = useMemo(() => ({
-    position: 'fixed',
-    left: `${cursorPos.x + 16}px`,
-    top: shouldDisplayAbove() ? `${cursorPos.y - imageSize.height}px` : `${cursorPos.y}px`,
-    width: `${imageSize.width}px`,
-    height: `${imageSize.height}px`,
-    pointerEvents: 'none',
-    display: isHovering ? 'block' : 'none',
-    transition: 'opacity 0.3s ease-in-out',
-    zIndex: 9999,
-  }), [cursorPos.x, cursorPos.y, imageSize.height, imageSize.width, isHovering]);
+    return {
+      position: "fixed",
+      left: `${cursorPos.x + 16}px`,
+      top: shouldDisplayAbove ? `${cursorPos.y - imageSize.height}px` : `${cursorPos.y}px`,
+      width: `${imageSize.width}px`,
+      height: `${imageSize.height}px`,
+      pointerEvents: "none",
+      display: isHovering ? "block" : "none",
+      transition: "opacity 0.3s ease-in-out",
+      zIndex: 9999,
+    } as const;
+  }, [cursorPos.x, cursorPos.y, imageSize.height, imageSize.width, isHovering]);
 
   return (
       <li

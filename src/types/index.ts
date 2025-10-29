@@ -10,6 +10,13 @@ export type {
   GallerySliderProps,
 } from "./gallery";
 
+// Image metadata types
+export type {
+  RemoteImageSource,
+  RemoteImageAttributes,
+  RemoteImageSet,
+} from "./image";
+
 // UI types
 export type { IconProps, ImageSize, CursorPosition } from "./ui";
 

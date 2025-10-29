@@ -13,13 +13,44 @@ import ArrowLeft from "../../react-icon/ArrowLeft.tsx";
 import ArrowRight from "../../react-icon/ArrowRight.tsx";
 import Close from "../../react-icon/Close.tsx";
 import type { GallerySliderProps } from "@/types";
+import type { SlideImage } from "yet-another-react-lightbox";
+
+type GallerySlide = SlideImage & {
+  description?: string;
+};
+
+const buildSanityImageUrl = (url: string, params: Record<string, string | number>) => {
+  const search = new URLSearchParams({ auto: "format" });
+  Object.entries(params).forEach(([key, value]) => {
+    search.set(key, String(value));
+  });
+  return `${url}?${search.toString()}`;
+};
+
+const buildSanityImageSrcSet = (url: string, params: Record<string, string | number>, baseWidth?: number) => [
+  {
+    src: buildSanityImageUrl(url, { ...params, dpr: 1 }),
+    width: baseWidth,
+  },
+  {
+    src: buildSanityImageUrl(url, { ...params, dpr: 2 }),
+    width: baseWidth !== undefined ? baseWidth * 2 : undefined,
+  },
+];
 
 export default function GallerySlider({ images }: GallerySliderProps) {
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = React.useState(0);
 
-  const slides = useMemo(
-    () => images.map((image) => ({ src: image.url, description: image.caption })),
+  const slides = useMemo<GallerySlide[]>(
+    () =>
+      images.map((image) => ({
+        type: "image",
+        src: buildSanityImageUrl(image.url, { w: 1600, fit: "max" }),
+        srcSet: buildSanityImageSrcSet(image.url, { w: 1600, fit: "max" }, 1600),
+        alt: image.caption ?? "Gallery image",
+        description: image.caption ?? undefined,
+      })),
     [images]
   );
 
@@ -37,10 +68,18 @@ export default function GallerySlider({ images }: GallerySliderProps) {
 
     handleResize(); // 获取初始值
 
-    window.addEventListener("resize", handleResize); // 添加窗口大小改变的监听器
+    // 添加防抖的 resize 监听器
+    let timeoutId: NodeJS.Timeout;
+    const debouncedHandleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(handleResize, 100);
+    };
+
+    window.addEventListener("resize", debouncedHandleResize);
 
     return () => {
-      window.removeEventListener("resize", handleResize); // 移除监听器
+      window.removeEventListener("resize", debouncedHandleResize);
+      clearTimeout(timeoutId);
     };
   }, []);
 
@@ -75,17 +114,17 @@ export default function GallerySlider({ images }: GallerySliderProps) {
                 }}
                 aria-label={item.caption ?? "Open gallery image"}
               >
-                <picture>
-                  <source srcSet={`${item.url}?h=640&f=avif`} type="image/avif" />
-                  <source srcSet={`${item.url}?h=640&f=webp`} type="image/webp" />
-                  <img
-                    src={`${item.url}?h=640`}
-                    alt={item.caption || "Gallery image"}
-                    className={`bg-gray-50 object-contain h-[480px] w-auto max-w-full ${
-                      !isActive ? "grayscale" : ""
-                    }`}
-                  />
-                </picture>
+                <img
+                  src={buildSanityImageUrl(item.url, { h: 640, fit: "max" })}
+                  srcSet={[
+                    `${buildSanityImageUrl(item.url, { h: 640, fit: "max", dpr: 1 })} 1x`,
+                    `${buildSanityImageUrl(item.url, { h: 640, fit: "max", dpr: 2 })} 2x`,
+                  ].join(", ")}
+                  alt={item.caption || "Gallery image"}
+                  className={`bg-gray-50 object-contain h-[480px] w-auto max-w-full ${
+                    !isActive ? "grayscale" : ""
+                  }`}
+                />
               </button>
             )}
           </SwiperSlide>
@@ -98,6 +137,11 @@ export default function GallerySlider({ images }: GallerySliderProps) {
         index={index}
         close={() => setOpen(false)}
         slides={slides}
+        render={{
+          iconPrev: () => <ArrowLeft />,
+          iconNext: () => <ArrowRight />,
+          iconClose: () => <Close />,
+        }}
         styles={{
           container: {
             background: "white",
@@ -109,11 +153,6 @@ export default function GallerySlider({ images }: GallerySliderProps) {
           },
           captionsDescriptionContainer: { background: "white" },
           captionsDescription: { color: "black", textAlign: "center" },
-        }}
-        render={{
-          iconPrev: () => <ArrowLeft />,
-          iconNext: () => <ArrowRight />,
-          iconClose: () => <Close />,
         }}
         counter={{ container: { style: { top: 0 } } }}
       />

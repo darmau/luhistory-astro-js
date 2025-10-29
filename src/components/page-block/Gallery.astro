@@ -1,14 +1,18 @@
 ---
-import Slider from './gallery/Slider.tsx';
-import Grid from './gallery/Grid.tsx'
+import LazySlider from './gallery/LazySlider.tsx';
+import LazyGrid from './gallery/LazyGrid.tsx'
+import type { GalleryImage } from "@/types";
+
 const {gallery, title, images} = Astro.props;
+
+const processedImages: GalleryImage[] = (images ?? []) as GalleryImage[];
 ---
 
 <div class = "col-start-1 col-span-8 lg:col-span-6 my-4 lg:my-16 w-full">
   {gallery === 'slider' ?
     <div class="overflow-visible">
-      <Slider images = {images} client:only = "react"/>
+      <LazySlider images = {processedImages} client:visible/>
     </div>
       :
-    <Grid title = {title} images = {images} client:only = "react"/>}
+    <LazyGrid title = {title} images = {processedImages} client:visible/>}
 </div>
