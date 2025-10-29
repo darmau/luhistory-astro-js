@@ -16,7 +16,16 @@ export default defineConfig({
       useCdn: false
     }),
     react(),
-    sitemap()],
+    sitemap({
+      filter: (page) => {
+        try {
+          const url = new URL(page);
+          return url.pathname !== '/status' && !url.pathname.startsWith('/status/');
+        } catch {
+          return true;
+        }
+      }
+    })],
   image: {
     domains: ["cdn.sanity.io"],
     remotePatterns: [{protocol: "https"}],
