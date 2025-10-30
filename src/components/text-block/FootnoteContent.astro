@@ -5,6 +5,8 @@ import PTInternalLink from "./PTInternalLink.astro";
 import PTUnderline from "./PTUnderline.astro";
 import PTStrong from "./PTStrong.astro";
 import PTem from "./PTem.astro";
+import documentIcon from "../../assets/icons/document.svg";
+import linkIcon from "../../assets/icons/link.svg";
 
 export interface Props {
   note: any;
@@ -15,7 +17,11 @@ export interface Props {
 const { note, index, id } = Astro.props as Props;
 ---
 
-<div class="footnote-content" id={`footnote-${id}`}>
+<div
+  class="footnote-content"
+  id={`footnote-${id}`}
+  style={`--internal-link-icon: url(${documentIcon.src}); --external-link-icon: url(${linkIcon.src});`}
+>
   <span class="footnote-number">
     <a href={`#footnote-ref-${id}`} class="footnote-back-link">
       {index}.&nbsp;
@@ -84,17 +90,44 @@ const { note, index, id } = Astro.props as Props;
   }
   
   .footnote-text a {
-    color: #171717;
+    color: #3f6d96;
+    font-weight: 500;
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 4px;
-    text-decoration-color: #a3a3a3;
+    text-decoration-color: rgba(63, 109, 150, 0.4);
+    transition: color 0.2s ease-in-out, text-decoration-color 0.2s ease-in-out;
   }
   
   .footnote-text a:hover {
-    text-decoration-color: #171717;
-    text-decoration-thickness: 2px;
-    transition: all 0.3s ease-in-out;
+    color: #2f5c84;
+    text-decoration-color: rgba(47, 92, 132, 0.6);
+  }
+
+  .footnote-text a[href^="http"]:not(.footnote-back-link)::before {
+    content: "";
+    display: inline-block;
+    width: 0.9em;
+    height: 0.9em;
+    vertical-align: middle;
+    transform: translateY(-0.06em);
+    background-image: var(--external-link-icon);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .footnote-text a[href^="/"]:not(.footnote-back-link)::before {
+    content: "";
+    display: inline-block;
+    width: 0.9em;
+    height: 0.9em;
+    vertical-align: middle;
+    transform: translateY(-0.06em);
+    background-image: var(--internal-link-icon);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
   }
   
   .footnote-text strong {

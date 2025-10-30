@@ -9,6 +9,8 @@ import PTInternalLink from "./PTInternalLink.astro";
 import PTUnderline from "./PTUnderline.astro";
 import PTStrong from "./PTStrong.astro";
 import PTem from "./PTem.astro";
+import documentIcon from "../../assets/icons/document.svg";
+import linkIcon from "../../assets/icons/link.svg";
 import type { PortableTextBlock } from "@portabletext/types";
 import type { TextBlockProps } from "@/types";
 
@@ -77,7 +79,10 @@ if (typeof globalThis !== 'undefined') {
 }
 ---
 
-<div class = "text-block-container mt-8 md:col-span-8 md:grid md:grid-cols-8">
+<div
+  class = "text-block-container mt-8 md:col-span-8 md:grid md:grid-cols-8"
+  style={`--internal-link-icon: url(${documentIcon.src}); --external-link-icon: url(${linkIcon.src});`}
+>
   {title && (
     <h2 class = "col-span-8 font-serif font-bold text-4xl md:text-6xl text-neutral-900 mb-8 md:mb-16">{title}</h2>
   )}
@@ -197,17 +202,44 @@ if (typeof globalThis !== 'undefined') {
   }
 
   .text-block-container a {
-    color: #171717;
+    color: #3f6d96;
+    font-weight: 500;
     text-decoration: underline;
-    text-decoration-thickness: 2px;
+    text-decoration-thickness: 1px;
     text-underline-offset: 6px;
-    text-decoration-color: #a3a3a3;
+    text-decoration-color: rgba(63, 109, 150, 0.4);
+    transition: color 0.2s ease-in-out, text-decoration-color 0.2s ease-in-out;
   }
 
   .text-block-container a:hover {
-    text-decoration-color: #171717;
-    text-decoration-thickness: 3px;
-    transition: all 0.3s ease-in-out;
+    color: #2f5c84;
+    text-decoration-color: rgba(47, 92, 132, 0.6);
+  }
+
+  .text-block-container a[href^="http"]:not(.footnote-link):not(.footnote-back-link)::before {
+    content: "";
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    transform: translateY(-0.08em);
+    background-image: var(--external-link-icon);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .text-block-container a[href^="/"]:not(.footnote-link):not(.footnote-back-link)::before {
+    content: "";
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    transform: translateY(-0.08em);
+    background-image: var(--internal-link-icon);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
   /* portabletext underline decorator */
