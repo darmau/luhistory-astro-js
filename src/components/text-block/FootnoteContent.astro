@@ -1,23 +1,49 @@
 ---
+import { PortableText } from "astro-portabletext";
+import PTLink from "./PTLink.astro";
+import PTInternalLink from "./PTInternalLink.astro";
+import PTUnderline from "./PTUnderline.astro";
+import PTStrong from "./PTStrong.astro";
+import PTem from "./PTem.astro";
+import documentIcon from "../../assets/icons/document.svg";
+import linkIcon from "../../assets/icons/link.svg";
+
 export interface Props {
-  note: string;
+  note: any;
   index: number;
   id: string;
 }
 
-const { note, index, id } = Astro.props;
+const { note, index, id } = Astro.props as Props;
 ---
 
-<div class="footnote-content" id={`footnote-${id}`}>
+<div
+  class="footnote-content"
+  id={`footnote-${id}`}
+  style={`--internal-link-icon: url(${documentIcon.src}); --external-link-icon: url(${linkIcon.src});`}
+>
   <span class="footnote-number">
     <a href={`#footnote-ref-${id}`} class="footnote-back-link">
       {index}.&nbsp;
     </a>
   </span>
-  <span class="footnote-text">{note}</span>
+  <span class="footnote-text">
+    <PortableText 
+      value={note}
+      components={{
+        mark: {
+          link: PTLink as any,
+          internalLink: PTInternalLink as any,
+          strong: PTStrong as any,
+          em: PTem as any,
+          underline: PTUnderline as any,
+        }
+      }}
+    />
+  </span>
 </div>
 
-<style>
+<style is:global>
   .footnote-content {
     display: flex;
     align-items: flex-start;
@@ -35,7 +61,7 @@ const { note, index, id } = Astro.props;
   
   .footnote-back-link {
     color: #171717;
-    text-decoration: none;
+    text-decoration: none !important;
     padding: 2px 4px;
     border-radius: 2px;
     transition: all 0.2s ease;
@@ -43,7 +69,6 @@ const { note, index, id } = Astro.props;
   
   .footnote-back-link:hover {
     background-color: #f5f5f5;
-    text-decoration: underline;
   }
   
   .footnote-text {
@@ -52,5 +77,64 @@ const { note, index, id } = Astro.props;
     font-size: 16px;
     line-height: 24px;
     color: #171717;
+  }
+  
+  /* 覆盖注释内 PortableText 的默认样式 */
+  .footnote-text p {
+    font-family: var(--font-serif);
+    font-size: 16px !important;
+    line-height: 24px !important;
+    color: #171717;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .footnote-text a {
+    color: #3f6d96;
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    text-decoration-color: rgba(63, 109, 150, 0.4);
+    transition: color 0.2s ease-in-out, text-decoration-color 0.2s ease-in-out;
+  }
+  
+  .footnote-text a:hover {
+    color: #2f5c84;
+    text-decoration-color: rgba(47, 92, 132, 0.6);
+  }
+
+  .footnote-text a[href^="http"]:not(.footnote-back-link)::before {
+    content: "";
+    display: inline-block;
+    width: 0.9em;
+    height: 0.9em;
+    vertical-align: middle;
+    transform: translateY(-0.06em);
+    background-image: var(--external-link-icon);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .footnote-text a[href^="/"]:not(.footnote-back-link)::before {
+    content: "";
+    display: inline-block;
+    width: 0.9em;
+    height: 0.9em;
+    vertical-align: middle;
+    transform: translateY(-0.06em);
+    background-image: var(--internal-link-icon);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  .footnote-text strong {
+    font-weight: 600;
+  }
+  
+  .footnote-text em {
+    font-style: italic;
   }
 </style>

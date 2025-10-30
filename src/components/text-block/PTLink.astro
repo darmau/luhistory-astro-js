@@ -1,0 +1,11 @@
+---
+const props = Astro.props as any;
+// astro-portabletext 传递的是 node.markDef
+const markDef = props?.node?.markDef || props?.value || props;
+const href = markDef?.href;
+---
+<a href={href} target="_blank" rel="noopener noreferrer">
+  <slot />
+</a>
+
+

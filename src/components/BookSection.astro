@@ -24,11 +24,11 @@ const booksData = await sanityClient.fetch<Book[]>(`
   <hgroup
     class="flex justify-between items-baseline text-neutral-900 mb-8 md:mb-20"
   >
-    <h2 class="font-bold text-3xl md:text-5xl font-serif">Publications</h2>
+    <h2 class="font-title font-bold text-3xl md:text-5xl">Publications</h2>
     <p class="flex items-center gap-2">
       <a
         href="/book/category"
-        class="text-lg md:text-2xl font-thin font-serif"
+        class="font-title text-lg md:text-2xl font-thin"
         data-astro-prefetch>View more&nbsp;&nbsp;→</a
       >
     </p>
@@ -57,7 +57,7 @@ const booksData = await sanityClient.fetch<Book[]>(`
               )}
             </div>
             <div class="space-y-2">
-              <h3 class="font-serif font-medium text-neutral-900 text-2xl">
+              <h3 class="font-title font-bold text-neutral-900 text-2xl">
                 {book.title}
               </h3>
               <p class="text-neutral-900 opacity-50">

@@ -1,0 +1,33 @@
+---
+const props = Astro.props as any;
+
+// astro-portabletext 传递的是 node.markDef
+const markDef = props?.node?.markDef || props?.value || props;
+
+// 从 GROQ 查询返回的 refType 和 refSlug 读取
+const type = markDef?.refType;
+const slug = markDef?.refSlug;
+
+const buildInternalHref = (t?: string, s?: string) => {
+  if (!t || !s) return '#';
+  switch (t) {
+    case 'article':
+      return `/collection/detail/${s}`;
+    case 'caseStudy':
+      return `/on-artists/detail/${s}`;
+    case 'book':
+      return `/book/detail/${s}`;
+    case 'exhibition':
+      return `/exhibition/detail/${s}`;
+    default:
+      return `/${t}/${s}`;
+  }
+};
+
+const href = buildInternalHref(type, slug);
+---
+<a href={href}>
+  <slot />
+</a>
+
+

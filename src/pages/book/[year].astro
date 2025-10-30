@@ -1,0 +1,225 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageTitle from "@/components/PageTitle.astro";
+import { Image } from "astro:assets";
+import { sanityClient } from "sanity:client";
+
+type BookSummary = {
+  title: string;
+  publishDate: string;
+  category: string;
+  slug: string;
+  cover?: string | null;
+};
+
+export async function getStaticPaths() {
+  const publishDates = await sanityClient.fetch<{ publishDate: string }[]>(
+    `*[_type == 'book' && defined(slug) && defined(publishDate)]{
+      publishDate
+    }`,
+  );
+
+  const decades = publishDates.reduce((acc, item) => {
+    if (!item.publishDate) {
+      return acc;
+    }
+
+    const year = new Date(item.publishDate).getFullYear();
+    if (Number.isNaN(year)) {
+      return acc;
+    }
+
+    const startYear = Math.floor(year / 10) * 10;
+    acc.add(startYear);
+    return acc;
+  }, new Set<number>());
+
+  return Array.from(decades)
+    .sort((a, b) => b - a)
+    .map((startYear) => ({
+      params: { year: startYear.toString() },
+      props: { decadeStart: startYear },
+    }));
+}
+
+const { decadeStart } = Astro.props as { decadeStart: number };
+const decadeEnd = decadeStart + 9;
+
+const books = await sanityClient.fetch<BookSummary[]>(
+  `*[_type == 'book' && defined(slug) && defined(publishDate) && publishDate >= "${decadeStart}-01-01" && publishDate <= "${decadeEnd}-12-31"] | order(publishDate desc) {
+    title,
+    publishDate,
+    category,
+    "slug": slug.current,
+    "cover": cover.asset->url
+  }`,
+);
+
+const allPublishDates = await sanityClient.fetch<{ publishDate: string }[]>(
+  `*[_type == 'book' && defined(slug) && defined(publishDate)]{
+    publishDate
+  }`,
+);
+
+const decadeMap = allPublishDates.reduce(
+  (acc, item) => {
+    if (!item.publishDate) {
+      return acc;
+    }
+
+    const year = new Date(item.publishDate).getFullYear();
+    if (Number.isNaN(year)) {
+      return acc;
+    }
+
+    const startYear = Math.floor(year / 10) * 10;
+    const key = startYear.toString();
+
+    if (!acc[key]) {
+      acc[key] = { start: startYear, end: startYear + 9, count: 0 };
+    }
+
+    acc[key].count += 1;
+    return acc;
+  },
+  {} as Record<string, { start: number; end: number; count: number }>,
+);
+
+const decades = Object.values(decadeMap).sort((a, b) => b.start - a.start);
+const recentDecades = decades.slice(0, 8);
+const hiddenDecades = decades.slice(8);
+---
+
+<Layout title={`${decadeStart}-${decadeEnd} Publications`}>
+  <PageTitle
+    title="Publications"
+    subtitle={`${decadeStart} - ${decadeEnd}`}
+    localImg="/images/book-cover.jpg"
+    bgWhite={false}
+  />
+
+  <main
+    id="main-content"
+    class="max-w-8xl mx-auto px-4 flex flex-col gap-8 8xl:px-0 lg:grid lg:grid-cols-12 py-8 lg:py-16 mb-24"
+  >
+    <div class="col-span-12 lg:col-span-2">
+      <ul class="flex gap-4 flex-wrap lg:flex-col">
+        <li
+          class="text-sm text-neutral-900 opacity-50 tracking-wider uppercase hover:opacity-100"
+        >
+          <a href="/book/category#main-content" data-astro-prefetch>ALL</a>
+        </li>
+        {
+          recentDecades.map((decade) => (
+            <li
+              class={`${decade.start === decadeStart ? "text-neutral-900 font-bold" : "text-neutral-900 opacity-50"} uppercase text-sm tracking-wider hover:opacity-100`}
+            >
+              <a
+                href={`/book/${decade.start}#main-content`}
+                data-astro-prefetch
+              >
+                {decade.start}-{decade.end} ({decade.count})
+              </a>
+            </li>
+          ))
+        }
+        {
+          hiddenDecades.map((decade) => (
+            <li
+              class={`hidden-decades ${decade.start === decadeStart ? "text-neutral-900 font-bold" : "text-neutral-900 opacity-50"} uppercase text-sm tracking-wider hover:opacity-100`}
+              style="display: none;"
+            >
+              <a
+                href={`/book/${decade.start}#main-content`}
+                data-astro-prefetch
+              >
+                {decade.start}-{decade.end} ({decade.count})
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      {
+        hiddenDecades.length > 0 && (
+          <button
+            id="toggle-decades"
+            class="text-sm text-neutral-900 opacity-50 tracking-wider hover:opacity-100 mt-4 uppercase cursor-pointer"
+            type="button"
+          >
+            Show All Decades
+          </button>
+        )
+      }
+    </div>
+
+    <ul
+      class="col-span-12 lg:col-start-4 col-end-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+    >
+      {
+        books.length > 0 ? (
+          books.map((book) => (
+            <li>
+              <a
+                href={`/book/detail/${book.slug}`}
+                class="flex lg:flex-col gap-4"
+                data-astro-prefetch
+              >
+                <div class="h-24 md:self-center md:h-32 lg:h-45 aspect-square bg-neutral-100 shrink-0">
+                  {
+                    book.cover && (
+                      <Image
+                        src={book.cover}
+                        alt={book.title}
+                        class="object-cover h-full"
+                        height="512"
+                        width="512"
+                        format="avif"
+                      />
+                    )
+                  }
+                </div>
+                <div class="space-y-2">
+                  <h3 class="font-title font-bold text-neutral-900 text-2xl">
+                    {book.title}
+                  </h3>
+                  <p class="text-neutral-900 opacity-50">
+                    {new Date(book.publishDate).getFullYear()}
+                  </p>
+                </div>
+              </a>
+            </li>
+          ))
+        ) : (
+          <li class="col-span-full text-neutral-900 opacity-60 uppercase tracking-wider text-sm">
+            No publications found for this decade.
+          </li>
+        )
+      }
+    </ul>
+  </main>
+</Layout>
+
+<script is:inline>
+  const toggleButton = document.getElementById('toggle-decades');
+  const hiddenDecadeItems = document.querySelectorAll('.hidden-decades');
+
+  if (toggleButton && hiddenDecadeItems.length > 0) {
+    let isExpanded = false;
+
+    toggleButton.addEventListener('click', () => {
+      if (isExpanded) {
+        hiddenDecadeItems.forEach((item) => {
+          item.style.display = 'none';
+        });
+        toggleButton.textContent = 'Show All Decades';
+        isExpanded = false;
+      } else {
+        hiddenDecadeItems.forEach((item) => {
+          item.style.display = 'block';
+        });
+        toggleButton.textContent = 'Hide Decades';
+        isExpanded = true;
+      }
+    });
+  }
+</script>

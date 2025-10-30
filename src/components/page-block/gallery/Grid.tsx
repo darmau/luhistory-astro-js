@@ -53,7 +53,7 @@ export default function GalleryGrid({ title, images }: GalleryGridProps) {
   return (
     <div>
       <hgroup className="md:mb-6 flex justify-between items-baseline max-w-3xl">
-        <h2 className="font-serif font-bold text-neutral-900 text-3xl md:text-5xl">
+        <h2 className="font-title font-bold text-neutral-900 text-3xl md:text-5xl">
           {title}
         </h2>
         <small className="font-sans text-base text-neutral-900 opacity-50">
