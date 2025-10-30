@@ -7,30 +7,35 @@ type RelatedArticle = {
 
 function generageCategory(category: string | null | undefined) {
   // 将historical-data转换成Historical Data
-  if (!category) return ''
+  if (!category) return "";
   return category
-    .split('-')
+    .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
+    .join(" ");
 }
-const { articles = [] } = Astro.props as { articles?: RelatedArticle[] }
+const { articles = [] } = Astro.props as { articles?: RelatedArticle[] };
 ---
 
-<div class = "col-start-1 col-span-8 my-4 lg:my-16">
+<div class="col-start-1 col-span-8 my-4 lg:my-16">
   <hgroup class="my-12">
-    <h2 class = "font-serif font-bold text-neutral-900 text-3xl md:text-5xl">Documents</h2>
+    <h2 class="font-title font-bold text-neutral-900 text-3xl md:text-5xl">
+      Documents
+    </h2>
   </hgroup>
   <ul class="space-y-8 pl-0">
-    {articles.map((article) => (
-      <li class="list-none">
-        <a
-          class="no-underline"
-          href = {`/collection/detail/${article.slug}`}
-        >
-          <h3 class="font-serif font-bold text-3xl text-neutral-900 mb-3 hover:underline">{article.title}</h3>
-          <small class="font-sans text-base text-neutral-900 opacity-50">{generageCategory(article.category)}</small>
-        </a>
-      </li>
-    ))}
+    {
+      articles.map((article) => (
+        <li class="list-none">
+          <a class="no-underline" href={`/collection/detail/${article.slug}`}>
+            <h3 class="font-title font-bold text-3xl text-neutral-900 mb-3 hover:underline">
+              {article.title}
+            </h3>
+            <small class="font-sans text-base text-neutral-900 opacity-50">
+              {generageCategory(article.category)}
+            </small>
+          </a>
+        </li>
+      ))
+    }
   </ul>
 </div>

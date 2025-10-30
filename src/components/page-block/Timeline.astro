@@ -4,32 +4,38 @@ import type { TimelineEndDate, TimelineProps } from "@/types";
 
 function ifPresent(endDate: TimelineEndDate) {
   if (endDate?.present) {
-    return 'to present'
+    return "to present";
   } else if (endDate?.endDate) {
-    return ` - ${new Date(endDate.endDate).getFullYear()}`
+    return ` - ${new Date(endDate.endDate).getFullYear()}`;
   } else {
-    return ''
+    return "";
   }
 }
 
-const {title, records = []} = Astro.props as TimelineProps;
+const { title, records = [] } = Astro.props as TimelineProps;
 ---
 
-<div class = "col-span-8 my-4 lg:my-16">
-  <h2 class = "font-serif font-bold text-3xl md:text-5xl text-neutral-900 mb-4 lg:mb-16">{title}</h2>
-  <ul class = "text-xl font-serif pl-0 space-y-4">
-    {records.map((record) => {
-      return (
-        <li class = "flex flex-col gap-2 lg:grid lg:grid-cols-4 lg:gap-8">
-          <div class = "col-span-1 font-semibold proportional-nums text-2xl lg:text-lg lg:font-normal">
-            <span>{new Date(record.startDate).getFullYear()}</span>
-            <span>{ifPresent(record.endDate)}</span>
-          </div>
-          <div class="col-span-3">
-            <PortableText value={record.details} />
-          </div>
-        </li>
-      )
-    })}
+<div class="col-span-8 my-4 lg:my-16">
+  <h2
+    class="font-title font-bold text-3xl md:text-5xl text-neutral-900 mb-4 lg:mb-16"
+  >
+    {title}
+  </h2>
+  <ul class="text-xl font-serif pl-0 space-y-4">
+    {
+      records.map((record) => {
+        return (
+          <li class="flex flex-col gap-2 lg:grid lg:grid-cols-4 lg:gap-8">
+            <div class="col-span-1 proportional-nums text-2xl lg:text-lg">
+              <span>{new Date(record.startDate).getFullYear()}</span>
+              <span>{ifPresent(record.endDate)}</span>
+            </div>
+            <div class="col-span-3">
+              <PortableText value={record.details} />
+            </div>
+          </li>
+        );
+      })
+    }
   </ul>
 </div>

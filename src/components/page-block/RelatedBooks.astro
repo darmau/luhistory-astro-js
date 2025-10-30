@@ -11,7 +11,7 @@ const { books = [] } = Astro.props as { books?: RelatedBook[] };
 
 <div class="col-start-1 md:col-span-12 lg:col-span-6 my-4 lg:my-16">
   <hgroup class="flex justify-between items-baseline max-w-3xl">
-    <h2 class="font-serif font-bold text-neutral-900 text-3xl md:text-5xl">
+    <h2 class="font-title font-bold text-neutral-900 text-3xl md:text-5xl">
       Publications
     </h2>
     <p class="font-sans text-base text-neutral-900 opacity-50">
@@ -41,7 +41,7 @@ const { books = [] } = Astro.props as { books?: RelatedBook[] };
               </div>
             )}
             <div class="flex-1">
-              <h3 class="my-0 font-serif font-bold text-2xl text-neutral-900 mb-2 leading-tight">
+              <h3 class="my-0 font-title font-bold text-2xl text-neutral-900 mb-2 leading-tight">
                 {book.title}
               </h3>
               <small class="font-sans text-base text-neutral-900 opacity-50">

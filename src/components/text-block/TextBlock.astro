@@ -180,6 +180,12 @@ if (typeof globalThis !== 'undefined') {
     margin-top: 16px;
     margin-bottom: 16px;
   }
+  
+  /* 修复思源宋体中文引号间距问题 */
+  .text-block-container {
+    text-spacing: trim-start allow-end;
+    hanging-punctuation: first last;
+  }
 
   .text-block-container blockquote {
     font-family: var(--font-serif);
