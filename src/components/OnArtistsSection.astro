@@ -32,28 +32,28 @@ const casesData = await Promise.all(
     }
 
     return { ...item, coverImage } satisfies CaseItem;
-  })
+  }),
 );
 ---
+
 <div
-  class = "col-start-1 col-span-12 mb-8 p-4 sm:p-0 sm:col-start-2 sm:col-span-10 lg:mb-40"
+  class="col-start-1 col-span-12 mb-8 p-4 sm:p-0 sm:col-start-2 sm:col-span-10 lg:mb-40"
 >
   <hgroup
-    class = "flex justify-between items-baseline text-neutral-900 mb-8 md:mb-20"
+    class="flex justify-between items-baseline text-neutral-900 mb-8 md:mb-20"
   >
-    <h2 class = "font-bold text-3xl md:text-5xl font-serif">On Artists</h2>
-    <div class = "flex items-center gap-2">
+    <h2 class="font-title font-bold text-3xl md:text-5xl">On Artists</h2>
+    <div class="flex items-center gap-2">
       <a
-        href = "/on-artists" class = "text-lg md:text-2xl font-thin font-serif"
-        data-astro-prefetch = "viewport"
-      >View more&nbsp;&nbsp;→</a>
+        href="/on-artists"
+        class="font-title text-lg md:text-2xl font-thin"
+        data-astro-prefetch="viewport">View more&nbsp;&nbsp;→</a
+      >
     </div>
   </hgroup>
-  <div class = "w-full">
-    <div class = "overflow-visible">
-      {casesData && (
-          <CaseSlider client:visible cases={casesData} />
-      )}
+  <div class="w-full">
+    <div class="overflow-visible">
+      {casesData && <CaseSlider client:visible cases={casesData} />}
     </div>
   </div>
 </div>
