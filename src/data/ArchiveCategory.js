@@ -4,7 +4,8 @@ const Category = [
   {name: "Lecture & Talk", slug: "lecture-talk"},
   {name: "Preface", slug: "preface"},
   {name: "Writing", slug: "writing"},
-  {name: "External Link", slug: "external-link"},
+  {name: "Records", slug: "records"},
+  {name: "Others", slug: "others"},
 ]
 
 export default Category
