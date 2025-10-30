@@ -1,11 +1,18 @@
 ---
+import { PortableText } from "astro-portabletext";
+import PTLink from "./PTLink.astro";
+import PTInternalLink from "./PTInternalLink.astro";
+import PTUnderline from "./PTUnderline.astro";
+import PTStrong from "./PTStrong.astro";
+import PTem from "./PTem.astro";
+
 export interface Props {
-  note: string;
+  note: any;
   index: number;
   id: string;
 }
 
-const { note, index, id } = Astro.props;
+const { note, index, id } = Astro.props as Props;
 ---
 
 <div class="footnote-content" id={`footnote-${id}`}>
@@ -14,7 +21,20 @@ const { note, index, id } = Astro.props;
       {index}.&nbsp;
     </a>
   </span>
-  <span class="footnote-text">{note}</span>
+  <span class="footnote-text">
+    <PortableText 
+      value={note}
+      components={{
+        mark: {
+          link: PTLink as any,
+          internalLink: PTInternalLink as any,
+          strong: PTStrong as any,
+          em: PTem as any,
+          underline: PTUnderline as any,
+        }
+      }}
+    />
+  </span>
 </div>
 
 <style>

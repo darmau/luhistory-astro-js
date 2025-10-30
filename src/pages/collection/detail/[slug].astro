@@ -1,5 +1,5 @@
 ---
-import {sanityClient} from "sanity:client";
+import { sanityClient } from "sanity:client";
 import Layout from "@/layouts/Layout.astro";
 import PageTitle from "@/components/PageTitle.astro";
 import TextBlock from "@/components/text-block/TextBlock.astro";
@@ -7,7 +7,9 @@ import NextArchive from "@/components/order/NextArchive.astro";
 import type { ArticleDetail } from "@/types";
 
 export async function getStaticPaths() {
-  const data = await sanityClient.fetch<ArticleDetail[]>(`*[_type == 'article' && defined(slug) && defined(publishDate)] {
+  const data = await sanityClient.fetch<
+    ArticleDetail[]
+  >(`*[_type == 'article' && defined(slug) && defined(publishDate)] {
     title,
     publishDate,
     author,
@@ -26,55 +28,149 @@ export async function getStaticPaths() {
           caption
         }
       },
+      // 富文本块
+    _type == "block" => {
+      "type": _type,
+      style,
+      listItem,
+      level,
+      "children": children[]{
+        _type == "span" => { _key, text, marks },
+        _type != "span" => { ... }
+      },
+      "markDefs": markDefs[]{
+        _key,
+        _type,
+        href,
+        reference,
+        note,
+        // 直接解引用 reference 获取 type 和 slug
+        "refType": reference->_type,
+        "refSlug": reference->slug.current
+      }
+    },
       ...
     }
   }`);
-  const paths = data.map((article) => {
+  
+  // 手动解析所有 internalLink references
+  const processedData = await Promise.all(
+    data.map(async (article) => {
+      if (!article.body) return article;
+      
+      const processedBody = await Promise.all(
+        article.body.map(async (block: any) => {
+          if (block.type !== 'block' || !block.markDefs) return block;
+          
+          const processedMarkDefs = await Promise.all(
+            block.markDefs.map(async (markDef: any) => {
+              if (markDef._type === 'internalLink' && markDef.reference?._ref) {
+                // 查询 reference 指向的文档
+                const refDoc = await sanityClient.fetch(
+                  `*[_id == $ref][0]{ _type, "slug": slug.current }`,
+                  { ref: markDef.reference._ref }
+                );
+                return {
+                  ...markDef,
+                  refType: refDoc?._type,
+                  refSlug: refDoc?.slug,
+                };
+              }
+              // 处理 subscript 里的 note
+              if (markDef._type === 'subscript' && markDef.note && Array.isArray(markDef.note)) {
+                const processedNote = await Promise.all(
+                  markDef.note.map(async (noteBlock: any) => {
+                    if (!noteBlock.markDefs || !Array.isArray(noteBlock.markDefs)) return noteBlock;
+                    const processedNoteMarkDefs = await Promise.all(
+                      noteBlock.markDefs.map(async (noteMarkDef: any) => {
+                        if (noteMarkDef._type === 'internalLink' && noteMarkDef.reference?._ref) {
+                          const refDoc = await sanityClient.fetch(
+                            `*[_id == $ref][0]{ _type, "slug": slug.current }`,
+                            { ref: noteMarkDef.reference._ref }
+                          );
+                          return {
+                            ...noteMarkDef,
+                            refType: refDoc?._type,
+                            refSlug: refDoc?.slug,
+                          };
+                        }
+                        return noteMarkDef;
+                      })
+                    );
+                    return { ...noteBlock, markDefs: processedNoteMarkDefs };
+                  })
+                );
+                return { ...markDef, note: processedNote };
+              }
+              return markDef;
+            })
+          );
+          return { ...block, markDefs: processedMarkDefs };
+        })
+      );
+      return { ...article, body: processedBody };
+    })
+  );
+  
+  const paths = processedData.map((article) => {
     return {
       params: {
-        slug: article.slug
+        slug: article.slug,
       },
       props: {
         title: article.title,
         publishDate: article.publishDate,
         author: article.author,
-        body: article.body
-      }
-    }
+        body: article.body,
+      },
+    };
   });
   return paths;
 }
 
-const {title, publishDate, author, body} = Astro.props as ArticleDetail;
+const { title, publishDate, author, body } = Astro.props as ArticleDetail;
 
 // 将2023-12-16转换成Dec 16, 2023
 function formatDate(dateString: string) {
   const date = new Date(dateString);
-  const month = date.toLocaleString('default', {month: 'short'});
+  const month = date.toLocaleString("default", { month: "short" });
   const day = date.getDate();
   const year = date.getFullYear();
   return `${month} ${day}, ${year}`;
 }
 ---
 
-<Layout title = {title}>
-  <PageTitle title = {title}/>
-  <div class = "p-4 flex flex-col gap-8 8xl:p-0 lg:max-w-8xl lg:mx-auto lg:grid lg:grid-cols-12 mb-24">
-    <aside class = "space-y-4 md:space-y-8 col-start-1 col-end-3 h-fit">
-      {author &&
-        <div>
-          <h3 class = "my-0 text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Author</h3>
-          <p class = "mt-0 text-lg font-semibold font-serif">{author}</p>
-        </div>}
+<Layout title={title}>
+  <PageTitle title={title} />
+  <div
+    class="p-4 flex flex-col gap-8 8xl:p-0 lg:max-w-8xl lg:mx-auto lg:grid lg:grid-cols-12 mb-24"
+  >
+    <aside class="space-y-4 md:space-y-8 col-start-1 col-end-3 h-fit">
+      {
+        author && (
+          <div>
+            <h3 class="my-0 text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">
+              Author
+            </h3>
+            <p class="mt-0 text-lg font-semibold font-serif">{author}</p>
+          </div>
+        )
+      }
       <div>
-        <h3 class = "my-0 text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase">Date</h3>
-        <p class = "mt-0 text-lg font-semibold font-serif">{formatDate(publishDate)}</p>
+        <h3
+          class="my-0 text-sm font-sans text-neutral-900 opacity-50 tracking-widest uppercase"
+        >
+          Date
+        </h3>
+        <p class="mt-0 text-lg font-semibold font-serif">
+          {formatDate(publishDate)}
+        </p>
       </div>
     </aside>
-    <main class = "col-start-4 col-end-12 md:grid md:grid-cols-8 md:gap-8">
-      <TextBlock overview = {body}/>
+    <main class="col-start-4 col-end-12 md:grid md:grid-cols-8 md:gap-8">
+      <TextBlock overview={body} />
     </main>
-    <NextArchive slug = {Astro.params.slug}/>
+    <NextArchive slug={Astro.params.slug} />
   </div>
 </Layout>
 
