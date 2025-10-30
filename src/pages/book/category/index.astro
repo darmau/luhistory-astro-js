@@ -1,11 +1,11 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import {sanityClient} from "sanity:client";
-import {Image} from 'astro:assets'
+import { sanityClient } from "sanity:client";
+import { Image } from "astro:assets";
 import PageTitle from "@/components/PageTitle.astro";
 import PublicationCategory from "@/data/PublicationCategory";
 
-type BookListItem = {
+type BookRecord = {
   title: string;
   publishDate: string;
   category: string;
@@ -13,13 +13,64 @@ type BookListItem = {
   cover?: string | null;
 };
 
-const books = await sanityClient.fetch<BookListItem[]>(`*[_type == 'book' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
+type BookWithMeta = BookRecord & {
+  year: number;
+  decadeStart: number;
+  decadeEnd: number;
+};
+
+const bookRecords = await sanityClient.fetch<BookRecord[]>(`*[_type == 'book' && defined(slug) && defined(publishDate) && defined(category)] | order(publishDate desc) {
     title,
     publishDate,
     category,
     "slug": slug.current,
     "cover": cover.asset->url
 }`);
+
+const books = bookRecords.reduce((acc, book) => {
+  if (!book.publishDate) {
+    return acc;
+  }
+
+  const year = new Date(book.publishDate).getFullYear();
+  if (Number.isNaN(year)) {
+    return acc;
+  }
+
+  const decadeStart = Math.floor(year / 10) * 10;
+  const decadeEnd = decadeStart + 9;
+
+  acc.push({
+    ...book,
+    year,
+    decadeStart,
+    decadeEnd,
+  });
+
+  return acc;
+}, [] as BookWithMeta[]);
+
+const decadeMap = books.reduce(
+  (acc, book) => {
+    const key = book.decadeStart.toString();
+
+    if (!acc[key]) {
+      acc[key] = {
+        start: book.decadeStart,
+        end: book.decadeEnd,
+        count: 0,
+      };
+    }
+
+    acc[key].count += 1;
+    return acc;
+  },
+  {} as Record<string, { start: number; end: number; count: number }>,
+);
+
+const decades = Object.values(decadeMap).sort((a, b) => b.start - a.start);
+const recentDecades = decades.slice(0, 8);
+const hiddenDecades = decades.slice(8);
 
 const publicationCategories = PublicationCategory as string[];
 ---
@@ -31,28 +82,95 @@ const publicationCategories = PublicationCategory as string[];
     bgWhite = "flase"
   />
 
-  <main class = "max-w-8xl mx-auto px-4 flex flex-col gap-8 8xl:px-0 lg:grid lg:grid-cols-12 py-8 lg:py-16 mb-24">
-    <ul class = "col-span-12 flex gap-4 flex-wrap lg:flex-col lg:col-span-2">
-      <li class="text-sm text-neutral-900 tracking-wider">
-        ALL
-      </li>
-      {publicationCategories.map((category) => {
-        return (
-          <li class = "text-sm text-neutral-900 opacity-50 tracking-wider hover:opacity-100">
-            <a
-              href={`/book/category/${category}`}
-              data-astro-prefetch>
-              {category.split('-').join(' ').toUpperCase()}
-            </a>
+  <main id="main-content" class = "max-w-8xl mx-auto px-4 flex flex-col gap-8 8xl:px-0 lg:grid lg:grid-cols-12 py-8 lg:py-16 mb-24">
+    <div class="col-span-12 flex flex-col gap-8 lg:col-span-2">
+      <div>
+        <p class="text-xs text-neutral-900 opacity-50 uppercase tracking-[0.3em] mb-4">
+          Category
+        </p>
+        <ul class = "flex gap-4 flex-wrap lg:flex-col">
+          <li class="text-sm text-neutral-900 font-bold tracking-wider uppercase">
+            ALL
           </li>
-        );
-      })}
-    </ul>
+          {publicationCategories.map((category) => {
+            return (
+              <li class = "text-sm text-neutral-900 opacity-50 tracking-wider uppercase hover:opacity-100">
+                <a
+                  href={`/book/category/${category}`}
+                  data-astro-prefetch>
+                  {category.split('-').join(' ').toUpperCase()}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      {
+        decades.length > 0 && (
+          <div>
+            <p class="text-xs text-neutral-900 opacity-50 uppercase tracking-[0.3em] mb-4">
+              Year
+            </p>
+            <ul class="flex gap-4 flex-wrap lg:flex-col">
+              <li>
+                <button
+                  class="decade-filter uppercase text-sm text-neutral-900 font-bold tracking-wider"
+                  data-decade-filter="all"
+                  type="button"
+                >
+                  ALL
+                </button>
+              </li>
+              {
+                recentDecades.map((decade) => (
+                  <li>
+                    <button
+                      class="decade-filter uppercase text-sm text-neutral-900 opacity-50 tracking-wider hover:opacity-100"
+                      data-decade-filter={decade.start.toString()}
+                      type="button"
+                    >
+                      {decade.start}-{decade.end} ({decade.count})
+                    </button>
+                  </li>
+                ))
+              }
+              {
+                hiddenDecades.map((decade) => (
+                  <li
+                    class="hidden-decades"
+                    style="display: none;"
+                  >
+                    <button
+                      class="decade-filter uppercase text-sm text-neutral-900 opacity-50 tracking-wider hover:opacity-100"
+                      data-decade-filter={decade.start.toString()}
+                      type="button"
+                    >
+                      {decade.start}-{decade.end} ({decade.count})
+                    </button>
+                  </li>
+                ))
+              }
+            </ul>
+            {
+              hiddenDecades.length > 0 && (
+                <button 
+                  id="toggle-decades"
+                  class="text-sm text-neutral-900 opacity-50 tracking-wider hover:opacity-100 mt-4 uppercase cursor-pointer"
+                  type="button"
+                >
+                  Show All Decades
+                </button>
+              )
+            }
+          </div>
+        )
+      }
+    </div>
     <ul
       class = "col-span-12 lg:col-start-4 col-end-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
     >
       {books.map((book) => (
-        <li>
+        <li data-decade={book.decadeStart} data-decade-item>
           <a href = {`/book/detail/${book.slug}`} class = "flex lg:flex-col gap-4" data-astro-prefetch>
             <div
               class = "h-24 md:self-center md:h-32 lg:h-45 aspect-square bg-neutral-100 shrink-0"
@@ -71,7 +189,7 @@ const publicationCategories = PublicationCategory as string[];
             </div>
             <div class="space-y-2">
               <h3 class="font-title font-bold text-neutral-900 text-2xl">{book.title}</h3>
-              <p class="text-neutral-900 opacity-50">{new Date(book.publishDate).getFullYear()}</p>
+              <p class="text-neutral-900 opacity-50">{book.year}</p>
             </div>
           </a>
         </li>
@@ -79,3 +197,84 @@ const publicationCategories = PublicationCategory as string[];
     </ul>
   </main>
 </Layout>
+
+<style lang="css">
+  .decade-filter {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    text-align: left;
+    cursor: pointer;
+  }
+</style>
+
+<script is:inline>
+  const toggleButton = document.getElementById('toggle-decades');
+  const hiddenDecadeItems = document.querySelectorAll('.hidden-decades');
+  const filterButtons = document.querySelectorAll('.decade-filter');
+  const bookItems = document.querySelectorAll('[data-decade-item]');
+
+  if (toggleButton && hiddenDecadeItems.length > 0) {
+    let isExpanded = false;
+
+    toggleButton.addEventListener('click', () => {
+      if (isExpanded) {
+        hiddenDecadeItems.forEach((item) => {
+          item.style.display = 'none';
+        });
+        toggleButton.textContent = 'Show All Decades';
+        isExpanded = false;
+      } else {
+        hiddenDecadeItems.forEach((item) => {
+          item.style.display = 'block';
+        });
+        toggleButton.textContent = 'Hide Decades';
+        isExpanded = true;
+      }
+    });
+  }
+
+  const updateFilter = (decade) => {
+    bookItems.forEach((item) => {
+      const element = item;
+      const itemDecade = element.dataset.decade;
+      if (!itemDecade) {
+        return;
+      }
+
+      if (decade === 'all' || decade === itemDecade) {
+        element.style.removeProperty('display');
+      } else {
+        element.style.display = 'none';
+      }
+    });
+
+    filterButtons.forEach((button) => {
+      const target = button;
+      if (target.dataset.decadeFilter === decade) {
+        target.classList.add('font-bold');
+        target.classList.remove('opacity-50');
+        target.setAttribute('aria-pressed', 'true');
+      } else {
+        target.classList.remove('font-bold');
+        target.classList.add('opacity-50');
+        target.setAttribute('aria-pressed', 'false');
+      }
+    });
+  };
+
+  if (filterButtons.length > 0 && bookItems.length > 0) {
+    updateFilter('all');
+
+    filterButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = button;
+        const decade = target.dataset.decadeFilter;
+        if (!decade) {
+          return;
+        }
+        updateFilter(decade);
+      });
+    });
+  }
+</script>
