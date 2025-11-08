@@ -7,46 +7,65 @@ const currentYear = new Date().getFullYear().toString();
 >
   <section class="col-span-4 py-10 border-t md:col-span-10 md:col-start-2">
     <div class="grid md:grid-cols-10 md:gap-8">
-      <ul class = "col-span-10 md:col-span-2 list-none pl-0 space-y-2">
+      <ul class="col-span-10 md:col-span-2 list-none pl-0 space-y-2">
         <li><span class="list__title">Navigation</span></li>
-        <li><a class = "no-underline font-title text-lg" href = "/about">About</a></li>
-        <li><a class = "no-underline font-title text-lg" href = "/exhibition">Exhibitions</a></li>
-        <li><a class = "no-underline font-title text-lg" href = "/book/category">Publications</a></li>
-        <li><a class = "no-underline font-title text-lg" href = "/teaching">Teaching</a></li>
-        <li><a class = "no-underline font-title text-lg" href = "/collection/all/1">Collection</a></li>
-        <li><a class = "no-underline font-title text-lg" href = "/on-artists">On Artists</a></li>
+        <li>
+          <a class="no-underline font-title text-lg" href="/about">About</a>
+        </li>
+        <li>
+          <a class="no-underline font-title text-lg" href="/exhibition"
+            >Exhibitions</a>
+        </li>
+        <li>
+          <a class="no-underline font-title text-lg" href="/book/category"
+            >Publications</a>
+        </li>
+        <li>
+          <a class="no-underline font-title text-lg" href="/teaching"
+            >Teaching</a>
+        </li>
+        <li>
+          <a class="no-underline font-title text-lg" href="/collection/all/1"
+            >Collection</a>
+        </li>
+        <li>
+          <a class="no-underline font-title text-lg" href="/on-artists"
+            >On Artists</a>
+        </li>
       </ul>
-      <ul class = "col-span-10 md:col-span-2 list-none pl-0 space-y-2">
+      <ul class="col-span-10 md:col-span-2 list-none pl-0 space-y-2">
         <li><span class="list__title">Social</span></li>
         <li>
           <a
-            class = "no-underline font-title text-lg"
-            href = "https://weibo.com/u/1087499432" rel = "noopener noreferrer" target = "_blank"
-            >Weibo</a
+            class="no-underline font-title text-lg"
+            href="https://weibo.com/u/1087499432"
+            rel="noopener noreferrer"
+            target="_blank">Weibo</a
           >
         </li>
         <li>
           <a
-            class = "no-underline font-title text-lg"
-            href = "https://www.xiaohongshu.com/user/profile/614f52d2000000001f03f1e4" rel = "noopener noreferrer"
-            target = "_blank"
-          >Xiaohongshu</a
+            class="no-underline font-title text-lg"
+            href="https://www.xiaohongshu.com/user/profile/645375ef000000001002bb35"
+            rel="noopener noreferrer"
+            target="_blank">Xiaohongshu</a
           >
         </li>
         <li>
           <a
-            class = "no-underline font-title text-lg"
-            href = "https://www.instagram.com/lvpeng60" rel = "noopener noreferrer" target = "_blank"
-          >Instagram</a
+            class="no-underline font-title text-lg"
+            href="https://www.instagram.com/penglvlv"
+            rel="noopener noreferrer"
+            target="_blank">Instagram</a
           >
         </li>
       </ul>
-      <ul class = "col-span-10 md:col-span-2 list-none pl-0">
+      <ul class="col-span-10 md:col-span-2 list-none pl-0">
         <li><span class="list__title">Contact</span></li>
         <li>
           <a
-            class = "no-underline font-title text-lg"
-            href = "mailto:info@luhistory.com"
+            class="no-underline font-title text-lg"
+            href="mailto:info@luhistory.com"
           >
             info@luhistory.com
           </a>
@@ -62,7 +81,7 @@ const currentYear = new Date().getFullYear().toString();
   </section>
 </footer>
 <style>
-    @reference "../styles/tailwind.css";
+  @reference "../styles/tailwind.css";
   footer .list__title {
     @apply text-gray-400 tracking-widest uppercase text-sm mb-2 inline-block;
   }
