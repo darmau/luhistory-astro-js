@@ -42,6 +42,26 @@ export async function getStaticPaths() {
           caption
         }
       },
+      _type == "block" => {
+        _type,
+        style,
+        listItem,
+        level,
+        "children": children[]{
+          _type == "span" => { _key, text, marks },
+          _type != "span" => { ... }
+        },
+        "markDefs": markDefs[]{
+          _key,
+          _type,
+          href,
+          reference,
+          note,
+          // 直接解引用 reference 获取 type 和 slug
+          "refType": reference->_type,
+          "refSlug": reference->slug.current
+        }
+      },
       ...
     },
     category,
