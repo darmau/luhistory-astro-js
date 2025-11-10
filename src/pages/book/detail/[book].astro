@@ -5,6 +5,7 @@ import { Image } from "astro:assets";
 import PageTitle from "@/components/PageTitle.astro";
 import TextBlock from "@/components/text-block/TextBlock.astro";
 import PageBlock from "@/components/PageBlock.astro";
+import { createPortableTextProcessor } from "@/utils/portableText";
 
 type BookPathItem = {
   slug: string;
@@ -22,6 +23,9 @@ type BookPathItem = {
 };
 
 export async function getStaticPaths() {
+  const { processPortableBlocks, processPageBlocks } =
+    createPortableTextProcessor(sanityClient);
+
   const slugs = await sanityClient.fetch<
     BookPathItem[]
   >(`*[_type == 'book' && defined(slug) && defined(publishDate)] {
@@ -95,7 +99,19 @@ export async function getStaticPaths() {
       }
     }
   }`);
-  const paths = slugs.map((book) => {
+  const processedSlugs = await Promise.all(
+    slugs.map(async (book) => {
+      const processedOverview = await processPortableBlocks(book.overview as any[]);
+      const processedBlocks = await processPageBlocks(book.blocks as any[]);
+      return {
+        ...book,
+        overview: processedOverview,
+        blocks: processedBlocks,
+      };
+    })
+  );
+
+  const paths = processedSlugs.map((book) => {
     return {
       params: {
         book: book.slug,

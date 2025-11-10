@@ -7,6 +7,7 @@ import TextBlock from "@/components/text-block/TextBlock.astro";
 import PageBlock from "@/components/PageBlock.astro";
 import NextCase from "@/components/order/NextCase.astro";
 import artistIcon from "@/assets/icons/artist.svg";
+import { createPortableTextProcessor } from "@/utils/portableText";
 
 export async function getStaticPaths() {
   type CaseStudyPathItem = {
@@ -17,6 +18,9 @@ export async function getStaticPaths() {
     overview: unknown;
     blocks: unknown;
   };
+
+  const { processPortableBlocks, processPageBlocks } =
+    createPortableTextProcessor(sanityClient);
 
   const slugs = await sanityClient.fetch<
     CaseStudyPathItem[]
@@ -101,7 +105,19 @@ export async function getStaticPaths() {
         }
       }
   }`);
-  const paths = slugs.map((caseStudy) => {
+  const processedSlugs = await Promise.all(
+    slugs.map(async (caseStudy) => {
+      const processedOverview = await processPortableBlocks(caseStudy.overview);
+      const processedBlocks = await processPageBlocks(caseStudy.blocks as any[]);
+      return {
+        ...caseStudy,
+        overview: processedOverview,
+        blocks: processedBlocks,
+      };
+    })
+  );
+
+  const paths = processedSlugs.map((caseStudy) => {
     return {
       params: {
         caseStudy: caseStudy.slug,

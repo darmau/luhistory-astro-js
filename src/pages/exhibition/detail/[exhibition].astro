@@ -7,8 +7,12 @@ import PageTitle from "@/components/PageTitle.astro";
 import TextBlock from "@/components/text-block/TextBlock.astro";
 import NextExhibition from "@/components/order/NextExhibition.astro";
 import type { ExhibitionDetail } from "@/types";
+import { createPortableTextProcessor } from "@/utils/portableText";
 
 export async function getStaticPaths() {
+  const { processPortableBlocks, processPageBlocks } =
+    createPortableTextProcessor(sanityClient);
+
   const slugs = await sanityClient.fetch<
     ExhibitionDetail[]
   >(`*[_type == 'exhibition' && defined(slug) && defined(dateRange)] {
@@ -99,7 +103,21 @@ export async function getStaticPaths() {
           }
       }
   }`);
-  const paths = slugs.map((exhibition) => {
+  const processedSlugs = await Promise.all(
+    slugs.map(async (exhibition) => {
+      const processedOverview = await processPortableBlocks(
+        exhibition.overview as any[]
+      );
+      const processedBlocks = await processPageBlocks(exhibition.blocks as any[]);
+      return {
+        ...exhibition,
+        overview: processedOverview,
+        blocks: processedBlocks,
+      };
+    })
+  );
+
+  const paths = processedSlugs.map((exhibition) => {
     return {
       params: {
         exhibition: exhibition.slug,

@@ -6,7 +6,12 @@ import Layout from "@/layouts/Layout.astro";
 import TextBlock from "@/components/text-block/TextBlock.astro";
 import PageBlock from "@/components/PageBlock.astro";
 import downloadIcon from "@/assets/icons/download.svg";
-const profileData = await sanityClient.fetch(`*[_type == 'profile' ]{
+import { createPortableTextProcessor } from "@/utils/portableText";
+
+const { processPortableBlocks, processPageBlocks } =
+  createPortableTextProcessor(sanityClient);
+
+const rawProfileData = await sanityClient.fetch(`*[_type == 'profile' ]{
   "cvLink": cvLink.asset->url,
   "overview": overview[] {
     _type == 'imageBlock' => {
@@ -103,7 +108,20 @@ const profileData = await sanityClient.fetch(`*[_type == 'profile' ]{
   }
 }`);
 
-const { overview, blocks, cvLink } = profileData[0];
+const processedProfileData = await Promise.all(
+  rawProfileData.map(async (profile: any) => {
+    const processedOverview = await processPortableBlocks(profile.overview);
+    const processedBlocks = await processPageBlocks(profile.blocks);
+    return {
+      ...profile,
+      overview: processedOverview,
+      blocks: processedBlocks,
+    };
+  })
+);
+
+const profileData = processedProfileData[0] ?? {};
+const { overview, blocks, cvLink } = profileData;
 ---
 
 <Layout title="About Lu Peng">
