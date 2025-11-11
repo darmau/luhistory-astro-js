@@ -162,9 +162,58 @@ function formatDate(start: string, end: string) {
     return `${startMonth} ${startDay}, ${startYear} - ${endMonth} ${endDay}, ${endYear}`;
   }
 }
+
+// 提取展览描述
+function extractDescription(overview: any[]): string {
+  if (!overview || overview.length === 0) return '';
+
+  for (const block of overview) {
+    if (block.type === 'block' && block.children) {
+      const text = block.children
+        .filter((child: any) => child.text)
+        .map((child: any) => child.text)
+        .join('');
+      if (text) {
+        return text.substring(0, 200);
+      }
+    }
+  }
+  return '';
+}
+
+const eventUrl = `${Astro.site}exhibition/detail/${Astro.params.exhibition}`;
+const description = extractDescription(overview);
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": title,
+  "description": description || subtitle || title,
+  "startDate": start,
+  "endDate": end,
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "eventStatus": "https://schema.org/EventScheduled",
+  ...(place && {
+    "location": {
+      "@type": "Place",
+      "name": place
+    }
+  }),
+  ...(cover && {
+    "image": cover
+  }),
+  ...(curator && {
+    "organizer": {
+      "@type": "Person",
+      "name": curator
+    }
+  }),
+  "url": eventUrl
+};
 ---
 
 <Layout title={title}>
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   <PageTitle title={title} subtitle={subtitle} />
   <div
     class="p-4 flex flex-col gap-8 8xl:p-0 lg:max-w-8xl lg:mx-auto lg:grid lg:grid-cols-12 mb-24"
