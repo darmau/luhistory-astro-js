@@ -205,7 +205,14 @@ const structuredData = {
 };
 ---
 
-<Layout title={title}>
+<Layout
+  title={title}
+  description={description}
+  image={imageUrl}
+  type="article"
+  publishedTime={publishDate}
+  author={author}
+>
   <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   <PageTitle title={title} />
   <div

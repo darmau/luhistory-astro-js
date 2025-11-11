@@ -156,9 +156,34 @@ const {
   purchaseLink?: string;
   blocks?: Array<Record<string, unknown>>;
 };
+
+// 提取书籍描述
+function extractDescription(overview: any): string {
+  if (!overview || !Array.isArray(overview)) return '';
+
+  for (const block of overview) {
+    if (block.type === 'block' && block.children) {
+      const text = block.children
+        .filter((child: any) => child.text)
+        .map((child: any) => child.text)
+        .join('');
+      if (text) {
+        return text.substring(0, 200);
+      }
+    }
+  }
+  return subtitle || '';
+}
+
+const description = extractDescription(overview);
 ---
 
-<Layout title={title}>
+<Layout
+  title={title}
+  description={description}
+  image={cover || heroImage}
+  type="website"
+>
   <PageTitle
     title={title}
     subtitle={subtitle}

@@ -212,7 +212,12 @@ const structuredData = {
 };
 ---
 
-<Layout title={title}>
+<Layout
+  title={title}
+  description={description || subtitle}
+  image={cover}
+  type="website"
+>
   <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   <PageTitle title={title} subtitle={subtitle} />
   <div
