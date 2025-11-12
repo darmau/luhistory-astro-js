@@ -173,6 +173,9 @@ function getFirstImage(body: any[]): string | null {
 }
 
 const articleUrl = `${Astro.site}collection/detail/${Astro.params.slug}`;
+const publishDateISO = publishDate
+  ? `${publishDate}T12:00:00+08:00`
+  : undefined;
 const description = extractDescription(body);
 const imageUrl = getFirstImage(body);
 
@@ -180,8 +183,10 @@ const structuredData = {
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": title,
-  "datePublished": publishDate,
-  "dateModified": publishDate,
+  ...(publishDateISO && {
+    "datePublished": publishDateISO,
+    "dateModified": publishDateISO,
+  }),
   "author": {
     "@type": "Person",
     "name": author || "Lu History"
@@ -210,7 +215,7 @@ const structuredData = {
   description={description}
   image={imageUrl}
   type="article"
-  publishedTime={publishDate}
+  publishedTime={publishDateISO ?? publishDate}
   author={author}
 >
   <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
