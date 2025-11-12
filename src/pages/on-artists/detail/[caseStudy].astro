@@ -135,9 +135,34 @@ export async function getStaticPaths() {
 }
 
 const { title, cover, overview, blocks, artist } = Astro.props;
+
+// 提取案例研究描述
+function extractDescription(overview: any): string {
+  if (!overview || !Array.isArray(overview)) return '';
+
+  for (const block of overview) {
+    if (block.type === 'block' && block.children) {
+      const text = block.children
+        .filter((child: any) => child.text)
+        .map((child: any) => child.text)
+        .join('');
+      if (text) {
+        return text.substring(0, 200);
+      }
+    }
+  }
+  return '';
+}
+
+const description = extractDescription(overview);
 ---
 
-<Layout title={title}>
+<Layout
+  title={title}
+  description={description}
+  image={cover}
+  type="article"
+>
   <PageTitle title={title} />
   <main
     class="px-4 flex flex-col gap-4 py-8 md:grid md:grid-cols-12 md:gap-8 md:py-16 lg:max-w-8xl lg:mx-auto 8xl:px-0"
