@@ -54,6 +54,7 @@ const ogImage = image?.startsWith('http') ? image : new URL(image, Astro.site).t
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <slot name="head" />
 
     <!-- 资源提示优化 -->
     <link rel="dns-prefetch" href="//www.googletagmanager.com" />

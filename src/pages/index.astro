@@ -7,13 +7,84 @@ import ArchiveSection from "@/components/ArchivetSection.astro";
 import CaseStudySection from "@/components/OnArtistsSection.astro";
 import TeachingSection from "@/components/TeachingSection.astro";
 import LatestNewsSection from "@/components/LatestNewsSection.astro";
+
+const pageTitle = "Lu Peng's Personal Website";
+const pageDescription =
+  "The website (www.luhistory.com) serves as the official platform for 吕澎 (Lü Peng/Lv Peng/Lu Peng). This platform is dedicated to showcasing Mr. Lü Peng's extensive academic research achievements and practical case studies across six key facets, including Personal Profile, Publications, Exhibitions, On Artists, Collection, and Teaching. It provides a comprehensive overview of Mr. Lü Peng's scholarly contributions and professional endeavors over the course of his career.";
+
+const runtimeSite = (Astro.site ?? "https://luhistory.com").toString();
+const siteUrl = runtimeSite.replace(/\/$/, "");
+const profileImage = new URL("/images/cover.jpg", runtimeSite).toString();
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}#website`,
+      url: siteUrl,
+      name: "Lu History",
+      description: pageDescription,
+      inLanguage: "en",
+      publisher: {
+        "@id": `${siteUrl}#person`,
+      },
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": `${siteUrl}#profile`,
+      url: siteUrl,
+      name: "Lu Peng Personal Profile",
+      description:
+        "Official profile of art historian and curator Lu Peng, covering research, publications, exhibitions, and teaching initiatives.",
+      about: {
+        "@id": `${siteUrl}#person`,
+      },
+      primaryImageOfPage: {
+        "@type": "ImageObject",
+        url: profileImage,
+      },
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}#person`,
+      name: "吕澎",
+      alternateName: ["Lu Peng", "Lü Peng", "Lv Peng"],
+      jobTitle: "Art historian & curator",
+      url: siteUrl,
+      image: profileImage,
+      description:
+        "Lu Peng is an art historian specializing in contemporary Chinese art, publishing research, curating exhibitions, and leading educational programs.",
+      worksFor: {
+        "@type": "Organization",
+        name: "Lu History",
+        url: siteUrl,
+      },
+      knowsAbout: [
+        "Contemporary Chinese art history",
+        "Curatorial practice",
+        "Art education",
+      ],
+      sameAs: [
+        "https://luhistory.com/about",
+        "https://luhistory.com/exhibition",
+        "https://luhistory.com/book",
+      ],
+    },
+  ],
+};
 ---
 
 <Layout
-  title="Lu Peng's Personal Website"
-  description="The website (www.luhistory.com) serves as the official platform for 吕澎 (Lü Peng/Lv Peng/Lu Peng). This platform is dedicated to showcasing Mr. Lü Peng's extensive academic research achievements and practical case studies across six key facets, including Personal Profile, Publications, Exhibitions, On Artists, Collection, and Teaching. It provides a comprehensive overview of Mr. Lü Peng's scholarly contributions and professional endeavors over the course of his career."
+  title={pageTitle}
+  description={pageDescription}
   type="website"
 >
+  <script
+    slot="head"
+    type="application/ld+json"
+    set:html={JSON.stringify(structuredData)}
+  />
   <main class="grid grid-cols-12 gap-8 max-w-8xl mx-auto">
     <HeroSection />
     <LatestNewsSection />
