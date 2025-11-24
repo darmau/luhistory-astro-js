@@ -8,7 +8,7 @@ This repository powers [LuHistory.com](https://luhistory.com), the official site
 - Dynamic routes (`/book/detail/[slug]`, `/exhibition/detail/[slug]`, `/collection/*`, `/on-artists/*`, etc.) provide deep dives with pagination helpers in `src/functions`.
 - Tailwind CSS v4 (via the Vite plugin) handles layout and theming, paired with custom serif/sans typography defined in `Layout.astro`.
 - React-only islands power the exhibition carousel (Swiper), hover previews, and lightbox galleries without shipping JavaScript to the rest of the page.
-- Sitemap generation, link prefetching, and Google Analytics (G‑F393GEHV22) are configured globally for SEO and performance.
+- Sitemap generation, link prefetching are configured globally for SEO and performance.
 - TypeScript definitions in `src/types` mirror the Sanity schema to keep GROQ queries safe and predictable.
 
 ## Tech Stack
