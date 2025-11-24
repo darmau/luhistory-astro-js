@@ -4,6 +4,11 @@ type LinkItem = {
   title: string;
   slug?: string;
   url?: string;
+  fileId?: string | null;
+  fileName?: string | null;
+  fileSize?: number | null;
+  fileType?: string | null;
+  mimeType?: string | null;
 } | null;
 
 type NonNullableLinkItem = Exclude<LinkItem, null>;
@@ -56,11 +61,25 @@ const mergedArray = links.reduce<NonNullableLinkItem[]>(
   <div class="flex flex-col gap-4">
     {
       mergedArray.map((page) => {
+        const isFileLink = page.type === "file";
         return (
           <a
             href={generateLink(page.type, page.slug, page.url)}
             class="no-underline"
             target={`${page.url ? "_blank" : "_self"}`}
+            rel={page.url ? "noopener noreferrer" : undefined}
+            data-file-download={isFileLink ? "true" : undefined}
+            data-file-id={isFileLink ? page.fileId ?? undefined : undefined}
+            data-file-name={
+              isFileLink ? page.fileName ?? page.title : undefined
+            }
+            data-file-type={
+              isFileLink ? page.fileType ?? page.mimeType ?? undefined : undefined
+            }
+            data-file-size={
+              isFileLink && page.fileSize ? String(page.fileSize) : undefined
+            }
+            data-file-context={isFileLink ? "page-block" : undefined}
           >
             <h3 class="mb-0 md:mb-2 lg:my-4 font-title font-bold text-2xl md:text-3xl text-neutral-900">
               {page.title}

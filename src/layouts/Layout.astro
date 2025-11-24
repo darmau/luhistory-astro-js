@@ -179,5 +179,43 @@ const ogImage = image?.startsWith('http') ? image : new URL(image, Astro.site).t
       </div>
       <Footer />
     </div>
+    <script is:inline>
+      (() => {
+        if (typeof window === "undefined") return;
+
+        const EVENT_NAME = "file_download";
+
+        function buildPayload(target) {
+          const dataset = target.dataset ?? {};
+          const href = target.getAttribute("href") ?? undefined;
+          return {
+            file_id: dataset.fileId || undefined,
+            file_name: dataset.fileName || target.textContent?.trim() || href,
+            file_type: dataset.fileType || undefined,
+            file_size_bytes: dataset.fileSize ? Number(dataset.fileSize) : undefined,
+            file_url: href,
+            context: dataset.fileContext || undefined,
+          };
+        }
+
+        function trackFileDownload(target) {
+          const payload = buildPayload(target);
+          if (window?.zaraz?.track) {
+            window.zaraz.track(EVENT_NAME, payload);
+          }
+        }
+
+        document.addEventListener("click", (event) => {
+          const target =
+            event.target instanceof Element
+              ? event.target.closest("[data-file-download]")
+              : null;
+          if (!target) {
+            return;
+          }
+          trackFileDownload(target);
+        });
+      })();
+    </script>
   </body>
 </html>

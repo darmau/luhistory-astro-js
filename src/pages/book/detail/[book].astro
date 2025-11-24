@@ -94,7 +94,12 @@ export async function getStaticPaths() {
         "assets": links[] {
           title,
           "type": "file",
-          "url": asset->url
+          "url": asset->url,
+          "fileId": asset->_id,
+          "fileName": coalesce(asset->originalFilename, title),
+          "fileSize": asset->size,
+          "fileType": asset->extension,
+          "mimeType": asset->mimeType
         }
       }
     }
