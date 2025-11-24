@@ -13,6 +13,14 @@ const { processPortableBlocks, processPageBlocks } =
 
 const rawProfileData = await sanityClient.fetch(`*[_type == 'profile' ]{
   "cvLink": cvLink.asset->url,
+  "cvFile": {
+    "url": cvLink.asset->url,
+    "fileId": cvLink.asset->_id,
+    "fileName": coalesce(cvLink.asset->originalFilename, "cv.pdf"),
+    "fileSize": cvLink.asset->size,
+    "fileType": cvLink.asset->extension,
+    "mimeType": cvLink.asset->mimeType
+  },
   "overview": overview[] {
     _type == 'imageBlock' => {
       type,
@@ -121,7 +129,7 @@ const processedProfileData = await Promise.all(
 );
 
 const profileData = processedProfileData[0] ?? {};
-const { overview, blocks, cvLink } = profileData;
+const { overview, blocks, cvLink, cvFile } = profileData;
 ---
 
 <Layout
@@ -133,14 +141,27 @@ const { overview, blocks, cvLink } = profileData;
   <main
     class="px-4 flex flex-col gap-4 py-8 md:grid md:grid-cols-12 md:gap-8 md:py-16 lg:max-w-8xl lg:mx-auto 8xl:px-0"
   >
-    <div class="col-span-3 lg:col-span-4 flex items-start gap-4 my-3">
-      <Image src={downloadIcon} alt="download" width="24" height="24" />
-      <a
-        href={cvLink}
-        target="_blank"
-        class="text-neutral-900 opacity-50 hover:opacity-100">Download CV</a
-      >
-    </div>
+    {cvLink && (
+      <div class="col-span-3 lg:col-span-4 flex items-start gap-4 my-3">
+        <Image src={downloadIcon} alt="download" width="24" height="24" />
+        <a
+          href={cvLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-neutral-900 opacity-50 hover:opacity-100"
+          data-file-download="true"
+          data-file-id={cvFile?.fileId ?? undefined}
+          data-file-name={cvFile?.fileName ?? undefined}
+          data-file-type={cvFile?.fileType ?? cvFile?.mimeType ?? undefined}
+          data-file-size={
+            cvFile?.fileSize ? String(cvFile.fileSize) : undefined
+          }
+          data-file-context="about-cv"
+        >
+          Download CV
+        </a>
+      </div>
+    )}
     <div class="col-start-4 col-end-12">
       <TextBlock overview={overview} />
       {blocks && <PageBlock blocks={blocks} />}
