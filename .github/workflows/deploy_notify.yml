@@ -40,8 +40,8 @@ jobs:
           BODY_HTML=""
 
           if [ "${STATE}" = "success" ]; then
-            SUBJECT="Cloudflare Pages 部署成功"
-            BODY_HTML="<p>${REPOSITORY} 的 Cloudflare Pages 部署成功。</p>"
+            SUBJECT="Cloudflare Workers 部署成功"
+            BODY_HTML="<p>${REPOSITORY} 的 Cloudflare Workers 部署成功。</p>"
             if [ -n "${DEPLOY_URL:-}" ]; then
               BODY_HTML="${BODY_HTML}<p>预览地址：<a href=\"${DEPLOY_URL}\">${DEPLOY_URL}</a></p>"
             fi
@@ -49,8 +49,8 @@ jobs:
               BODY_HTML="${BODY_HTML}<p>Target URL：<a href=\"${TARGET_URL}\">${TARGET_URL}</a></p>"
             fi
           else
-            SUBJECT="Cloudflare Pages 部署失败"
-            BODY_HTML="<p>${REPOSITORY} 的 Cloudflare Pages 部署失败（状态：${STATE}）。</p>"
+            SUBJECT="Cloudflare Workers 部署失败"
+            BODY_HTML="<p>${REPOSITORY} 的 Cloudflare Workers 部署失败（状态：${STATE}）。</p>"
             if [ -n "${LOG_URL:-}" ]; then
               BODY_HTML="${BODY_HTML}<p>日志链接：<a href=\"${LOG_URL}\">${LOG_URL}</a></p>"
             fi

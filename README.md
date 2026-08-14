@@ -70,9 +70,26 @@ This repository powers [LuHistory.com](https://luhistory.com), the official site
 
 ## Deployment
 
-1. Run `pnpm build` to generate the static site and any server output expected by your hosting provider.
-2. Deploy the `dist/` directory to your static host (Netlify, Vercel, S3, etc.). Make sure the Sanity token (if used) is configured as an environment variable in the hosting platform.
-3. Verify that `/sitemap-index.xml` is reachable and that analytics events fire in GA.
+The site is deployed to **Cloudflare Workers** using [static assets](https://developers.cloudflare.com/workers/static-assets/). The build is fully pre-rendered, so the Worker is assets-only — there is no server entrypoint (`main`) and no runtime Sanity access.
+
+Configuration lives in `wrangler.jsonc`:
+
+- `assets.directory` points at Astro's `dist/` output.
+- `html_handling: "auto-trailing-slash"` matches Astro's directory-style routes (`/about` → `dist/about/index.html`).
+- `not_found_handling: "404-page"` serves `dist/404.html` for unmatched paths.
+
+| Command | Description |
+| --- | --- |
+| `pnpm cf:dev` | Build, then serve the Worker locally via `wrangler dev` |
+| `pnpm cf:deploy` | Build, then deploy with `wrangler deploy` |
+
+Steps:
+
+1. Authenticate once with `pnpm exec wrangler login` (or set `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` in CI).
+2. Run `pnpm cf:deploy`. Sanity content is fetched at build time, so any Sanity token must be present in the **build** environment, not in Worker secrets.
+3. Verify that `/sitemap-index.xml` is reachable and that a bad URL renders the 404 page.
+
+To deploy from CI or the Cloudflare dashboard's Git integration, use build command `pnpm build`, deploy command `pnpm exec wrangler deploy`, and output directory `dist`.
 
 ## Conventions & Next Steps
 
