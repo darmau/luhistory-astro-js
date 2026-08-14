@@ -20,6 +20,14 @@
       "eslint --fix"
     ]
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@tailwindcss/oxide",
+      "esbuild",
+      "sharp",
+      "workerd"
+    ]
+  },
   "dependencies": {
     "@astrojs/check": "^0.9.5",
     "@astrojs/react": "^4.4.1",
